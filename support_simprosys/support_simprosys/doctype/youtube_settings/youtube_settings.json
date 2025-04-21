@@ -1,0 +1,83 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-02-14 10:12:33.420822",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "api_data_section",
+  "playlist_id",
+  "fetch_limit",
+  "column_break_eqzs",
+  "api_key",
+  "section_break_bjot",
+  "api_url"
+ ],
+ "fields": [
+  {
+   "fieldname": "api_data_section",
+   "fieldtype": "Section Break",
+   "label": "API Data"
+  },
+  {
+   "fieldname": "api_url",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "API URL",
+   "reqd": 1
+  },
+  {
+   "fieldname": "api_key",
+   "fieldtype": "Data",
+   "label": "API Key",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_eqzs",
+   "fieldtype": "Column Break",
+   "hidden": 1
+  },
+  {
+   "fieldname": "playlist_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Playlist Id",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_bjot",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "fetch_limit",
+   "fieldtype": "Int",
+   "label": "Fetch Limit",
+   "non_negative": 1,
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-04-08 10:21:31.699171",
+ "modified_by": "Administrator",
+ "module": "Support Simprosys",
+ "name": "Youtube Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

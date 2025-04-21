@@ -1,0 +1,371 @@
+---
+// Image Import
+import Header from "../components/Header.astro";
+import favicon from "../assets/img/favicon.png";
+
+// Component Import
+import Footer from "../components/Footer.astro";
+import AppSchema from "../components/AppSchema.astro";
+
+export interface Props {
+  Title?: string;
+  meta_title?: string;
+  meta_desc?: string;                                         
+  schema?: string;
+  canonicalURL?: string;
+  content?: string;
+  HomePageSchemaName?: string;
+  HomePageSchemaURL?: string;
+  AppName?: string;
+  PlatformName?: string;
+  blogSchemaName?: string;
+  blogName?: string;
+  blogSlug?: string;
+  meta_keyword?: string;
+  ticketSchema?: object;
+  youtubeVideoDetails?: {
+    name: string;
+    description: string;
+    uploadDate: string;
+    embedUrl: string;
+    duration: string;
+    thumbnailUrl: string;
+  }[]; // Changed from `string` to `array of objects`
+}
+
+const {
+  Title,
+  meta_title,
+  meta_desc,
+  meta_keyword,
+  ticketSchema,
+  canonicalURL,
+  HomePageSchemaName,
+  HomePageSchemaURL,
+  AppName,
+  PlatformName,
+  blogSchemaName,
+  blogSlug,
+  blogName,
+  youtubeVideoDetails = [], // Default to empty array to prevent errors
+} = Astro.props;
+
+const api_URL = import.meta.env.PUBLIC_ApiUrl;
+
+// Fetch Support Home Page Settings
+const SupportPageResponse = `${api_URL}/api/resource/Support%20Home%20Page/Support%20Home%20Page`;
+
+const support_response = await fetch(SupportPageResponse, {
+  method: "GET",
+  headers: {
+    Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+  },
+});
+
+const SupportHomePage_data = await support_response.json();
+const SupportHomeSettings = SupportHomePage_data.data;
+
+const crawler_name = SupportHomeSettings.crawler_name || "";
+const crawler_content = SupportHomeSettings.crawler_content || "";
+
+const schemaData = [
+  {
+    "@context": "https:\/\/schema.org".replace(/\//g, "\\/"),
+    "@type": "WebPage",
+    name: HomePageSchemaName,
+    url: HomePageSchemaURL,
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https:\/\/support.simprosys.com".replace(/\//g, "\\/"),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Support Simprosys",
+          item: "https:\/\/support.simprosys.com/".replace(/\//g, "\\/"),
+        },
+      ],
+    },
+    description:
+      "Find below help articles to navigate our apps & their functionalities seamlessly, for further assistance contact our support team at support@simprosys.com",
+  },
+  { 
+    "@context": "https://schema.org", 
+    "@type": "Organization", 
+    "address": { 
+      "@type": "PostalAddress", 
+      "addressLocality": "Ahmedabad, Gujarat", 
+      "addressCountry": "India", 
+      "postalCode": "380060", 
+      "streetAddress": "B-303, Shapath Hexa, Opp. Gujarat High Court, Sarkhej - Gandhinagar Hwy, Ahmedabad, Gujarat 380060" 
+    }, 
+    "email": "info@simprosys.com", 
+    "name": "Simprosys Infomedia", 
+    "telephone": "+91 9723663337", 
+    "sameAs": [ "https://www.facebook.com/simprosys", 
+    "https://www.instagram.com/simprosysinfomedia/", "https://www.youtube.com/@Simprosys", "https://www.linkedin.com/company/simprosys-infomedia" ]
+  },
+  {
+    "@context": "https:\/\/schema.org",
+    "@type": "LocalBusiness",   
+    address: {
+      "@type": "PostalAddress", 
+    "addressLocality": "Ahmedabad, Gujarat", 
+    "addressCountry": "India", 
+    "addressRegion": "IN",
+    "postalCode": "380060", 
+    "streetAddress": "B-303, Shapath Hexa, Opp. Gujarat High Court, Sarkhej - Gandhinagar Hwy, Ahmedabad, Gujarat 380060"
+    },
+    email: "info@simprosys.com",
+    name: "Simprosys Infomedia",
+    openingHours: ["Mon-Fri 09:30 AM to 06:30 PM"],
+    telephone: "+91 9723663337",
+    url: "https://simprosys.com",
+    sameAs: [
+      "https://www.facebook.com/simprosys",
+      "https://www.instagram.com/simprosysinfomedia/",
+      "https://www.youtube.com/@Simprosys",
+      "https://www.linkedin.com/company/simprosys-infomedia",
+    ],
+  },
+];
+  
+const schemaCollectionPage = [
+  {
+    "@context": "https:\/\/schema.org".replace(/\//g, "\\/"),
+    "@type": "WebPage",
+    name: `${PlatformName} > ${AppName}`,
+    url: "https://support.simprosys.com/faq/google-automated-discount-requirements".replace(/\//g, "\\/"),
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://support.simprosys.com".replace(/\//g, "\\/"),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Google Automated Discounts: Eligibility & Requirements Explained",
+          item: "https://support.simprosys.com/faq/google-automated-discount-requirements".replace(/\//g, "\\/"),
+        },
+      ],
+    },
+    description:
+      "Submits Feed For Google Shopping, Facebook Ads & Microsoft Ads.",
+  },
+  {
+    "@context": "https:\/\/schema.org".replace(/\//g, "\\/"),
+    "@type": "CollectionPage",
+    url: "https://support.simprosys.com/google-shopping-feed".replace(/\//g, "\\/"),
+    name: `${PlatformName} > ${AppName}`,
+    description:
+      "Submits Feed For Google Shopping, Facebook Ads & Microsoft Ads.",
+  },
+];
+
+const schemaVideoObject = [
+  {
+    "@context": "https://schema.org".replace(/\//g, "\\/"),
+    "@type": "WebPage",
+    name: blogName,
+    url: `https://support.simprosys.com/faq/${blogSlug}`.replace(/\//g, "\\/"),
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://support.simprosys.com".replace(/\//g, "\\/"),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: blogName,
+          item: `https://support.simprosys.com/faq/${blogSlug}`.replace(/\//g, "\\/"),
+        },
+      ],
+    },
+  },
+  {
+    "@context": "https:\/\/schema.org",
+    "@type": "VideoObject",
+    name: youtubeVideoDetails[0]?.name,
+    description: youtubeVideoDetails[0]?.description,
+    uploadDate: youtubeVideoDetails[0]?.uploadDate,
+    embedUrl: youtubeVideoDetails[0]?.embedUrl,
+    duration: youtubeVideoDetails[0]?.duration,
+    thumbnailUrl: youtubeVideoDetails[0]?.thumbnailUrl,
+  },
+];
+
+const schemaBlogPage = 
+  {
+    "@context": "https://schema.org".replace(/\//g, "\\/"),
+    "@type": "WebPage",
+    name: blogSchemaName,
+    url: `https://support.simprosys.com/faq/${blogSlug}`.replace(/\//g, "\\/"),
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://support.simprosys.com".replace(/\//g, "\\/"),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: blogSchemaName,
+          item: `https://support.simprosys.com/faq/${blogSlug}`.replace(/\//g, "\\/"),
+        },
+      ],
+    },
+  }
+const schemaBlogPage2 = 
+  {
+    "@context": "https:\/\/schema.org".replace(/\//g, "\\/"),
+    "@type": "Article",
+    url: `https://support.simprosys.com/faq/${blogSlug}`.replace(/\//g, "\\/"),
+    name: blogSchemaName,
+    description:
+      "Submitting product feeds and managing campaigns on various platforms can be time-consuming and complex, but it doesn’t have to be.",
+    datePublished: "2024-05-21T10:38:50+05:30",
+    dateModified: "2025-02-05T12:23:04+05:30",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Simprosys InfoMedia Help Centre",
+      url: "https://support.simprosys.com".replace(/\//g, "\\/"),
+    },
+  }
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Meta Tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="language" content="en-GB" />
+    <meta name="generator" content={Astro.generator} />
+    {
+      meta_title && (
+        <meta name="title" content={meta_title} />
+      )
+    }
+    {
+      meta_desc && (
+        <meta name="description" content={meta_desc} />
+      )
+    }
+    {
+      meta_keyword && (
+        <meta name="keywords" content={meta_keyword} />
+      )
+    }
+    <!-- {
+      crawler_name && crawler_content && (
+        <meta name={crawler_name} content={crawler_content} />
+      )
+    } -->
+
+    <!-- Todo Remove For No Index No Follow -->
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="googlebot" content="noindex, nofollow" />
+
+    <!-- Title of the page -->
+    <title>{Title}</title>
+
+    <!-- <link rel="stylesheet" href="input.css"> -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- Canonical Link -->
+    {canonicalURL && <link rel="canonical" href={canonicalURL} />}
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href={favicon.src} />
+
+    <!-- Optional: External JavaScript Libraries -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <!-- External Fonts (Poppins) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!--* Schema for Home page -->
+    {
+      HomePageSchemaName &&
+      HomePageSchemaURL &&
+      schemaData.map((schema) => (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(schema).replace(/\\\\/g, "\\")}
+        />
+      ))
+    }
+
+    <!--* Schema For Apps -->
+    {
+      AppName &&
+        PlatformName &&
+        schemaCollectionPage.map((schema) => (
+          <script
+            type="application/ld+json"
+            set:html={JSON.stringify(schema).replace(/\\\\/g, "\\")}
+          />
+        ))
+    }
+
+    <!--* Schema For Blog Without Video -->
+    {
+      youtubeVideoDetails?.length > 0 ? (
+        // * Schema for Blogs With Video
+        schemaVideoObject.map((schema) => (
+          <script
+            type="application/ld+json"
+            set:html={JSON.stringify(schema).replace(/\\\\/g, "\\")}
+          />
+        ))
+      ) : blogSchemaName && (
+        // * Schema For Blog Without Video
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(schemaBlogPage).replace(/\\\\/g, "\\")}
+        />
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(schemaBlogPage2).replace(/\\\\/g, "\\")}
+        />
+      )
+    }
+
+    {
+      ticketSchema &&
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(ticketSchema).replace(/\\\\/g, "\\")}
+        />
+    }
+  </head>
+
+  <body>
+    <Header />
+    <slot />
+    <Footer />
+  </body>
+  <script src="../../src/assets/static/index.js"></script>
+</html>

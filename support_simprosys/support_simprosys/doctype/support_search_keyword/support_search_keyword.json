@@ -1,0 +1,56 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "Keyword-.#",
+ "creation": "2025-02-28 17:37:27.734350",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "keyword_details_section",
+  "keyword",
+  "order"
+ ],
+ "fields": [
+  {
+   "fieldname": "keyword_details_section",
+   "fieldtype": "Section Break",
+   "label": "Keyword Details"
+  },
+  {
+   "fieldname": "keyword",
+   "fieldtype": "Data",
+   "label": "Keyword"
+  },
+  {
+   "fieldname": "order",
+   "fieldtype": "Int",
+   "label": "order"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-02-28 17:39:48.623534",
+ "modified_by": "Administrator",
+ "module": "Support Simprosys",
+ "name": "Support Search Keyword",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "keyword"
+}

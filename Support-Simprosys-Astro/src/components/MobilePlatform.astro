@@ -1,0 +1,42 @@
+---
+import ToggleArrow from "../assets/img/platformArrowMobile.svg";
+
+interface Props {
+  active?: string;
+  dataPlatform?: string;
+  classButton?: string;
+  platformName?: string;
+}
+
+const { platformName, active, dataPlatform, classButton } = Astro.props;
+---
+
+<button
+  class=`${active || ''} py-[.5em] px-[.75em] bg-[#eee] w-full border-2 md:px-2 rounded-xl relative group flex items-center justify-between ${ classButton || 'platform-btn' }`
+  data-platform={dataPlatform}
+>
+  <h3 class="font-bold text-lg">{platformName}</h3>
+  <img class="arrow-icon max-w-none" src={ToggleArrow.src} alt="Toggle Arrow" />
+</button>
+
+<!-- <img
+  class="hover:bg-[#FFFFFF] m-auto max-h-[50px]"
+  src=`${api_URL}${imageSrc}`
+  alt={alternateText}
+/> -->
+
+<style>
+  .button-platform.active-mobile-button {
+    background-color: #195279;
+    color: white !important;
+    border-color: #195279;
+    border-radius: 12px 12px 0px 0px ;
+  }
+
+  .button-platform.active-mobile-button img {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease-in-out;
+    filter: invert(0%) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(250%)
+      contrast(100%);
+  }
+</style>

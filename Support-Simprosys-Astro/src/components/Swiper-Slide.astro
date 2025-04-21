@@ -1,0 +1,66 @@
+---
+import he from "he";
+import union from "../assets/img/union.svg";
+import arrow from "../assets/img/arrow.png";
+import clock from "../assets/img/clock.svg";
+
+interface Props {
+  headTag?: any;
+  paragraph?: any;
+  Name?: String;
+  URL?: String;
+  Image?: String;
+}
+
+const { headTag, paragraph, Name, URL, Image } = Astro.props;
+---
+
+<a
+  href=`${URL || "#"}`
+  target="_blank"
+  class="p-4 ssm:p-6 md:p-8 space-y-8 bg-[#E9F6FF] relative group rounded-2xl swiper-slide h-full self-stretch"
+>
+  <!-- Content Section -->
+  <div class="space-y-4 pb-4">
+    <div class="space-x-6">
+      <h3
+        class="text-2xl font-semibold text-[#3D3F42] truncate-head line-clamp-2"
+      >
+        {headTag}
+      </h3>
+    </div>
+    <p
+      class="text-base text-[#3D3F42] truncate-paragraph line-clamp-3 min-h-[4.5rem] leading-6"
+    >
+      {he.decode(paragraph)}
+    </p>
+
+    <!-- Metadata Section -->
+    <div class="flex sm:space-x-4 sm:pt-4 space- y-3 sm:space-y-0">
+      <div class="px-2 py-1 rounded-[3px] bg-white gap-[10px]">
+        <p class="text-[12px] leading-6">{Name}</p>
+      </div>
+      <!--* 4:00 minutes read  -->
+      <!-- <div class="flex gap-[10px] w-auto h-auto py-1 items-center">
+        <img class="h-4 w-4" src={clock.src} alt="clock icon" />
+        <p class="text-base leading-4">4:00 minutes read</p>
+      </div> -->
+      <!--*  -->
+    </div>
+  </div>
+
+  <!-- Image Section -->
+  <div class="relative w-full h-auto">
+    <img
+      class="rounded-2xl w-full aspect-[16/9] object-cover"
+      src=`${Image}`
+      alt="slide-image"
+    />
+    <img
+      class="absolute bottom-[-1px] right-[-1px]"
+      src={union.src}
+      alt="union-icon"
+    />
+    <img class="absolute bottom-0 right-0" src={arrow.src} alt="arrow-icon" />
+  </div>
+</a>

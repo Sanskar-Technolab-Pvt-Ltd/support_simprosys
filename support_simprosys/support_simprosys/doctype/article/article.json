@@ -1,0 +1,176 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:title",
+ "creation": "2025-01-21 11:08:03.076052",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_wlof",
+  "title",
+  "url",
+  "featured_image",
+  "status",
+  "column_break_xhft",
+  "new_featured_image",
+  "date",
+  "alt",
+  "section_break_abew",
+  "description",
+  "category_section",
+  "term_id",
+  "name1",
+  "slug",
+  "term_group",
+  "term_taxonomy_id",
+  "taxonomy",
+  "column_break_rjma",
+  "parent1",
+  "count",
+  "filter",
+  "category_description"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_wlof",
+   "fieldtype": "Section Break",
+   "label": "Article Data"
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title",
+   "unique": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "column_break_xhft",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_abew",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Data",
+   "label": "Date"
+  },
+  {
+   "fieldname": "alt",
+   "fieldtype": "Data",
+   "label": "Alt"
+  },
+  {
+   "fieldname": "category_section",
+   "fieldtype": "Section Break",
+   "label": "Category"
+  },
+  {
+   "fieldname": "term_id",
+   "fieldtype": "Data",
+   "label": "Term Id"
+  },
+  {
+   "fieldname": "slug",
+   "fieldtype": "Data",
+   "label": "Slug",
+   "read_only": 1
+  },
+  {
+   "fieldname": "term_taxonomy_id",
+   "fieldtype": "Data",
+   "label": "Term Taxonomy Id"
+  },
+  {
+   "fieldname": "parent1",
+   "fieldtype": "Data",
+   "label": "Parent"
+  },
+  {
+   "fieldname": "filter",
+   "fieldtype": "Data",
+   "label": "Filter"
+  },
+  {
+   "fieldname": "column_break_rjma",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "name1",
+   "fieldtype": "Data",
+   "label": "Name"
+  },
+  {
+   "fieldname": "term_group",
+   "fieldtype": "Data",
+   "label": "Term Group"
+  },
+  {
+   "fieldname": "taxonomy",
+   "fieldtype": "Data",
+   "label": "Taxonomy"
+  },
+  {
+   "fieldname": "count",
+   "fieldtype": "Int",
+   "label": "Count"
+  },
+  {
+   "fieldname": "category_description",
+   "fieldtype": "Small Text",
+   "label": "Category Description"
+  },
+  {
+   "fieldname": "new_featured_image",
+   "fieldtype": "Attach",
+   "label": "New Featured Image"
+  },
+  {
+   "fieldname": "url",
+   "fieldtype": "Data",
+   "label": "URL "
+  },
+  {
+   "fieldname": "featured_image",
+   "fieldtype": "Attach",
+   "label": "Featured image"
+  },
+  {
+   "default": "Publish",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Publish\nUnpublish"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-02-28 15:42:51.015177",
+ "modified_by": "Administrator",
+ "module": "Support Simprosys",
+ "name": "Article",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

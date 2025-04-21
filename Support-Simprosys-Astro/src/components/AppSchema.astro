@@ -1,0 +1,21 @@
+<!-- ---
+export interface Props {
+  name: string;
+  url: string;
+  description: string;
+}
+
+const { name, url, description } = Astro.props;
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": name,
+  "url": url,
+  "description": description
+};
+---
+
+<script type="application/ld+json">
+  {JSON.stringify(schemaData)}
+</script> -->

@@ -1,0 +1,657 @@
+---
+"use strict";
+
+import he from "he";
+import slugify from "slugify";
+
+// Images
+import homeIcon from "../../assets/img/home-icon.svg";
+import ArrowIcon from "../../assets/img/arrowIcon.svg";
+
+// Components
+import Carousel from "../../components/Carousel.astro";
+
+// import MobileMenu from "../components/MobileMenu.astro";
+import Layout from "../../layouts/Layout.astro";
+import DetailDropdown from "../../components/DetailDropdown.astro";
+import MobileDropdown from "../../components/MobileDropdown.astro";
+
+const API_URL = import.meta.env.PUBLIC_ApiUrl;
+
+export async function getStaticPaths() {
+  const url = import.meta.env.PUBLIC_ApiUrl;
+  const pageSize = 50;
+  let allBlogs: any[] = [];
+  let offset = 0;
+  let hasMore = true;
+
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  try {
+    while (hasMore) {
+      const response = await fetch(
+        `${url}/api/resource/Simprosys%20Blog?fields=["slug","name"]&filters=[["status","=","publish"]]&limit_start=${offset}&limit_page_length=${pageSize}`,
+        {
+          headers: {
+            Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+          },
+        }
+      );
+
+      const json = await response.json();
+
+      if (json.data && json.data.length > 0) {
+        allBlogs = allBlogs.concat(json.data);
+        offset += pageSize;
+
+        // Add a small delay (e.g., 300ms) to avoid overwhelming server
+        await delay(300);
+      } else {
+        hasMore = false;
+      }
+    }
+
+    return allBlogs.map((blog: any) => ({
+      params: { blog: blog.slug },
+      props: {
+        name: blog.name,
+        slug: blog.slug,
+      },
+    }));
+  } catch (err) {
+    console.error("Failed to fetch blog data:", err);
+    return [];
+  }
+}
+
+const { blog, slug }: any = Astro.params;
+const { name, slug: propSlug } = Astro.props;
+
+// const encodedName = encodeURIComponent(name);
+//  Fetching Blog Data
+const blog_details_api = await fetch(
+  `${API_URL}/api/resource/Simprosys%20Blog/${name}&filters=[["status","=","publish"]]`,
+  {
+    method: "GET",
+    headers: {
+      Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+    },
+  }
+);
+
+const blog_details_json = await blog_details_api.json();
+const blog_details = blog_details_json.data;
+
+// Fetching Subcategory Data
+const SubCategoryResponse = await fetch(
+  `${API_URL}/api/resource/Simprosys%20Post%20Category?fields=["*"]&filters=[["name","=","${blog_details.post_category}"],["status","=","publish"]]&order_by=\`order\` asc`,
+  {
+    method: "GET",
+    headers: {
+      Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+    },
+  }
+);
+
+const subCategoryDataJson = await SubCategoryResponse.json();
+const SubCategoryData = subCategoryDataJson.data || [];
+
+const encodeSubCategory = encodeURIComponent(
+  SubCategoryData[0]?.parent_simprosys_post_category || ""
+);
+// Fetching Category Data
+const CategoryResponse = await fetch(
+  `${API_URL}/api/resource/Simprosys%20Post%20Category?fields=["*"]&filters=[["parent_simprosys_post_category", "=", "${encodeSubCategory}"], ["category_criteria", "=", "Subcategory"],["status","=","publish"]]&order_by=\`order\` asc`,
+  {
+    method: "GET",
+    headers: {
+      Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+    },
+  }
+);
+const categoryDataJson = await CategoryResponse.json();
+const CategoryData = categoryDataJson.data || [];
+let Parent_Slug = "No Slug Found"; // Declare outside
+let Platform = "#";
+let Icon = "";
+let post_category_name = "";
+if (CategoryData.length > 0) {
+  const ParentCategoryName = encodeURIComponent(
+    CategoryData[0].parent_simprosys_post_category
+      ? CategoryData[0].parent_simprosys_post_category
+      : ""
+  );
+  const ParentCategoryResponse = await fetch(
+    `${API_URL}/api/resource/Simprosys%20Post%20Category?filters=[["name", "=", "${ParentCategoryName}"]]&fields=["slug","parent_simprosys_post_category","icon_image","post_category_name"]`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+      },
+    }
+  );
+  const ParentCategoryJson = await ParentCategoryResponse.json();
+  const ParentCategoryData = ParentCategoryJson.data || [];
+  // Assign value inside the block
+  if (ParentCategoryData.length > 0) {
+    post_category_name = ParentCategoryData[0]?.post_category_name || "";
+    Parent_Slug = ParentCategoryData[0].slug;
+    Platform = ParentCategoryData[0]?.parent_simprosys_post_category || "";
+    Icon = ParentCategoryData[0].icon_image;
+  }
+}
+
+// Fetch Platform Data
+const platformResponse = await fetch(
+  `${API_URL}/api/resource/Simprosys%20Post%20Category?fields=["*"]&filters=[["name", "=", "${Platform}"]]`,
+  {
+    method: "GET",
+    headers: {
+      Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+    },
+  }
+);
+const platformJson = await platformResponse.json();
+const platform = platformJson.data || [];
+
+const blogs_api = await fetch(
+  `${API_URL}/api/resource/Simprosys%20Blog?filters=[["post_category","=","${blog_details.post_category}"],["status","=","publish"]]&fields=["name", "slug","blog_title","canonical_url"]&order_by=\`order\` asc&limit_page_length=1000`,
+  {
+    method: "GET",
+    headers: {
+      Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+    },
+  }
+);
+
+const blogs_json = await blogs_api.json();
+const blogs = blogs_json.data || [];
+
+const currentIndex = blogs.findIndex((blog: any) => {
+  return blog.name === blog_details.name;
+});
+
+// Get previous and next blog
+const prevBlog = currentIndex > 0 ? blogs[currentIndex - 1] : null;
+const nextBlog =
+  currentIndex < blogs.length - 1 ? blogs[currentIndex + 1] : null;
+
+// Decode the content
+let decodedContent = blog_details.content_details
+  ? he.decode(blog_details.content_details)
+  : "No content available";
+
+// Convert YouTube short links to embedded iFrames
+decodedContent = decodedContent.replace(
+  /https?:\/\/(?:www\.)?youtu\.be\/([\w-]+)/g,
+  '<iframe width="560" height="315" src="https://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>'
+);
+
+// Ensure all links have "https://"
+decodedContent = decodedContent.replace(
+  /\b\/\/([\w.-]+\/[\w-]+)/g,
+  "https://$1"
+);
+
+// 1️⃣ Remove anchor tags that wrap an iframe
+decodedContent = decodedContent.replace(
+  /<a[^>]*href=["'][^"']*<iframe[^>]*>[^"']*["'][^>]*>\s*(<iframe[^>]*><\/iframe>)\s*<\/a>/gi,
+  "$1"
+);
+
+// 2️⃣ Remove any remaining misplaced <a> tags that contain an iframe
+decodedContent = decodedContent.replace(
+  /<a[^>]*>\s*(<iframe[^>]*><\/iframe>)\s*<\/a>/gi,
+  "$1"
+);
+
+decodedContent = decodedContent.replace(
+  /<strong>\s*<a([^>]*)>(.*?)<\/a>\s*<\/strong>/gi,
+  '<a$1 target="_blank">$2</a>'
+);
+
+// Remove the <BR> tags
+decodedContent = decodedContent.replace(/<span[^>]*>\s*<br>\s*<\/span>/gi, "");
+decodedContent = decodedContent.replace(/<div[^>]*>\s*<br>\s*<\/div>/gi, "");
+decodedContent = decodedContent.replace(/<p>\s*<br>\s*<\/p>/gi, "");
+decodedContent = decodedContent.replace(
+  /<ol[^>]*>\s*(<li>\s*<\/li>\s*)+<\/ol>/gis,
+  ""
+);
+decodedContent = decodedContent.replace(
+  /\/files\/uploads\//g,
+  `${API_URL}/files/uploads/`
+);
+
+// Remove any remaining unwanted "//" at the start of the lines
+decodedContent = decodedContent
+  .replace(/{%/g, "&#123;%") // Escapes Jinja `{% %}` syntax
+  .replace(/%}/g, "%&#125;")
+  .replace(/{{/g, "&#123;&#123;") // Escapes `{{ }}`
+  .replace(/}}/g, "&#125;&#125;");
+
+// Function to extract YouTube video links
+function extractYouTubeLinks(content: any) {
+  const regex =
+    /https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/g;
+  let matches = [];
+  let match;
+
+  while ((match = regex.exec(content)) !== null) {
+    matches.push(`https://youtu.be/${match[1]}`);
+  }
+
+  return matches;
+}
+
+// Decode the content
+let decodedContentYT = blog_details.content_details
+  ? he.decode(blog_details.content_details)
+  : "No content available";
+
+// Extract YouTube links
+const youtubeLinks = extractYouTubeLinks(decodedContentYT);
+
+// Fetch Youtube video details
+const youtubeSetting = await fetch(
+  `${API_URL}/api/resource/Youtube%20Settings/Youtube%20Settings`,
+  {
+    method: "GET",
+    headers: {
+      Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+    },
+  }
+);
+
+// Extract YouTube video IDs
+const videoIds = youtubeLinks.map((link) => link.split("/").pop()).join(",");
+
+const youtubeSettingJson = await youtubeSetting.json();
+const youtubeSettingData = youtubeSettingJson.data || {};
+
+// Fetch YouTube video details
+const youtubeData = await fetch(
+  `https://www.googleapis.com/youtube/v3/videos?id=${videoIds}&part=snippet,contentDetails&key=${youtubeSettingData.api_key}`,
+  {
+    method: "GET",
+  }
+);
+
+const youtubeDataJson = await youtubeData.json();
+const youtubeDataMsg = youtubeDataJson.items || [];
+
+// Extract relevant fields
+const videoDetails = youtubeDataMsg.map((video: any) => ({
+  name: video.snippet.title,
+  description: video.snippet.description,
+  uploadDate: video.snippet.publishedAt,
+  embedUrl: `https://www.youtube.com/embed/${video.id}`,
+  duration: video.contentDetails.duration,
+  thumbnailUrl: video.snippet.thumbnails.high.url,
+}));
+
+let heading = he.decode(blog_details.blog_title);
+
+// Format the date
+const dateStr = blog_details.publish_date || "";
+const dateObj = new Date(dateStr);
+const formattedDate = dateObj.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "2-digit",
+});
+---
+
+<Layout
+  Title=`${blog_details.blog_title}`
+  meta_title={blog_details.meta_title}
+  meta_desc={blog_details.meta_desc}
+  meta_keyword={blog_details.meta_keyword}
+  canonicalURL=`${blog_details.canonical_url || ""}`
+  blogSchemaName={blog_details.blog_title || ""}
+  youtubeVideoDetails={videoDetails || ""}
+  blogSlug={blog_details.slug || ""}
+  blogName={blog_details.blog_title || ""}
+>
+  <main class="lg:mb-[-64px] 2xl :mb-[-140px]">
+    <Carousel />
+    <section>
+      <!-- Mobile View -->
+      <div class="mx-[20px] md:mx-[26px] 2xl:mx-[125px] lg:mx-[50px]">
+        <div class="grid lg:grid-cols-12">
+          <div
+            class="hidden lg:block space-y-8 lg:col-span-4 xl:col-span-3 md:border-r pt-[30px] sm:pt-[50px] md:pt-[64px] lg:pt-[70px] xl:pt-[85px] 2xl:pt-[70px]"
+          >
+            <div class="space-y-[30px]">
+              <div
+                class="flex space-x-6 items-center lg:pr-[23px] 2xl:pr-[46px]"
+              >
+                <div
+                  class="bg-[#E9F6FF] p-5 rounded-full flex items-center justify-center"
+                >
+                  <img
+                    class="h-full w-[44.2px]"
+                    src=`${API_URL}${Icon}`
+                    alt="icon"
+                  />
+                </div>
+                <h1 class="text-xl lg:text-2xl">
+                  {post_category_name}
+                </h1>
+              </div>
+            </div>
+            <div>
+              <div class="pr-2 lg:pr-[23px] 2xl:pr-[46px]">
+                {
+                  CategoryData.map((item: any, index: number) => (
+                    <DetailDropdown
+                      heading={item.name}
+                      Label={item?.post_category_name || ""}
+                      round="rounded-[12px]"
+                      Slug={blog_details.slug}
+                      DropdownClass="dropdown-details cursor-pointer"
+                      index={index}
+                    />
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="xl:col-start-5 lg:px-8 xl:px-0 lg:col-span-8 pt-[30px] sm:pt-[50px] md:pt-[64px] lg:pt-[70px] xl:pt-[85px] 2xl:pt-[70px]"
+          >
+            <div
+              class="mt-[20px] md:mt-[0px] md:pt-[0px] space-y-8 xl:space-y-16 mb-[50px] lg:mb-[92px]"
+            >
+              <div class="space-y-6">
+                <div class="space-y-8">
+                  <div class="hidden ssm:flex space-x-1 lg:space-x-2">
+                    <a
+                      href="../../"
+                      class="text-[#25282B] text-sm opacity-70 hover:underline"
+                    >
+                      <span class="ssm:hidden">
+                        <img
+                          class="w-[22px]"
+                          src={homeIcon.src}
+                          alt="home-icon"
+                        />
+                      </span>
+                      <span class="hidden ssm:block" title="Home"> Home </span>
+                    </a>
+                    <p class="text-[16px] leading-[22px] text-[#929495]">></p>
+                    <a
+                      href=`/${Parent_Slug}`
+                      class="flex items-start whitespace-pre-line xl:whitespace-pre-line md:overflow-hidden md:text-ellipsis xl:w-auto font-medium hover:underline text-sm ssm:space-x-1"
+                    >
+                      <img
+                        class="h-[20px] w-auto"
+                        src={platform[0]?.icon
+                          ? `${API_URL}${platform[0].icon}`
+                          : ""}
+                        alt={platform[0]?.post_category_name
+                          ? `${platform[0].post_category_name}`
+                          : ""}
+                      />
+                      <span
+                        class="hidden ssm:block overflow-hidden text-ellipsis whitespace-nowrap text-[#25282B] opacity-70"
+                        title={post_category_name}
+                        >{post_category_name}
+                      </span>
+                    </a>
+
+                    <p class="text-[16px] leading-[22px] text-[#929495]">></p>
+                    <a
+                      href={`/${Parent_Slug}`}
+                      class="text-[#25282B] whitespace-pre-line xl:whitespace-nowrap md:overflow-hidden md:text-ellipsis opacity-70 font-medium hover:underline text-sm"
+                      title={SubCategoryData[0]?.post_category_name || ""}
+                      onclick="storeDropdownSelection(event, this.getAttribute('data-dropdown'))"
+                      data-dropdown={SubCategoryData[0]?.post_category_name ||
+                        ""}
+                    >
+                      {SubCategoryData[0]?.post_category_name || ""}
+                    </a>
+                    <p
+                      class="hidden xl:flex text-[16px] leading-[22px] text-[#929495]"
+                    >
+                      >
+                    </p>
+                    <a
+                      href={blog_details.slug}
+                      class="hidden xl:inline-block text-[#25282B] whitespace-pre-line xl:whitespace-nowrap md:overflow-hidden md:text-ellipsis font-medium hover:underline text-sm"
+                      title=`${heading}`>{heading}</a
+                    >
+                  </div>
+                </div>
+
+                <div class="space-y-8">
+                  <div
+                    class=`flex ${blog_details.featured_image ? "space-x-2 item-start xl:items-center" : ""}`
+                  >
+                    <div
+                      class=`p-5 ${blog_details.featured_image ? "" : "hidden"} h-fit rounded-full w-fit bg-[#E9F6FF] content-center`
+                    >
+                      <img
+                        class="w-16"
+                        src=`${API_URL}${blog_details.featured_image}`
+                        alt="featured-icon"
+                      />
+                    </div>
+                    <div class="space-y-2">
+                      <h2
+                        class="font-semibold text-2xl md:text-3xl lg:text-4px 2xl:text-[40px] 2xl:leading-[54px]"
+                      >
+                        {heading}
+                      </h2>
+                      {
+                        blog_details.publish_date && (
+                          <p class="text-black opacity-70">{formattedDate}</p>
+                        )
+                      }
+                    </div>
+                  </div>
+                  <div class="table-wrapper">
+                    <div
+                      class="ql-editor read-mode"
+                      set:html={decodedContent}
+                    />
+                    <div
+                      class="border-t pt-5 lg:pt-10 text-center lg:text-start"
+                    >
+                      <div
+                        class=`text-base grid grid-cols-12 lg:space-y-0 gap-2`
+                      >
+                        <div
+                          class={`col-span-6 space-y-3 text-left ${prevBlog ? "" : ""}`}
+                        >
+                          <p class=`font-semibold ${prevBlog ? "" : "hidden"}`>
+                            Previous article
+                          </p>
+                          <p class="text-[#195279] hover:underline">
+                            <a
+                              class="justify-items-start float-left"
+                              href={prevBlog ? `/faq/${prevBlog.slug}` : "#"}
+                              ><img
+                                class={`scale-x-[-1] transform transition hover:-translate-x-1 motion-reduce:transition-none motion-reduce:hover:transform-none ${prevBlog ? "" : "hidden"}`}
+                                src={ArrowIcon.src}
+                                alt="Previous-Arrow"
+                              /></a
+                            >
+                          </p>
+                        </div>
+                        <div
+                          class={`col-span-6 justify-items-end space-y-3 text-right ${nextBlog ? "" : "hidden"}`}
+                        >
+                          <p class="font-semibold">Next article</p>
+                          <p class="text-[#195279] hover:underline">
+                            <a
+                              class="justify-items-end float-right"
+                              href={nextBlog ? `/faq/${nextBlog.slug}` : "#"}
+                              ><img
+                                class="transform transition hover:translate-x-1 motion-reduce:transition-none motion-reduce:hover:transform-none"
+                                src={ArrowIcon.src}
+                                alt="Next-Arrow"
+                              /></a
+                            >
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--* Pop-up Modal -->
+    <div
+      id="mediaModal"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 hidden z-50"
+    >
+      <div
+        class="relative rounded-lg shadow-lg w-full max-w-3xl sm:max-w-4xl xl:max-w-7xl p-4 max-h-[90vh] overflow-y-auto"
+      >
+        <!-- Close Button -->
+        <button
+          id="closeModal"
+          class="absolute top-3 right-3 hover:text-gray-300 text-white text-xl"
+        >
+          ✖
+        </button>
+
+        <!-- Modal Content -->
+        <div id="modalContent" class="p-4 flex justify-center items-center">
+          <img
+            id="modalImage"
+            src=""
+            alt="Large Image"
+            class="max-h-[80vh] w-auto"
+          />
+        </div>
+      </div>
+    </div>
+
+    <MobileDropdown Data={CategoryData} Slug={blog_details.slug} />
+  </main>
+
+  <script src="../../../src/assets/static/blog.js"></script>
+</Layout>
+
+<script is:inline>
+  const mediaModal = document.getElementById("mediaModal");
+  const closeModalBtn = document.getElementById("closeModal");
+
+  // Close when clicking the close button
+  closeModalBtn.addEventListener("click", () => {
+    mediaModal.classList.add("hidden");
+  });
+
+  // Close when clicking outside the modal content (on the dark background)
+  mediaModal.addEventListener("click", (e) => {
+    if (e.target === mediaModal) {
+      mediaModal.classList.add("hidden");
+    }
+  });
+
+  function storeDropdownSelection(event, dropdownName) {
+    if (!dropdownName) return; // Prevent errors if the value is empty
+
+    const referrer = document.referrer;
+
+    // ✅ Only store if the user is coming from the FAQ page
+    if (referrer.includes("/faq")) {
+      sessionStorage.setItem("selectedDropdown", dropdownName);
+      sessionStorage.setItem("cameFromFAQ", "true");
+    }
+  }
+</script>
+
+<!-- export async function getStaticPaths() {
+  const url = import.meta.env.PUBLIC_ApiUrl;
+  const pageSize = 1000000; // Adjust if needed
+  const start = 0;
+
+  // Fetch blog data
+  const response = await fetch(
+    `${url}/api/resource/Simprosys%20Blog?fields=["slug","name"]&limit_page_length=${pageSize}&limit_start=${start}&filters=[["status","=","publish"],["post_category","!=",""]]`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+      },
+    }
+  );
+
+  const api_url_json = await response.json();
+  const api_url_data = api_url_json.data;
+
+  // Sanitize the slugs only if needed
+  const paths = api_url_data.map((blog_data: any) => {
+    let cleanSlug = slugify(blog_data.slug);
+    // Replace `%20` (encoded spaces) only if present
+    // if (cleanSlug.includes("%20")) {
+    //   cleanSlug = cleanSlug.replace(/%20/g, "-");
+    // }
+
+    return {
+      params: { blog: cleanSlug },
+      props: {
+        name: blog_data.name,
+        slug: blog_data.slug, // Retain original for internal reference
+      },
+    };
+  });
+
+  return paths;
+} -->
+
+<!-- export async function getStaticPaths() {
+  const url = import.meta.env.PUBLIC_ApiUrl;
+  const pageSize = 100; // Fetch 100 at a time
+  let start = 0;
+  let paths: any = [];
+
+  while (true) {
+    // Fetch blog data
+    const response = await fetch(
+      `${url}/api/resource/Simprosys%20Blog?fields=["slug","name"]&limit_page_length=${pageSize}&limit_start=${start}&filters=[["status","=","publish"],["post_category","!=",""]]`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+        },
+      }
+    );
+
+    const api_url_json = await response.json();
+    const api_url_data = api_url_json.data;
+
+    if (!api_url_data.length) break; // Stop if no more data
+
+    // Append new paths
+    paths = paths.concat(
+
+    
+      api_url_data.map((blog_data: any) => {
+        let cleanSlug = slugify(blog_data.slug);
+        return {
+          params: { blog: cleanSlug },
+          props: {
+            name: blog_data.name,
+            slug: blog_data.slug,
+          },
+        };
+      })
+    );
+
+    start += pageSize; // Move to the next batch
+  }
+
+  return paths;
+}
+ -->

@@ -1,0 +1,175 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-02-28 14:49:38.522684",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "header_details_section",
+  "canonical_url",
+  "meta_title",
+  "schema_name",
+  "column_break_nndp",
+  "crawler_name",
+  "crawler_content",
+  "schema_url",
+  "section_break_nfha",
+  "meta_description",
+  "carousel_heading_details_section",
+  "carousel_heading_paragraph",
+  "column_break_otax",
+  "carousel_heading_label",
+  "platform_heading_details_section",
+  "platform_heading_label",
+  "support_article_heading_details_section",
+  "article_heading_label",
+  "article_description",
+  "youtube_video_heading_details_section",
+  "youtube_video_heading_label",
+  "youtube_video_description"
+ ],
+ "fields": [
+  {
+   "fieldname": "header_details_section",
+   "fieldtype": "Section Break",
+   "label": "Index Header Details "
+  },
+  {
+   "fieldname": "canonical_url",
+   "fieldtype": "Data",
+   "label": "Canonical URL"
+  },
+  {
+   "fieldname": "meta_title",
+   "fieldtype": "Data",
+   "label": "Meta Title "
+  },
+  {
+   "fieldname": "meta_description",
+   "fieldtype": "Small Text",
+   "label": "Meta Description"
+  },
+  {
+   "fieldname": "platform_heading_details_section",
+   "fieldtype": "Section Break",
+   "label": "Platform Heading Details"
+  },
+  {
+   "fieldname": "platform_heading_label",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Platform Heading Label",
+   "reqd": 1
+  },
+  {
+   "fieldname": "support_article_heading_details_section",
+   "fieldtype": "Section Break",
+   "label": "Support Article Heading Details"
+  },
+  {
+   "fieldname": "article_heading_label",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Article Heading Label",
+   "reqd": 1
+  },
+  {
+   "fieldname": "article_description",
+   "fieldtype": "Small Text",
+   "label": "Article Description",
+   "reqd": 1
+  },
+  {
+   "fieldname": "youtube_video_heading_details_section",
+   "fieldtype": "Section Break",
+   "label": "Youtube Video Heading Details"
+  },
+  {
+   "fieldname": "youtube_video_heading_label",
+   "fieldtype": "Data",
+   "label": "Youtube Video Heading Label",
+   "reqd": 1
+  },
+  {
+   "fieldname": "youtube_video_description",
+   "fieldtype": "Text Editor",
+   "label": "Youtube Video Description",
+   "reqd": 1
+  },
+  {
+   "fieldname": "carousel_heading_details_section",
+   "fieldtype": "Section Break",
+   "label": "Carousel Heading Details"
+  },
+  {
+   "fieldname": "carousel_heading_label",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Carousel Heading Label",
+   "reqd": 1
+  },
+  {
+   "fieldname": "carousel_heading_paragraph",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Carousel Heading Paragraph",
+   "reqd": 1
+  },
+  {
+   "fieldname": "crawler_name",
+   "fieldtype": "Data",
+   "label": "Crawler Name"
+  },
+  {
+   "fieldname": "crawler_content",
+   "fieldtype": "Data",
+   "label": "Crawler Content"
+  },
+  {
+   "fieldname": "column_break_nndp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_nfha",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_otax",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "schema_name",
+   "fieldtype": "Data",
+   "label": "Schema Name"
+  },
+  {
+   "fieldname": "schema_url",
+   "fieldtype": "Data",
+   "label": "Schema URL"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-04-08 10:20:37.824385",
+ "modified_by": "Administrator",
+ "module": "Support Simprosys",
+ "name": "Support Home Page",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

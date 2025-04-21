@@ -1,0 +1,52 @@
+{
+ "actions": [],
+ "autoname": "autoincrement",
+ "creation": "2025-03-17 15:57:07.704516",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "email_details_section",
+  "email"
+ ],
+ "fields": [
+  {
+   "fieldname": "email_details_section",
+   "fieldtype": "Section Break",
+   "label": "Email Details"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Email Address",
+   "options": "Email",
+   "unique": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-03-17 16:19:08.791390",
+ "modified_by": "Administrator",
+ "module": "Support Simprosys",
+ "name": "Simprosy Newsletter Subscriber",
+ "naming_rule": "Autoincrement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

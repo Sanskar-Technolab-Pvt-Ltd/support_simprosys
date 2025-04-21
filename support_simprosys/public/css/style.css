@@ -1,0 +1,87 @@
+body {
+  font-family: "Poppins", serif;
+}
+
+.rotate {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease-in-out;
+}
+
+.platform-btn.active-button {
+  background-color: #ffffff; /* Replace with your desired active background color */
+  filter: grayscale(0);
+  opacity: 1;
+}
+
+.button-platform.active-mobile-button{
+  background-color: #ffffff; /* Replace with your desired active background color */
+  filter: grayscale(0);
+  opacity: 1;
+}
+
+/* Blog Page Css */
+.ql-editor h2{
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+}
+
+.ql-editor h3{
+  font-size: 20px;
+  line-height: 18px;
+  font-weight: 600;
+}
+
+.ql-editor p{
+  color: #25282B;
+  font-size: 16px;
+  line-height: 30px;
+}
+.ql-editor table th{
+  background-color: #B6B7B8;
+  font-size: 18px;
+  line-height: 18px;
+  font-family: bold;
+}
+
+.ql-editor table tr:nth-child(even) {
+  background-color: #CECFCF; 
+  font-size: 18px;
+}
+
+.ql-editor table tr:nth-child(odd) {
+  background-color: #E6E7E7;
+  font-size: 18px;
+}
+
+/* After lg screen */
+@media (min-width: 1280px){
+  .ql-editor h2{
+    font-size: 40px;
+    line-height: 54px;
+    font-weight: 600;
+}
+
+  .ql-editor h3{
+    font-size: 28px;
+    line-height: 22px;
+    font-weight: 600;
+  }
+
+  .ql-editor p{
+    color: #25282B;
+    font-size: 18px;
+    line-height: 30px;
+  }
+
+  .ql-editor table tr{
+    font-size: 16px;
+    line-height: 16px;
+  }
+
+  .ql-editor table th{
+    font-size: 16px;
+    line-height: 16px;
+    font-family: bold;
+  }
+}

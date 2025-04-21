@@ -1,0 +1,108 @@
+---
+import Cart from "../assets/img/cart.svg";
+import StarRating from "../components/StarRating.astro";
+// import VectorHalf from '.../assets/img/vector-half.svg'
+
+interface Props {
+  headTag?: string;
+  paragraphTag?: string;
+  review?: String;
+  hrefLink?: String;
+  newLabel?: String;
+  CTAButton?: String;
+  rating?: number;
+  slug?: String;
+  Icon?: String;
+}
+
+const {
+  headTag,
+  paragraphTag,
+  review,
+  hrefLink,
+  newLabel,
+  CTAButton,
+  rating,
+  slug,
+  Icon,
+} = Astro.props;
+
+const api_URl = import.meta.env.PUBLIC_ApiUrl;
+
+// Fetch the Tag data
+
+const api_URL = import.meta.env.PUBLIC_ApiUrl;
+const fetchCategoryData = async () => {
+  try {
+    const response = await fetch(
+      `${api_URL}/api/resource/Support%20Tag/${newLabel}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+        },
+      }
+    );
+
+    const jsonData = await response.json();
+    return jsonData.data || []; // Ensure data is always an array
+  } catch (error) {
+    console.error("Error fetching category data:", error);
+    return []; // Return empty array on failure
+  }
+};
+const categoryData = await fetchCategoryData();
+---
+
+<div
+  class="relative flex flex-col justify-between pb-[18px] rounded-2xl space-y-6 border border-sm bg-white"
+>
+  <a href={`./${slug}`} class="space-y-6 pt-4 sm:pt-8">
+    <div class="space-y-6 px-4 sm:px-8">
+      <div class="bg-[#E9F6FF] p-5 rounded-full w-fit">
+        <img class="h-10 w-10" src=`${api_URl}${Icon}` alt={headTag} />
+      </div>
+      <div class="space-y-6 xl:space-y-[8px] 2xl:space-y-[11px]">
+        <h3 class="font-semibold text-2xl text-[#25282B]">{headTag}</h3>
+        <p class="font-normal text-base text-[#3D3F42] line-clamp-2">
+          {paragraphTag}
+        </p>
+      </div>
+    </div>
+    <div
+      class={`absolute ${newLabel || "hidden"} right-[0%] top-[0%] rounded-tl-md rounded-bl-md px-2 lg:px-3 py-1`}
+      style=`background-color: ${categoryData.background_color || "#FFFFFF"};`
+    >
+      <p
+        class=`text-base italic font-bold`
+        style=`color:${categoryData.text_color || ""};`
+      >
+        {categoryData.tag_name || ""}
+      </p>
+    </div>
+  </a>
+  <div
+    class="pt-4 sssm:flex mx-4 lg:mx-8 sm:grid sm:grid-cols-2 sm:space-x-5 md:space-x-10 xl:space-x-17 lg:p-0 lg:pt-4 2xl:pt-[18px] border-t justify-between lg:justify-items-between items-center space-y-2 sssm:space-y-0 sm:text-right"
+  >
+    <div class="flex sm:h-[24px] sm:w-[200px] lg:w-[240px] space-x-1">
+      <!-- <div class="flex"> -->
+      <div
+        class="flex 2xl:gap-[2px] space-x-2 sm:space-x-1 lg:space-x-2  items-center justify-between"
+      >
+        <StarRating Rating={Number(rating)} />
+        <div>
+          <p class="text-[14px] sm:text-[13px] md:text-sm lg:text-base text-[#55575A]">
+            {review} Reviews
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="lg:pt-0">
+      <a
+        href={`${hrefLink}`}
+        class="button bg-[#195279] text-white px-2 py-1 md:px-4 md:py-[6px] text-sm md:text-base rounded-full hover:shadow-lg"
+        >{CTAButton}</a
+      >
+    </div>
+  </div>
+</div>
