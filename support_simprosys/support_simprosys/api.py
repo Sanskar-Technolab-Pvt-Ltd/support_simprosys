@@ -209,7 +209,7 @@ def import_Youtube_data():
 
 
 
-#? Fetch the data for Searching ------------------------------>#? Fetch the data for Searching ------------------------------>
+#? Fetch the data for Searching ------------------------------>
 @frappe.whitelist(allow_guest=True)
 def search_blog(keyword):
     # Split keyword by spaces to handle multiple words
