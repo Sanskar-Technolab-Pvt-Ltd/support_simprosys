@@ -103,23 +103,15 @@ frappe.ui.form.on("Update Simprosys Website", {
 });
 // * ----------------------------------
 
-
 // frappe.ui.form.on("Update Simprosys Website", {
 //   update: function (frm) {
-//     // Prevent duplicate listener
-//     frappe.realtime.off("astro_build_logs");
-
-//     // Clear logs
+//     // Clear logs before starting the build
 //     frm.set_value("logs", "");
 
-//     // Disable button (UI-safe way)
-//     const $btn = frm.fields_dict.update.$wrapper.find("button");
-//     $btn.prop("disabled", true);
+//     // Prevent duplicate listeners
+//     frappe.realtime.off("astro_build_logs");
 
-//     // Show freeze message
-//     frappe.freeze("🚧 Building in progress... Please wait.");
-
-//     // Listen for realtime logs
+//     // Realtime log subscription
 //     frappe.realtime.on("astro_build_logs", function (data) {
 //       if (data.log) {
 //         let currentLogs = frm.doc.logs || "";
@@ -128,24 +120,41 @@ frappe.ui.form.on("Update Simprosys Website", {
 //       }
 //     });
 
-//     // Trigger build
+//     // Disable button and show message that build is in progress
+//     let $btn = frm.fields_dict.update.$wrapper.find("button");
+//     $btn.prop("disabled", true); // Disable the button
+
+//     // Show custom message to the user
+//     frm.set_df_property("logs", "read_only", 1); // Make the logs field read-only
+//     frm.set_value("logs", "🚧 Build is in progress... Please wait.");
+//     frm.refresh_field("logs");
+
+//     // Trigger the build
 //     frappe.call({
-//       method: "support_simprosys.support_simprosys.api.trigger_astro_build_realtime",
+//       method:
+//         "support_simprosys.support_simprosys.api.trigger_astro_build_realtime",
 //       callback: function (r) {
-//         frappe.unfreeze();
+//         // Re-enable the button once build is finished
 //         $btn.prop("disabled", false);
 
+//         // Check build result
 //         if (r.message.status === "success") {
 //           frappe.msgprint("✅ Build Successful");
+//           frm.set_value("logs", "✅ Build Completed Successfully.");
 //         } else {
 //           frappe.msgprint("❌ Build Failed: " + r.message.message);
+//           frm.set_value("logs", "❌ Build Failed: " + r.message.message);
 //         }
+
+//         frm.refresh_field("logs"); // Refresh logs after update
 //       },
 //       error: function () {
-//         frappe.unfreeze();
+//         // In case of error
 //         $btn.prop("disabled", false);
-//         frappe.msgprint("❌ Build Failed due to unexpected error.");
-//       }
+//         frappe.msgprint("❌ Build Failed: Unexpected error occurred.");
+//         frm.set_value("logs", "❌ Build Failed: Unexpected error occurred.");
+//         frm.refresh_field("logs");
+//       },
 //     });
 //   },
 // });

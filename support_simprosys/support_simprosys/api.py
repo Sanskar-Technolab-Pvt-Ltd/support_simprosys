@@ -1018,6 +1018,7 @@ def get_post_category_tree():
 #                          "Astro Build Fatal Error")
 #         stream_logs(err_message)
 #         return {"status": "error", "message": err_message}
+
 #  * ---------------------------------------------
 
 from datetime import datetime
@@ -1042,7 +1043,20 @@ def create_astro_build_log(user):
 @frappe.whitelist()
 def trigger_astro_build_realtime():
     user = frappe.session.user
+
+    # 🚨 Check for existing processing builds
+    existing_build = frappe.db.exists(
+        "Astro Build Logs",
+        {"status": "Processing"}
+    )
+    if existing_build:
+        return {
+            "status": "in_progress",
+            "message": "A build is already in progress. Please wait until it completes."
+        }
+
     log_id = create_astro_build_log(user)  # create only once
+
     base_dir = frappe.get_app_path("support_simprosys")
     astro_dir = os.path.abspath(os.path.join(base_dir, "..", "Support-Simprosys-Astro"))
     dist_dir = os.path.join(base_dir, "public", "astro")
@@ -1057,33 +1071,33 @@ def trigger_astro_build_realtime():
 
         log = frappe.get_doc("Astro Build Logs", log_id)
 
-        # Append to logs field
         if not log.logs:
             log.logs = msg
         else:
             log.logs += f"\n{msg}"
 
-        # Update message, status, datetime
         log.message = msg
         log.date_and_time = datetime.now()
         if status:
             log.status = status
         log.save(ignore_permissions=True)
 
+        frappe.db.commit()
+
     try:
-        update_log("📦 Running `npm install`...")
+        update_log("📦 Running npm install...")
         install_process = subprocess.Popen(["npm", "install"], cwd=astro_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         for line in install_process.stdout:
             update_log(f"[install] {line.strip()}")
         install_process.wait()
 
         if install_process.returncode != 0:
-            update_log("🚫 `npm install` failed.", status="Failed")
-            return {"status": "error", "message": "`npm install` failed."}
+            update_log("🚫 npm install failed.", status="Failed")
+            return {"status": "error", "message": "npm install failed."}
 
-        update_log("✅ `npm install` completed.")
+        update_log("✅ npm install completed.")
 
-        update_log("🚀 Running `npm run build`...")
+        update_log("🚀 Running npm run build...")
         build_process = subprocess.Popen(["npm", "run", "build", "--", "--outDir", "dist-temp"], cwd=astro_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         for line in build_process.stdout:
             update_log(f"[build] {line.strip()}")
