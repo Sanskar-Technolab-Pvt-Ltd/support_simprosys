@@ -1139,7 +1139,7 @@ www_target: {www_target}
         stream_logs("✅ Build completed and files deployed to assets & www.")
 
          # === Run bench clear-cache ===
-        stream_logs("🧹 Running `bench clear-cache`...")
+        stream_logs("Running `bench clear-cache`...")
         cache_process = subprocess.run(
             ["bench", "clear-cache"],
             cwd="/home/frappe/frappe-bench/",
@@ -1150,7 +1150,7 @@ www_target: {www_target}
         stream_logs(cache_process.stdout)
 
         # === Run bench clear-website-cache ===
-        stream_logs("🌐 Running `bench clear-website-cache`...")
+        stream_logs("Running `bench clear-website-cache`...")
         website_cache_process = subprocess.run(
             ["bench", "clear-website-cache"],
             cwd="/home/frappe/frappe-bench/",
