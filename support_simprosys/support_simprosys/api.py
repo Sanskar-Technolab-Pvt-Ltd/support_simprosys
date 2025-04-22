@@ -1139,9 +1139,10 @@ www_target: {www_target}
         stream_logs("✅ Build completed and files deployed to assets & www.")
 
          # === Run bench clear-cache ===
-        stream_logs("Running `bench clear-cache`...")
+        # === Run bench --site all clear-cache ===
+        stream_logs("🧹 Running `bench --site all clear-cache`...")
         cache_process = subprocess.run(
-            ["bench", "clear-cache"],
+            ["bench", "--site", "all", "clear-cache"],
             cwd="/home/frappe/frappe-bench/",
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -1149,16 +1150,17 @@ www_target: {www_target}
         )
         stream_logs(cache_process.stdout)
 
-        # === Run bench clear-website-cache ===
-        stream_logs("Running `bench clear-website-cache`...")
+        # === Run bench --site all clear-website-cache ===
+        stream_logs("🧼 Running `bench --site all clear-website-cache`...")
         website_cache_process = subprocess.run(
-            ["bench", "clear-website-cache"],
+            ["bench", "--site", "all", "clear-website-cache"],
             cwd="/home/frappe/frappe-bench/",
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
         )
         stream_logs(website_cache_process.stdout)
+
 
         stream_logs("✅ All steps completed successfully.")
         return {"status": "success", "message": "Astro build, deployment, and cache clearing completed."}
