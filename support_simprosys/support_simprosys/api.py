@@ -500,6 +500,95 @@ def get_post_category_tree():
 #         return {"status": "error", "message": str(e)}
 
 
+# import os
+# import subprocess
+# import shutil
+# import frappe
+
+# @frappe.whitelist()
+# def trigger_astro_build_realtime():
+#     base_dir = frappe.get_app_path("support_simprosys")
+#     astro_dir = os.path.abspath(os.path.join(base_dir, "..", "Support-Simprosys-Astro"))
+#     dist_dir = os.path.join(base_dir, "public", "astro")
+#     temp_dist_dir = os.path.join(astro_dir, "dist-temp")
+
+#     assets_base = os.path.join(base_dir, "public", "support_simprosys", "assets")
+#     astro_assets_target = os.path.join(assets_base, "_astro")
+#     www_target = os.path.join(base_dir, "www")
+
+#     def stream_logs(log_line):
+#         frappe.publish_realtime("astro_build_logs", {"log": log_line}, user=frappe.session.user)
+
+#     try:
+#         # Clean previous temp build
+#         if os.path.exists(temp_dist_dir):
+#             shutil.rmtree(temp_dist_dir)
+
+#         # Run `npm run build -- --outDir dist-temp`
+#         process = subprocess.Popen(
+#             ["npm", "run", "build", "--", "--outDir", "dist-temp"],
+#             cwd=astro_dir,
+#             stdout=subprocess.PIPE,
+#             stderr=subprocess.STDOUT,
+#             text=True,
+#         )
+
+#         for line in iter(lambda: process.stdout.readline(), ""):
+#             if not line:
+#                 break
+#             stream_logs(line.strip())
+
+#         process.wait()
+
+#         if process.returncode != 0:
+#             stream_logs("🚫 Astro Build Failed.")
+#             return {"status": "error", "message": "Astro build failed."}
+
+#         # Replace old dist dir
+#         if os.path.exists(dist_dir):
+#             shutil.rmtree(dist_dir)
+#         shutil.move(temp_dist_dir, dist_dir)
+
+#         # === Copy `_astro` to public/support_simprosys/assets/_astro/ ===
+#         src_astro = os.path.join(dist_dir, "_astro")
+#         if os.path.exists(src_astro):
+#             if os.path.exists(astro_assets_target):
+#                 shutil.rmtree(astro_assets_target)
+#             os.makedirs(assets_base, exist_ok=True)
+#             shutil.copytree(src_astro, astro_assets_target)
+#             stream_logs("📁 Copied _astro to public/support_simprosys/assets/_astro/")
+#         else:
+#             stream_logs("⚠️ No _astro folder found in build output.")
+
+#         # === Copy remaining files to www/ ===
+#         if os.path.exists(www_target):
+#             for item in os.listdir(www_target):
+#                 item_path = os.path.join(www_target, item)
+#                 if os.path.isdir(item_path):
+#                     shutil.rmtree(item_path)
+#                 else:
+#                     os.remove(item_path)
+
+#         for item in os.listdir(dist_dir):
+#             if item == "_astro":
+#                 continue  # already handled
+#             src_item = os.path.join(dist_dir, item)
+#             dst_item = os.path.join(www_target, item)
+#             if os.path.isdir(src_item):
+#                 shutil.copytree(src_item, dst_item)
+#             else:
+#                 shutil.copy2(src_item, dst_item)
+
+#         stream_logs("✅ Build completed and files deployed to assets & www.")
+#         return {"status": "success", "message": "Astro build and deployment successful."}
+
+#     except Exception as e:
+#         frappe.log_error(str(e), "Astro Build")
+#         stream_logs(f"❗ Exception: {str(e)}")
+#         return {"status": "error", "message": str(e)}
+
+
+
 import os
 import subprocess
 import shutil
@@ -520,9 +609,30 @@ def trigger_astro_build_realtime():
         frappe.publish_realtime("astro_build_logs", {"log": log_line}, user=frappe.session.user)
 
     try:
+        # Log all paths for debugging
+        frappe.log_error(f"""🔍 Path Debug:
+base_dir: {base_dir}
+astro_dir: {astro_dir}
+dist_dir: {dist_dir}
+temp_dist_dir: {temp_dist_dir}
+assets_base: {assets_base}
+astro_assets_target: {astro_assets_target}
+www_target: {www_target}
+""", "Astro Build Paths")
+
         # Clean previous temp build
         if os.path.exists(temp_dist_dir):
             shutil.rmtree(temp_dist_dir)
+            stream_logs(f"🧹 Removed previous build folder: {temp_dist_dir}")
+        else:
+            stream_logs(f"ℹ️ No previous temp folder found at: {temp_dist_dir}")
+
+        # Ensure Astro directory exists
+        if not os.path.exists(astro_dir):
+            error_msg = f"🚫 Astro directory not found: {astro_dir}"
+            frappe.log_error(error_msg, "Astro Build Error")
+            stream_logs(error_msg)
+            return {"status": "error", "message": error_msg}
 
         # Run `npm run build -- --outDir dist-temp`
         process = subprocess.Popen(
@@ -541,26 +651,29 @@ def trigger_astro_build_realtime():
         process.wait()
 
         if process.returncode != 0:
-            stream_logs("🚫 Astro Build Failed.")
-            return {"status": "error", "message": "Astro build failed."}
+            error_msg = "🚫 Astro Build Failed."
+            stream_logs(error_msg)
+            return {"status": "error", "message": error_msg}
 
         # Replace old dist dir
         if os.path.exists(dist_dir):
             shutil.rmtree(dist_dir)
+            stream_logs(f"🔁 Removed old dist directory: {dist_dir}")
         shutil.move(temp_dist_dir, dist_dir)
+        stream_logs(f"✅ Moved build to: {dist_dir}")
 
-        # === Copy `_astro` to public/support_simprosys/assets/_astro/ ===
+        # === Copy `_astro` to assets ===
         src_astro = os.path.join(dist_dir, "_astro")
         if os.path.exists(src_astro):
             if os.path.exists(astro_assets_target):
                 shutil.rmtree(astro_assets_target)
             os.makedirs(assets_base, exist_ok=True)
             shutil.copytree(src_astro, astro_assets_target)
-            stream_logs("📁 Copied _astro to public/support_simprosys/assets/_astro/")
+            stream_logs(f"📁 Copied _astro to {astro_assets_target}")
         else:
-            stream_logs("⚠️ No _astro folder found in build output.")
+            stream_logs(f"⚠️ No _astro folder found in: {src_astro}")
 
-        # === Copy remaining files to www/ ===
+        # === Copy remaining files to www ===
         if os.path.exists(www_target):
             for item in os.listdir(www_target):
                 item_path = os.path.join(www_target, item)
@@ -568,6 +681,7 @@ def trigger_astro_build_realtime():
                     shutil.rmtree(item_path)
                 else:
                     os.remove(item_path)
+            stream_logs("🧹 Cleaned www directory")
 
         for item in os.listdir(dist_dir):
             if item == "_astro":
@@ -583,6 +697,15 @@ def trigger_astro_build_realtime():
         return {"status": "success", "message": "Astro build and deployment successful."}
 
     except Exception as e:
-        frappe.log_error(str(e), "Astro Build")
-        stream_logs(f"❗ Exception: {str(e)}")
-        return {"status": "error", "message": str(e)}
+        err_message = f"❗ Exception during build: {str(e)}"
+        frappe.log_error(f"{err_message}\n\nVariable Info:\n"
+                         f"base_dir = {base_dir}\n"
+                         f"astro_dir = {astro_dir}\n"
+                         f"dist_dir = {dist_dir}\n"
+                         f"temp_dist_dir = {temp_dist_dir}\n"
+                         f"assets_base = {assets_base}\n"
+                         f"astro_assets_target = {astro_assets_target}\n"
+                         f"www_target = {www_target}\n",
+                         "Astro Build Fatal Error")
+        stream_logs(err_message)
+        return {"status": "error", "message": err_message}
