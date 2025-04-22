@@ -849,9 +849,12 @@ def get_post_category_tree():
 #         return {"status": "error", "message": err_message}
 
 
-# import os
+# * Currently running code -------------->
+
 # import subprocess
+# import os
 # import shutil
+# from pathlib import Path
 # import frappe
 
 # @frappe.whitelist()
@@ -879,6 +882,10 @@ def get_post_category_tree():
 # astro_assets_target: {astro_assets_target}
 # www_target: {www_target}
 # """, "Astro Build Paths")
+
+#         # Dynamically determine the bench path
+#         bench_path = Path(__file__).resolve().parents[2]  # Adjust the level as needed
+#         bench_path = os.path.join(bench_path, 'frappe-bench')  # Adjust the bench folder name if necessary
 
 #         # Ensure Astro directory exists
 #         if not os.path.exists(astro_dir):
@@ -971,27 +978,29 @@ def get_post_category_tree():
 
 #         stream_logs("✅ Build completed and files deployed to assets & www.")
 
-#         # === Run bench clear-cache ===
-#         stream_logs("🧹 Running `bench clear-cache`...")
+#          # === Run bench clear-cache ===
+#         # === Run bench --site all clear-cache ===
+#         stream_logs("🧹 Running `bench --site all clear-cache`...")
 #         cache_process = subprocess.run(
-#             ["bench", "clear-cache"],
-#             cwd=frappe.get_bench_path(),
+#             ["bench", "--site", "all", "clear-cache"],
+#             cwd="/home/frappe/frappe-bench/",
 #             stdout=subprocess.PIPE,
 #             stderr=subprocess.STDOUT,
 #             text=True,
 #         )
 #         stream_logs(cache_process.stdout)
 
-#         # === Run bench clear-website-cache ===
-#         stream_logs("🌐 Running `bench clear-website-cache`...")
+#         # === Run bench --site all clear-website-cache ===
+#         stream_logs("🧼 Running `bench --site all clear-website-cache`...")
 #         website_cache_process = subprocess.run(
-#             ["bench", "clear-website-cache"],
-#             cwd=frappe.get_bench_path(),
+#             ["bench", "--site", "all", "clear-website-cache"],
+#             cwd="/home/frappe/frappe-bench/",
 #             stdout=subprocess.PIPE,
 #             stderr=subprocess.STDOUT,
 #             text=True,
 #         )
 #         stream_logs(website_cache_process.stdout)
+
 
 #         stream_logs("✅ All steps completed successfully.")
 #         return {"status": "success", "message": "Astro build, deployment, and cache clearing completed."}
@@ -1009,16 +1018,31 @@ def get_post_category_tree():
 #                          "Astro Build Fatal Error")
 #         stream_logs(err_message)
 #         return {"status": "error", "message": err_message}
+#  * ---------------------------------------------
 
-
-import subprocess
+from datetime import datetime
 import os
 import shutil
-from pathlib import Path
+import subprocess
 import frappe
+
+def create_astro_build_log(user):
+    """Create a single log entry for this build session."""
+    log = frappe.get_doc({
+        "doctype": "Astro Build Logs",
+        "user": user,
+        "status": "Processing",
+        "message": "Build started",
+        "date_and_time": datetime.now(),
+        "logs": "🚀 Build initiated...\n"
+    })
+    log.insert(ignore_permissions=True)
+    return log.name  # Return the log name (ID)
 
 @frappe.whitelist()
 def trigger_astro_build_realtime():
+    user = frappe.session.user
+    log_id = create_astro_build_log(user)  # create only once
     base_dir = frappe.get_app_path("support_simprosys")
     astro_dir = os.path.abspath(os.path.join(base_dir, "..", "Support-Simprosys-Astro"))
     dist_dir = os.path.join(base_dir, "public", "astro")
@@ -1028,153 +1052,76 @@ def trigger_astro_build_realtime():
     astro_assets_target = os.path.join(assets_base, "_astro")
     www_target = os.path.join(base_dir, "www")
 
-    def stream_logs(log_line):
-        frappe.publish_realtime("astro_build_logs", {"log": log_line}, user=frappe.session.user)
+    def update_log(msg, status=None):
+        frappe.publish_realtime("astro_build_logs", {"log": msg}, user=user)
+
+        log = frappe.get_doc("Astro Build Logs", log_id)
+
+        # Append to logs field
+        if not log.logs:
+            log.logs = msg
+        else:
+            log.logs += f"\n{msg}"
+
+        # Update message, status, datetime
+        log.message = msg
+        log.date_and_time = datetime.now()
+        if status:
+            log.status = status
+        log.save(ignore_permissions=True)
 
     try:
-        # Log important paths
-        frappe.log_error(f"""🔍 Path Debug:
-base_dir: {base_dir}
-astro_dir: {astro_dir}
-dist_dir: {dist_dir}
-temp_dist_dir: {temp_dist_dir}
-assets_base: {assets_base}
-astro_assets_target: {astro_assets_target}
-www_target: {www_target}
-""", "Astro Build Paths")
-
-        # Dynamically determine the bench path
-        bench_path = Path(__file__).resolve().parents[2]  # Adjust the level as needed
-        bench_path = os.path.join(bench_path, 'frappe-bench')  # Adjust the bench folder name if necessary
-
-        # Ensure Astro directory exists
-        if not os.path.exists(astro_dir):
-            error_msg = f"🚫 Astro directory not found: {astro_dir}"
-            frappe.log_error(error_msg, "Astro Build Error")
-            stream_logs(error_msg)
-            return {"status": "error", "message": error_msg}
-
-        # Clean previous temp build
-        if os.path.exists(temp_dist_dir):
-            shutil.rmtree(temp_dist_dir)
-            stream_logs(f"🧹 Removed previous build folder: {temp_dist_dir}")
-
-        # --- Run `npm install` ---
-        stream_logs("📦 Running `npm install`...")
-        install_process = subprocess.Popen(
-            ["npm", "install"],
-            cwd=astro_dir,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-        )
-        for line in iter(lambda: install_process.stdout.readline(), ""):
-            if not line:
-                break
-            stream_logs(f"[install] {line.strip()}")
-
+        update_log("📦 Running `npm install`...")
+        install_process = subprocess.Popen(["npm", "install"], cwd=astro_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        for line in install_process.stdout:
+            update_log(f"[install] {line.strip()}")
         install_process.wait()
+
         if install_process.returncode != 0:
-            stream_logs("🚫 `npm install` failed.")
+            update_log("🚫 `npm install` failed.", status="Failed")
             return {"status": "error", "message": "`npm install` failed."}
-        stream_logs("✅ `npm install` completed.")
 
-        # --- Run `npm run build` ---
-        stream_logs("🚀 Starting Astro build...")
-        build_process = subprocess.Popen(
-            ["npm", "run", "build", "--", "--outDir", "dist-temp"],
-            cwd=astro_dir,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-        )
-        for line in iter(lambda: build_process.stdout.readline(), ""):
-            if not line:
-                break
-            stream_logs(f"[build] {line.strip()}")
+        update_log("✅ `npm install` completed.")
 
+        update_log("🚀 Running `npm run build`...")
+        build_process = subprocess.Popen(["npm", "run", "build", "--", "--outDir", "dist-temp"], cwd=astro_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        for line in build_process.stdout:
+            update_log(f"[build] {line.strip()}")
         build_process.wait()
+
         if build_process.returncode != 0:
-            stream_logs("🚫 Astro Build Failed.")
+            update_log("🚫 Astro build failed.", status="Failed")
             return {"status": "error", "message": "Astro build failed."}
 
-        # Replace old dist dir
+        update_log("✅ Astro build completed.")
+
         if os.path.exists(dist_dir):
             shutil.rmtree(dist_dir)
-            stream_logs(f"🔁 Removed old dist directory: {dist_dir}")
         shutil.move(temp_dist_dir, dist_dir)
-        stream_logs(f"✅ Moved build to: {dist_dir}")
 
-        # === Copy `_astro` to assets ===
-        src_astro = os.path.join(dist_dir, "_astro")
-        if os.path.exists(src_astro):
+        if os.path.exists(os.path.join(dist_dir, "_astro")):
             if os.path.exists(astro_assets_target):
                 shutil.rmtree(astro_assets_target)
-            os.makedirs(assets_base, exist_ok=True)
-            shutil.copytree(src_astro, astro_assets_target)
-            stream_logs(f"📁 Copied _astro to {astro_assets_target}")
-        else:
-            stream_logs(f"⚠️ No _astro folder found in: {src_astro}")
+            shutil.copytree(os.path.join(dist_dir, "_astro"), astro_assets_target)
 
-        # === Copy remaining files to www ===
         if os.path.exists(www_target):
             for item in os.listdir(www_target):
-                item_path = os.path.join(www_target, item)
-                if os.path.isdir(item_path):
-                    shutil.rmtree(item_path)
-                else:
-                    os.remove(item_path)
-            stream_logs("🧹 Cleaned www directory")
+                path = os.path.join(www_target, item)
+                shutil.rmtree(path) if os.path.isdir(path) else os.remove(path)
 
         for item in os.listdir(dist_dir):
-            if item == "_astro":
-                continue  # already handled
-            src_item = os.path.join(dist_dir, item)
-            dst_item = os.path.join(www_target, item)
-            if os.path.isdir(src_item):
-                shutil.copytree(src_item, dst_item)
-            else:
-                shutil.copy2(src_item, dst_item)
+            if item != "_astro":
+                src = os.path.join(dist_dir, item)
+                dst = os.path.join(www_target, item)
+                shutil.copytree(src, dst) if os.path.isdir(src) else shutil.copy2(src, dst)
 
-        stream_logs("✅ Build completed and files deployed to assets & www.")
+        subprocess.run(["bench", "--site", "all", "clear-cache"], cwd="/home/frappe/frappe-bench")
+        subprocess.run(["bench", "--site", "all", "clear-website-cache"], cwd="/home/frappe/frappe-bench")
 
-         # === Run bench clear-cache ===
-        # === Run bench --site all clear-cache ===
-        stream_logs("🧹 Running `bench --site all clear-cache`...")
-        cache_process = subprocess.run(
-            ["bench", "--site", "all", "clear-cache"],
-            cwd="/home/frappe/frappe-bench/",
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-        )
-        stream_logs(cache_process.stdout)
-
-        # === Run bench --site all clear-website-cache ===
-        stream_logs("🧼 Running `bench --site all clear-website-cache`...")
-        website_cache_process = subprocess.run(
-            ["bench", "--site", "all", "clear-website-cache"],
-            cwd="/home/frappe/frappe-bench/",
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-        )
-        stream_logs(website_cache_process.stdout)
-
-
-        stream_logs("✅ All steps completed successfully.")
-        return {"status": "success", "message": "Astro build, deployment, and cache clearing completed."}
+        update_log("✅ All steps completed successfully.", status="Success")
+        return {"status": "success", "message": "Build finished successfully."}
 
     except Exception as e:
-        err_message = f"❗ Exception during build: {str(e)}"
-        frappe.log_error(f"{err_message}\n\nVariable Info:\n"
-                         f"base_dir = {base_dir}\n"
-                         f"astro_dir = {astro_dir}\n"
-                         f"dist_dir = {dist_dir}\n"
-                         f"temp_dist_dir = {temp_dist_dir}\n"
-                         f"assets_base = {assets_base}\n"
-                         f"astro_assets_target = {astro_assets_target}\n"
-                         f"www_target = {www_target}\n",
-                         "Astro Build Fatal Error")
-        stream_logs(err_message)
-        return {"status": "error", "message": err_message}
+        update_log(f"❗ Exception: {str(e)}", status="Failed")
+        frappe.log_error(str(e), "Astro Build Error")
+        return {"status": "error", "message": str(e)}

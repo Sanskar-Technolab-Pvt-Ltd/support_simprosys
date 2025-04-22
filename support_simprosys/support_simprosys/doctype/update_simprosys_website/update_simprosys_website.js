@@ -72,6 +72,7 @@
 // }
 
 
+// * Currently Working JS
 frappe.ui.form.on("Update Simprosys Website", {
   update: function (frm) {
     // Clear logs before build
@@ -100,3 +101,52 @@ frappe.ui.form.on("Update Simprosys Website", {
     });
   },
 });
+// * ----------------------------------
+
+
+// frappe.ui.form.on("Update Simprosys Website", {
+//   update: function (frm) {
+//     // Prevent duplicate listener
+//     frappe.realtime.off("astro_build_logs");
+
+//     // Clear logs
+//     frm.set_value("logs", "");
+
+//     // Disable button (UI-safe way)
+//     const $btn = frm.fields_dict.update.$wrapper.find("button");
+//     $btn.prop("disabled", true);
+
+//     // Show freeze message
+//     frappe.freeze("🚧 Building in progress... Please wait.");
+
+//     // Listen for realtime logs
+//     frappe.realtime.on("astro_build_logs", function (data) {
+//       if (data.log) {
+//         let currentLogs = frm.doc.logs || "";
+//         frm.set_value("logs", currentLogs + data.log + "\n");
+//         frm.refresh_field("logs");
+//       }
+//     });
+
+//     // Trigger build
+//     frappe.call({
+//       method: "support_simprosys.support_simprosys.api.trigger_astro_build_realtime",
+//       callback: function (r) {
+//         frappe.unfreeze();
+//         $btn.prop("disabled", false);
+
+//         if (r.message.status === "success") {
+//           frappe.msgprint("✅ Build Successful");
+//         } else {
+//           frappe.msgprint("❌ Build Failed: " + r.message.message);
+//         }
+//       },
+//       error: function () {
+//         frappe.unfreeze();
+//         $btn.prop("disabled", false);
+//         frappe.msgprint("❌ Build Failed due to unexpected error.");
+//       }
+//     });
+//   },
+// });
+
