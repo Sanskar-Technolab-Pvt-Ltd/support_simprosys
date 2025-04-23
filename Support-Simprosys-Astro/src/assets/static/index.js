@@ -8,8 +8,8 @@ function scrollFunction() {
   const header = document.getElementById("header");
 
   if (
-    document.body.scrollTop > 300 ||
-    document.documentElement.scrollTop > 300
+    document.body.scrollTop > 30 ||
+    document.documentElement.scrollTop > 30
   ) {
     header.classList.add("header-fixed");
     header.classList.remove("header-initial");

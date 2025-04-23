@@ -86,16 +86,19 @@ const categoryData = await fetchCategoryData();
   >
     <div class="flex sm:h-[24px] sm:w-[200px] lg:w-[240px] space-x-1">
       <!-- <div class="flex"> -->
-      <div
-        class="flex 2xl:gap-[2px] space-x-2 sm:space-x-1 lg:space-x-2  items-center justify-between"
+      <a
+        href={`${hrefLink}`}
+        class="flex 2xl:gap-[2px] space-x-2 sm:space-x-1 lg:space-x-2 items-center justify-between"
       >
         <StarRating Rating={Number(rating)} />
         <div>
-          <p class="text-[14px] sm:text-[13px] md:text-sm lg:text-base text-[#55575A]">
+          <p
+            class="text-[14px] sm:text-[13px] md:text-sm lg:text-base text-[#55575A]"
+          >
             {review} Reviews
           </p>
         </div>
-      </div>
+      </a>
     </div>
     <div class="lg:pt-0">
       <a

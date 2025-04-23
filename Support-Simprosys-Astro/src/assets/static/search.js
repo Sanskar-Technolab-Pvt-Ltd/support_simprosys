@@ -128,10 +128,17 @@ document.getElementById("searchInput").addEventListener(
 // Event listener to trigger search when input is focused
 document.getElementById("searchInput").addEventListener("focus", (event) => {
   const keyword = event.target.value.trim();
-  if (keyword.length > 2) {
+  const resultsContainer = document.getElementById("searchResults");
+
+  if (keyword.length > 1) {
     fetchSearchResults(keyword);
+  } else {
+    // Hide previous search results if keyword is short or empty
+    resultsContainer.innerHTML = "";
+    resultsContainer.classList.add("hidden");
   }
 });
+
 
 // Keyboard navigation variables
 let selectedIndex = -1;
