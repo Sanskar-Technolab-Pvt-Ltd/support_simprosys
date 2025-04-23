@@ -103,59 +103,58 @@ frappe.ui.form.on("Update Simprosys Website", {
 });
 // * ----------------------------------
 
+
 // frappe.ui.form.on("Update Simprosys Website", {
+//   onload: function (frm) {
+//     // Inject custom CSS styles into the page for the logs field
+//     const style = document.createElement("style");
+//     style.innerHTML = `
+//       div[data-fieldname="logs"] .ql-editor {
+//         max-height: 350px !important;
+//         overflow-y: auto !important;
+//         font-family: monospace !important;
+//         font-size: 13px !important;
+//         background-color: #f8f8f8 !important;
+//         white-space: pre-wrap;
+//       }
+//     `;
+//     document.head.appendChild(style);
+//   },
+
 //   update: function (frm) {
-//     // Clear logs before starting the build
+//     // Clear logs before starting
 //     frm.set_value("logs", "");
 
-//     // Prevent duplicate listeners
-//     frappe.realtime.off("astro_build_logs");
-
-//     // Realtime log subscription
+//     // Real-time listener
 //     frappe.realtime.on("astro_build_logs", function (data) {
 //       if (data.log) {
 //         let currentLogs = frm.doc.logs || "";
-//         frm.set_value("logs", currentLogs + data.log + "\n");
+//         let newLog = currentLogs + data.log + "\n";
+//         frm.set_value("logs", newLog);
 //         frm.refresh_field("logs");
+
+//         // Scroll to bottom after log update
+//         setTimeout(() => {
+//           const logsWrapper = frm.fields_dict.logs?.$wrapper;
+//           const qlEditor = logsWrapper?.find(".ql-editor")[0];
+//           if (qlEditor) {
+//             qlEditor.scrollTop = qlEditor.scrollHeight;
+//           }
+//         }, 100);
 //       }
 //     });
 
-//     // Disable button and show message that build is in progress
-//     let $btn = frm.fields_dict.update.$wrapper.find("button");
-//     $btn.prop("disabled", true); // Disable the button
-
-//     // Show custom message to the user
-//     frm.set_df_property("logs", "read_only", 1); // Make the logs field read-only
-//     frm.set_value("logs", "🚧 Build is in progress... Please wait.");
-//     frm.refresh_field("logs");
-
-//     // Trigger the build
+//     // Trigger build call
 //     frappe.call({
 //       method:
 //         "support_simprosys.support_simprosys.api.trigger_astro_build_realtime",
 //       callback: function (r) {
-//         // Re-enable the button once build is finished
-//         $btn.prop("disabled", false);
-
-//         // Check build result
 //         if (r.message.status === "success") {
 //           frappe.msgprint("✅ Build Successful");
-//           frm.set_value("logs", "✅ Build Completed Successfully.");
 //         } else {
 //           frappe.msgprint("❌ Build Failed: " + r.message.message);
-//           frm.set_value("logs", "❌ Build Failed: " + r.message.message);
 //         }
-
-//         frm.refresh_field("logs"); // Refresh logs after update
-//       },
-//       error: function () {
-//         // In case of error
-//         $btn.prop("disabled", false);
-//         frappe.msgprint("❌ Build Failed: Unexpected error occurred.");
-//         frm.set_value("logs", "❌ Build Failed: Unexpected error occurred.");
-//         frm.refresh_field("logs");
 //       },
 //     });
 //   },
 // });
-
