@@ -1,7 +1,7 @@
 import { c as createComponent, m as maybeRenderHead, b as addAttribute, f as renderScript, d as renderTemplate } from './astro/server_DqOV3ocY.mjs';
 import 'kleur/colors';
 import 'clsx';
-import { F as FrameImage, S as Search } from './Layout_BTa5xw4V.mjs';
+import { F as FrameImage, S as Search } from './Layout_BNRMZKsY.mjs';
 
 const $$Carousel = createComponent(async ($$result, $$props, $$slots) => {
   const api_URL = "https://simprosys.frappe.cloud";

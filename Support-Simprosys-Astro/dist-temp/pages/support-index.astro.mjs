@@ -2,7 +2,7 @@
 import { c as createComponent, a as createAstro, m as maybeRenderHead, b as addAttribute, d as renderTemplate, e as renderComponent, f as renderScript, u as unescapeHTML } from '../chunks/astro/server_DqOV3ocY.mjs';
 import 'kleur/colors';
 import he from 'he';
-import { $ as $$Layout, F as FrameImage, S as Search } from '../chunks/Layout_BTa5xw4V.mjs';
+import { $ as $$Layout, F as FrameImage, S as Search } from '../chunks/Layout_BNRMZKsY.mjs';
 import 'clsx';
 /* empty css                                         */
 export { renderers } from '../renderers.mjs';

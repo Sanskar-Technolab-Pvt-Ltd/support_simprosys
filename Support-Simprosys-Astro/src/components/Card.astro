@@ -13,6 +13,7 @@ interface Props {
   rating?: number;
   slug?: String;
   Icon?: String;
+  ReviewLink?: string;
 }
 
 const {
@@ -25,6 +26,7 @@ const {
   rating,
   slug,
   Icon,
+  ReviewLink,
 } = Astro.props;
 
 const api_URl = import.meta.env.PUBLIC_ApiUrl;
@@ -87,7 +89,7 @@ const categoryData = await fetchCategoryData();
     <div class="flex sm:h-[24px] sm:w-[200px] lg:w-[240px] space-x-1">
       <!-- <div class="flex"> -->
       <a
-        href={`${hrefLink}`}
+        href={`${ReviewLink || ""}`}
         class="flex 2xl:gap-[2px] space-x-2 sm:space-x-1 lg:space-x-2 items-center justify-between"
       >
         <StarRating Rating={Number(rating)} />

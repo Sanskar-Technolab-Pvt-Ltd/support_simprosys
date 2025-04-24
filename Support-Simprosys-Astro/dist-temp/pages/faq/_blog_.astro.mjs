@@ -2,8 +2,8 @@
 import { c as createComponent, a as createAstro, m as maybeRenderHead, b as addAttribute, d as renderTemplate, e as renderComponent, u as unescapeHTML, f as renderScript } from '../../chunks/astro/server_DqOV3ocY.mjs';
 import 'kleur/colors';
 import he from 'he';
-import { $ as $$Carousel } from '../../chunks/Carousel_C3yD8Z_Y.mjs';
-import { $ as $$Layout } from '../../chunks/Layout_BTa5xw4V.mjs';
+import { $ as $$Carousel } from '../../chunks/Carousel_KQ4Ac3Ql.mjs';
+import { $ as $$Layout } from '../../chunks/Layout_BNRMZKsY.mjs';
 import { T as ToggleArrow } from '../../chunks/toggle-arrow_CMTeNEh3.mjs';
 import 'clsx';
 /* empty css                                     */

@@ -3,10 +3,10 @@ import { c as createComponent, a as createAstro, m as maybeRenderHead, b as addA
 import 'kleur/colors';
 import 'clsx';
 /* empty css                                         */
-import { $ as $$Layout } from '../chunks/Layout_BTa5xw4V.mjs';
+import { $ as $$Layout } from '../chunks/Layout_BNRMZKsY.mjs';
 import he from 'he';
 import { T as ToggleArrow } from '../chunks/toggle-arrow_CMTeNEh3.mjs';
-import { $ as $$Carousel } from '../chunks/Carousel_C3yD8Z_Y.mjs';
+import { $ as $$Carousel } from '../chunks/Carousel_KQ4Ac3Ql.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro$4 = createAstro();
