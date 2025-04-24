@@ -41,7 +41,7 @@ async function fetchSearchResults(keyword) {
         resultItem.className =
           "result-item flex p-4 sm:p-5 gap-3 bg-white hover:bg-slate-100 hover:rounded-2xl border-b";
         resultItem.innerHTML = `
-          <img src="/searchNote.svg" alt="noteIcon" />
+          <img src="${api_url}/files/searchNote.svg" alt="noteIcon" />
           <div class="text-start">
             <p class="text-sm sm:text-base text-[#25282B]">
               ${highlightKeyword(
