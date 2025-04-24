@@ -16,12 +16,14 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "User",
-   "options": "User"
+   "options": "User",
+   "read_only": 1
   },
   {
    "fieldname": "date_and_time",
    "fieldtype": "Datetime",
-   "label": "Date and Time"
+   "label": "Date and Time",
+   "read_only": 1
   },
   {
    "fieldname": "status",
@@ -33,13 +35,15 @@
   {
    "fieldname": "logs",
    "fieldtype": "Text Editor",
-   "label": "Logs"
+   "label": "Logs",
+   "max_height": "350px",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-23 10:20:22.254168",
+ "modified": "2025-04-24 15:32:08.037281",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Astro Build Logs",
