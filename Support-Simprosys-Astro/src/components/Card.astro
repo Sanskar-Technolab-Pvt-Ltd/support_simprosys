@@ -109,7 +109,7 @@ const categoryData = await fetchCategoryData();
     </div>
     <div class="lg:pt-0">
       <a
-        href={`${hrefLink}`}
+        href={`${hrefLink || ""}`}
         target={`${HeaderLinkTarget || "_self"}`}
         class="button bg-[#195279] text-white px-2 py-1 md:px-4 md:py-[6px] text-sm md:text-base rounded-full hover:shadow-lg"
         >{CTAButton}</a
