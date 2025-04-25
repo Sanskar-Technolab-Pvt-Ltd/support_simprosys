@@ -14,6 +14,8 @@ interface Props {
   slug?: String;
   Icon?: String;
   ReviewLink?: string;
+  HeaderLinkTarget?: string;
+  ReviewLinkTarget?: string;
 }
 
 const {
@@ -27,6 +29,8 @@ const {
   slug,
   Icon,
   ReviewLink,
+  HeaderLinkTarget,
+  ReviewLinkTarget,
 } = Astro.props;
 
 const api_URl = import.meta.env.PUBLIC_ApiUrl;
@@ -90,7 +94,7 @@ const categoryData = await fetchCategoryData();
       <!-- <div class="flex"> -->
       <a
         href={`${ReviewLink || ""}`}
-        target="_blank"
+        target={`${ReviewLinkTarget || "_self"}`}
         class="flex 2xl:gap-[2px] space-x-2 sm:space-x-1 lg:space-x-2 items-center justify-between"
       >
         <StarRating Rating={Number(rating)} />
@@ -106,7 +110,7 @@ const categoryData = await fetchCategoryData();
     <div class="lg:pt-0">
       <a
         href={`${hrefLink}`}
-        target="_blank"
+        target={`${HeaderLinkTarget || "_self"}`}
         class="button bg-[#195279] text-white px-2 py-1 md:px-4 md:py-[6px] text-sm md:text-base rounded-full hover:shadow-lg"
         >{CTAButton}</a
       >

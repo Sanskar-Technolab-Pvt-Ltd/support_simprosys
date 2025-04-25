@@ -26,6 +26,7 @@
   "header_slug",
   "header_url_target",
   "review_url",
+  "review_url_target",
   "canonical_url",
   "column_break_eqlc",
   "icon_image",
@@ -243,6 +244,13 @@
    "fieldname": "crawler_content",
    "fieldtype": "Data",
    "label": "Crawler Content"
+  },
+  {
+   "default": "_self",
+   "fieldname": "review_url_target",
+   "fieldtype": "Select",
+   "label": "Review URL Target",
+   "options": "_self\n_blank"
   }
  ],
  "grid_page_length": 50,
@@ -250,7 +258,7 @@
  "is_tree": 1,
  "links": [],
  "make_attachments_public": 1,
- "modified": "2025-04-14 10:31:13.834348",
+ "modified": "2025-04-25 10:40:33.071982",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Simprosys Post Category",
