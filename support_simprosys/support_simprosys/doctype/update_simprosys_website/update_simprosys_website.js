@@ -105,31 +105,36 @@
 
 frappe.ui.form.on("Update Simprosys Website", {
   onload: function (frm) {
-    frappe.realtime.off("astro_build_logs");
-  },
-
-  on_close: function (frm) {
-    frappe.realtime.off("astro_build_logs");
-  },
-
-
-  update: function (frm) {
-    // Clear logs before starting new build
+    // Clear existing logs when form loads
     frm.set_value("logs", "");
 
-    // Clear old listeners
-    frappe.realtime.off("astro_build_logs");
+    // Remove old real-time listener if any
+    if (frm.__astro_log_listener) {
+      frappe.realtime.off("astro_build_logs", frm.__astro_log_listener);
+      delete frm.__astro_log_listener;
+    }
+  },
 
-    // New real-time log listener
-    frappe.realtime.on("astro_build_logs", function (data) {
+  update: function (frm) {
+    // Clear logs before starting
+    frm.set_value("logs", "");
+
+    // Remove old listener if any
+    if (frm.__astro_log_listener) {
+      frappe.realtime.off("astro_build_logs", frm.__astro_log_listener);
+    }
+
+    // Setup real-time log listener
+    frm.__astro_log_listener = function (data) {
       if (data.log) {
         let currentLogs = frm.doc.logs || "";
-        frm.set_value("logs", currentLogs + data.log + "\n");
-        frm.refresh_field("logs");
+        frm.set_value("logs", currentLogs + data.log + "<br>"); // Append new logs
       }
-    });
+    };
 
-    // Trigger backend build
+    frappe.realtime.on("astro_build_logs", frm.__astro_log_listener);
+
+    // Call backend method to trigger build
     frappe.call({
       method:
         "support_simprosys.support_simprosys.api.trigger_astro_build_realtime",
@@ -142,12 +147,16 @@ frappe.ui.form.on("Update Simprosys Website", {
           frappe.msgprint("❌ Build Failed: " + r.message.message);
         }
 
-        // 🧹 Clear logs AFTER build is finished (Important)
-        setTimeout(() => {
-          frm.set_value("logs", "");
-          frm.refresh_field("logs");
-        }, 3000); // wait for 3 sec to let user read final logs
+        // After build is complete, clear logs TEMPORARILY
+        frm.set_value("logs", "");
+
+        // Also remove the listener
+        if (frm.__astro_log_listener) {
+          frappe.realtime.off("astro_build_logs", frm.__astro_log_listener);
+          delete frm.__astro_log_listener;
+        }
       },
     });
   },
 });
+

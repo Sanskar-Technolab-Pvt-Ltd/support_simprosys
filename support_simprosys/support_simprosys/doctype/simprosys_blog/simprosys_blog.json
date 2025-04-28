@@ -38,6 +38,8 @@
    "default": "Draft",
    "fieldname": "status",
    "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Status",
    "options": "Publish\nUnpublish\nDraft",
    "permlevel": 1,
@@ -57,10 +59,8 @@
   },
   {
    "fieldname": "author",
-   "fieldtype": "Link",
-   "label": "Author",
-   "options": "User",
-   "read_only": 1
+   "fieldtype": "Data",
+   "label": "Author"
   },
   {
    "fieldname": "section_break_xlce",
@@ -153,7 +153,7 @@
  "index_web_pages_for_search": 1,
  "links": [],
  "make_attachments_public": 1,
- "modified": "2025-04-11 11:46:46.623442",
+ "modified": "2025-04-28 17:26:31.635399",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Simprosys Blog",
