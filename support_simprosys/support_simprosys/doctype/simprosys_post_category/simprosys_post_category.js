@@ -83,7 +83,6 @@ function toggle_category_fields_section(frm) {
     const fields = [
       "header_app_name",
       "description",
-      "header_url",
       "header_url_target",
       "icon_image",
       "cta_button",
