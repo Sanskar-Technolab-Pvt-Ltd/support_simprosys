@@ -73,65 +73,21 @@
 
 
 // * Currently Working JS
-frappe.ui.form.on("Update Simprosys Website", {
-  update: function (frm) {
-    // Clear logs before build
-    frm.set_value("logs", "");
-
-    // Realtime log listener
-    frappe.realtime.on("astro_build_logs", function (data) {
-      if (data.log) {
-        let currentLogs = frm.doc.logs || "";
-        frm.set_value("logs", currentLogs + data.log + "\n");
-        frm.refresh_field("logs");
-      }
-    });
-
-    // Trigger build without freeze
-    frappe.call({
-      method:
-        "support_simprosys.support_simprosys.api.trigger_astro_build_realtime",
-      callback: function (r) {
-        if (r.message.status === "success") {
-          frappe.msgprint("✅ Build Successful");
-        } else {
-          frappe.msgprint("❌ Build Failed: " + r.message.message);
-        }
-      },
-    });
-  },
-});
-// * ----------------------------------
-
-
 // frappe.ui.form.on("Update Simprosys Website", {
 //   update: function (frm) {
-//     // Step 1: Clear logs
+//     // Clear logs before build
 //     frm.set_value("logs", "");
-//     frm.refresh_field("logs");
 
-//     // Step 2: Realtime log listener
+//     // Realtime log listener
 //     frappe.realtime.on("astro_build_logs", function (data) {
 //       if (data.log) {
-//         // Append new log with HTML line break
 //         let currentLogs = frm.doc.logs || "";
-//         currentLogs += frappe.utils.escape_html(data.log) + "<br>";
-//         frm.doc.logs = currentLogs; // set without triggering set_value
-
-//         // Update DOM directly (avoiding refresh_field re-render)
-//         const logFieldWrapper = frm.fields_dict.logs?.$wrapper;
-//         const editorBody = logFieldWrapper?.find(".frappe-control .ql-editor");
-
-//         if (editorBody && editorBody.length) {
-//           editorBody.html(currentLogs);
-
-//           // Scroll to bottom
-//           editorBody[0].scrollTop = editorBody[0].scrollHeight;
-//         }
+//         frm.set_value("logs", currentLogs + data.log + "\n");
+//         frm.refresh_field("logs");
 //       }
 //     });
 
-//     // Step 3: Trigger build
+//     // Trigger build without freeze
 //     frappe.call({
 //       method:
 //         "support_simprosys.support_simprosys.api.trigger_astro_build_realtime",
@@ -145,3 +101,53 @@ frappe.ui.form.on("Update Simprosys Website", {
 //     });
 //   },
 // });
+// * ----------------------------------
+
+frappe.ui.form.on("Update Simprosys Website", {
+  onload: function (frm) {
+    frappe.realtime.off("astro_build_logs");
+  },
+
+  on_close: function (frm) {
+    frappe.realtime.off("astro_build_logs");
+  },
+
+
+  update: function (frm) {
+    // Clear logs before starting new build
+    frm.set_value("logs", "");
+
+    // Clear old listeners
+    frappe.realtime.off("astro_build_logs");
+
+    // New real-time log listener
+    frappe.realtime.on("astro_build_logs", function (data) {
+      if (data.log) {
+        let currentLogs = frm.doc.logs || "";
+        frm.set_value("logs", currentLogs + data.log + "\n");
+        frm.refresh_field("logs");
+      }
+    });
+
+    // Trigger backend build
+    frappe.call({
+      method:
+        "support_simprosys.support_simprosys.api.trigger_astro_build_realtime",
+      callback: function (r) {
+        if (r.message.status === "success") {
+          frappe.msgprint("✅ Build Successful");
+        } else if (r.message.status === "in_progress") {
+          frappe.msgprint("⏳ Build already in progress.");
+        } else {
+          frappe.msgprint("❌ Build Failed: " + r.message.message);
+        }
+
+        // 🧹 Clear logs AFTER build is finished (Important)
+        setTimeout(() => {
+          frm.set_value("logs", "");
+          frm.refresh_field("logs");
+        }, 3000); // wait for 3 sec to let user read final logs
+      },
+    });
+  },
+});
