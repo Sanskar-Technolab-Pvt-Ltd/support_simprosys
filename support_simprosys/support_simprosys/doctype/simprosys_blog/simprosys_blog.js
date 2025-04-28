@@ -13,22 +13,4 @@ frappe.ui.form.on("Simprosys Blog", {
         .css("min-height", "600px");
     }, 300);
   },
-
-  onload: function (frm) {
-    // Set author only if it's a new document and author is not already set
-    if (frm.is_new() && !frm.doc.author) {
-      frappe.call({
-        method: "frappe.client.get",
-        args: {
-          doctype: "User",
-          name: frappe.session.user,
-        },
-        callback: function (response) {
-          if (response.message) {
-            frm.set_value("author", response.message.full_name);
-          }
-        },
-      });
-    }
-  },
 });
