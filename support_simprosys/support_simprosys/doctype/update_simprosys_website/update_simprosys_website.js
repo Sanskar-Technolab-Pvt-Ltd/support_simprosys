@@ -103,60 +103,46 @@
 // });
 // * ----------------------------------
 
+
+// ! Use HTML field
+
 frappe.ui.form.on("Update Simprosys Website", {
-  onload: function (frm) {
-    // Clear existing logs when form loads
-    frm.set_value("logs", "");
-
-    // Remove old real-time listener if any
-    if (frm.__astro_log_listener) {
-      frappe.realtime.off("astro_build_logs", frm.__astro_log_listener);
-      delete frm.__astro_log_listener;
-    }
-  },
-
   update: function (frm) {
-    // Clear logs before starting
-    frm.set_value("logs", "");
+    // Clear logs and apply styling
+    frm.fields_dict["logs"].$wrapper
+      .css({
+        "max-height": "350px",
+        "overflow-y": "auto",
+        "background-color": "#f9f9f9",
+        padding: "10px",
+        border: "1px solid #ddd",
+        "font-family": "monospace",
+      })
+      .html("");
 
-    // Remove old listener if any
-    if (frm.__astro_log_listener) {
-      frappe.realtime.off("astro_build_logs", frm.__astro_log_listener);
-    }
-
-    // Setup real-time log listener
-    frm.__astro_log_listener = function (data) {
+    // Realtime log listener
+    frappe.realtime.on("astro_build_logs", function (data) {
       if (data.log) {
-        let currentLogs = frm.doc.logs || "";
-        frm.set_value("logs", currentLogs + data.log + "<br>"); // Append new logs
+        let wrapper = frm.fields_dict["logs"].$wrapper;
+        wrapper.append(`<pre style="margin: 0;">${data.log}</pre>`);
+        wrapper.scrollTop(wrapper[0].scrollHeight); // Auto-scroll to bottom
       }
-    };
+    });
 
-    frappe.realtime.on("astro_build_logs", frm.__astro_log_listener);
-
-    // Call backend method to trigger build
+    // Trigger build
     frappe.call({
       method:
         "support_simprosys.support_simprosys.api.trigger_astro_build_realtime",
       callback: function (r) {
         if (r.message.status === "success") {
           frappe.msgprint("✅ Build Successful");
-        } else if (r.message.status === "in_progress") {
-          frappe.msgprint("⏳ Build already in progress.");
         } else {
           frappe.msgprint("❌ Build Failed: " + r.message.message);
-        }
-
-        // After build is complete, clear logs TEMPORARILY
-        frm.set_value("logs", "");
-
-        // Also remove the listener
-        if (frm.__astro_log_listener) {
-          frappe.realtime.off("astro_build_logs", frm.__astro_log_listener);
-          delete frm.__astro_log_listener;
         }
       },
     });
   },
 });
+
+
 
