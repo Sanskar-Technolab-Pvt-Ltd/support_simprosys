@@ -1021,6 +1021,18 @@ def get_post_category_tree():
 
 #  * ---------------------------------------------
 
+@frappe.whitelist()
+def get_current_build_log():
+    log = frappe.get_all(
+        "Astro Build Logs",
+        filters={"status": "Processing"},
+        order_by="creation desc",
+        limit_page_length=1,
+        fields=["name", "logs", "status"]
+    )
+    return log[0] if log else None
+
+
 from datetime import datetime
 import os
 import shutil
