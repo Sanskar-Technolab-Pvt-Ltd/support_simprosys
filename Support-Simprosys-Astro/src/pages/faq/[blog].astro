@@ -182,6 +182,11 @@ let decodedContent = blog_details.content_details
   ? he.decode(blog_details.content_details)
   : "No content available";
 
+decodedContent = decodedContent.replace(
+  /(https?:\/\/(?:www\.)?youtu\.be\/[\w-]+)\?[\w=&-]*/g,
+  "$1"
+);
+
 // Convert YouTube short links to embedded iFrames
 decodedContent = decodedContent.replace(
   /https?:\/\/(?:www\.)?youtu\.be\/([\w-]+)/g,

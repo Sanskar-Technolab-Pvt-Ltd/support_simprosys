@@ -164,12 +164,12 @@ frappe.ui.form.on("Update Simprosys Website", {
 });
 
 function disable_update_button(frm) {
-  frm.set_df_property("update", "read_only", 1);
+  frm.set_df_property("update", "hidden", 1);
   frm.refresh_field("update");
 }
 
 function enable_update_button(frm) {
-  frm.set_df_property("update", "read_only", 0);
+  frm.set_df_property("update", "hidden", 0);
   frm.refresh_field("update");
 }
 
@@ -181,7 +181,7 @@ function show_logs_from_server(frm, logs) {
   const lines = logs.split("\n");
 
   for (let line of lines) {
-    wrapper.append(`<pre style="margin: 0;">${line}</pre>`);
+    wrapper.append(`<pre style="margin: 0; color:black;">${line}</pre>`);
   }
 
   wrapper.scrollTop(wrapper[0].scrollHeight);

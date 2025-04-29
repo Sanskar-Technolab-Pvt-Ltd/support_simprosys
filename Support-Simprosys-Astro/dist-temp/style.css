@@ -300,7 +300,7 @@ body {
 .ql-editor img {
   max-width: 100%;
   height: auto;
-  /* ! date-29th april --> width: 100% !important;  */ 
+  width: 100% !important;
   margin-bottom: 1rem;
 }
 
