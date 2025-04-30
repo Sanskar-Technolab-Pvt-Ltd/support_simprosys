@@ -15,6 +15,7 @@ import Carousel from "../../components/Carousel.astro";
 import Layout from "../../layouts/Layout.astro";
 import DetailDropdown from "../../components/DetailDropdown.astro";
 import MobileDropdown from "../../components/MobileDropdown.astro";
+import { any } from "astro:schema";
 
 const API_URL = import.meta.env.PUBLIC_ApiUrl;
 
@@ -216,6 +217,15 @@ decodedContent = decodedContent.replace(
   '<a$1 target="_blank">$2</a>'
 );
 
+// Step 1: Add target="_blank" to <a> inside <strong>
+decodedContent = decodedContent.replace(
+  /(<strong[^>]*>[\s\S]*?<a\s+)(?![^>]*target=)([^>]*>)/gi,
+  '$1target="_blank" rel="noopener noreferrer" $2'
+);
+
+// Step 2: Remove <strong> and </strong> tags
+decodedContent = decodedContent.replace(/<\/?strong[^>]*>/gi, "");
+
 // Remove the <BR> tags
 decodedContent = decodedContent.replace(/<span[^>]*>\s*<br>\s*<\/span>/gi, "");
 decodedContent = decodedContent.replace(/<div[^>]*>\s*<br>\s*<\/div>/gi, "");
@@ -235,6 +245,23 @@ decodedContent = decodedContent
   .replace(/%}/g, "%&#125;")
   .replace(/{{/g, "&#123;&#123;") // Escapes `{{ }}`
   .replace(/}}/g, "&#125;&#125;");
+
+// Bullet <ol> tags
+decodedContent = decodedContent.replace(
+  /<ol>([\s\S]*?)<\/ol>/gi,
+  (match:any, innerContent:any) => {
+    // Check if all <li> tags inside have data-list="bullet"
+    const allBullet = Array.from(innerContent.matchAll(/<li[^>]*>/gi)).every(
+      (li:any) => li[0].includes('data-list="bullet"')
+    );
+
+    if (allBullet) {
+      // Replace opening and closing ol with ul
+      return `<ul>${innerContent}</ul>`;
+    }
+    return match; // leave as is
+  }
+);
 
 // Function to extract YouTube video links
 function extractYouTubeLinks(content: any) {
