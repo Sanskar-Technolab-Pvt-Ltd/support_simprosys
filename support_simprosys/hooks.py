@@ -55,7 +55,8 @@ doc_events = {
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 doctype_list_js = {"Article" : "public/js/article.js",
-                   "Simprosys Youtube Data" : "public/js/youtube.js"}
+                   "Simprosys Youtube Data" : "public/js/youtube.js",
+                   "Simprosys Blog" : "public/js/blog.js",}
 # doctype_tree_js = {"Simprosys Post Category" : "public/js/simprosys_post_category_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
