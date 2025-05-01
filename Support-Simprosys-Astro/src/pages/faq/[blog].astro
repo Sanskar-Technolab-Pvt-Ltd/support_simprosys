@@ -249,10 +249,10 @@ decodedContent = decodedContent
 // Bullet <ol> tags
 decodedContent = decodedContent.replace(
   /<ol>([\s\S]*?)<\/ol>/gi,
-  (match:any, innerContent:any) => {
+  (match: any, innerContent: any) => {
     // Check if all <li> tags inside have data-list="bullet"
     const allBullet = Array.from(innerContent.matchAll(/<li[^>]*>/gi)).every(
-      (li:any) => li[0].includes('data-list="bullet"')
+      (li: any) => li[0].includes('data-list="bullet"')
     );
 
     if (allBullet) {
@@ -546,7 +546,7 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
       class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 hidden z-50"
     >
       <div
-        class="relative rounded-lg shadow-lg w-full max-w-3xl sm:max-w-4xl xl:max-w-7xl p-4 max-h-[90vh] overflow-y-auto"
+        class="relative rounded-lg shadow-lg w-full max-w-3xl sm:max-w-4xl xl:max-w-7xl p-4 max-h-[85vh] overflow-y-auto"
       >
         <!-- Close Button -->
         <button

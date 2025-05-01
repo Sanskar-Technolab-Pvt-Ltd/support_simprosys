@@ -125,7 +125,9 @@ const SupportSearchData = SupportSearchJson.data;
           <!-- Search Bar -->
           <div class="space-y-6">
             <div class="flex items-center justify-center relative px-[20px]">
-              <div class="relative w-full md:w-[90%] lg:w-full">
+              <div
+                class="relative w-full max-w-xl md:max-w-xl lg:max-w-3xl xl:max-w-5xl 2xl:max-w-6xl"
+              >
                 <div
                   class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none pl-5"
                 >
@@ -143,7 +145,7 @@ const SupportSearchData = SupportSearchJson.data;
 
               <div
                 id="searchResults"
-                class="absolute z-10 w-full md:w-[90%] lg:w-full top-[110%] hidden px-5 rounded-t-2xl rounded-b-2xl overflow-hidden"
+                class="absolute z-10 w-full top-[110%] hidden px-5 rounded-t-2xl rounded-b-2xl overflow-hidden"
                 style="mask-image: radial-gradient(white 100%, transparent 100%); -webkit-mask-image: radial-gradient(white 100%, transparent 100%);"
               >
               </div>
@@ -152,17 +154,18 @@ const SupportSearchData = SupportSearchJson.data;
 
           <!-- Links Section -->
           <div
-            class="content-section px-5 sm:px-11 flex flex-wrap sm:flex-row sm:items-center justify-center gap-2"
+            class="content-section px-5 sm:px-11 flex flex-wrap sm:flex-row sm:items-center justify-center gap-2 md:max-w-3xl lg:max-x-xl xl:max-w-4xl 2xl:max-w-5xl"
           >
-            { SupportSearchData && 
-              SupportSearchData.map((item: any) => (
-                <a
-                  href="javascript:void(0);"
-                  class="link-item px-2 py-1 md:px-3 md:py-2 bg-[#133953] bg-opacity-50 text-white rounded-full font-normal text-sm md:text-base hover:bg-opacity-100"
-                >
-                  {item.keyword || ""}
-                </a>
-              ))
+            {
+              SupportSearchData &&
+                SupportSearchData.map((item: any) => (
+                  <a
+                    href="javascript:void(0);"
+                    class="link-item px-2 py-1 md:px-3 md:py-2 bg-[#133953] bg-opacity-50 text-white rounded-full font-normal text-sm md:text-base hover:bg-opacity-100"
+                  >
+                    {item.keyword || ""}
+                  </a>
+                ))
             }
           </div>
         </div>
@@ -173,7 +176,9 @@ const SupportSearchData = SupportSearchJson.data;
     <!-- Support Section Start -->
 
     <div class="sm:hidden">
-      <MobileSupport heading={SupportHomeSettings.platform_heading_label || ""} />
+      <MobileSupport
+        heading={SupportHomeSettings.platform_heading_label || ""}
+      />
     </div>
     <div class="hidden sm:block">
       <Support heading={SupportHomeSettings.platform_heading_label || ""} />
@@ -281,14 +286,15 @@ const SupportSearchData = SupportSearchJson.data;
           <div
             class="md:col-span-8 lg:col-span-9 grid grid-cols-2 lg:grid-cols-3 gap-4 xl:gap-[22px]"
           >
-            { youtubeData &&
-              youtubeData.map((item: any) => (
-                <Videos
-                  Src={item.image}
-                  Href={item.video_id}
-                  Title={item.title}
-                />
-              ))
+            {
+              youtubeData &&
+                youtubeData.map((item: any) => (
+                  <Videos
+                    Src={item.image}
+                    Href={item.video_id}
+                    Title={item.title}
+                  />
+                ))
             }
           </div>
         </div>
