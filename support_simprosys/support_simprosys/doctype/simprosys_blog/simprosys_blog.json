@@ -57,6 +57,7 @@
    "fieldname": "slug",
    "fieldtype": "Data",
    "label": "Slug",
+   "read_only": 1,
    "unique": 1
   },
   {
@@ -179,7 +180,7 @@
  "index_web_pages_for_search": 1,
  "links": [],
  "make_attachments_public": 1,
- "modified": "2025-04-30 17:19:14.418132",
+ "modified": "2025-05-01 12:55:04.733427",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Simprosys Blog",
