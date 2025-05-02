@@ -55,15 +55,16 @@ const SupportSearchData = SupportSearchJson.data;
         class="content-section px-5 sm:px-11 flex flex-wrap sm:flex-row sm:items-center justify-center gap-2 max-w-lg lg:max-w-2xl xl:max-w-4xl 2xl:max-w-4xl"
       >
         {
-          SupportSearchData.map((item: any, index: any) => (
-            <a
-              href="javascript:void(0);"
-              class="link-item px-2 py-1 xl:py-2 bg-[#133953] bg-opacity-50 text-white rounded-full font-normal text-sm md:text-base hover:bg-opacity-100"
-              data-index={index}
-            >
-              {item.keyword || ""}
-            </a>
-          ))
+          SupportSearchData &&
+            SupportSearchData.map((item: any, index: any) => (
+              <a
+                href="javascript:void(0);"
+                class="link-item px-2 py-1 xl:py-2 bg-[#133953] bg-opacity-50 text-white rounded-full font-normal text-sm md:text-base hover:bg-opacity-100"
+                data-index={index}
+              >
+                {item.keyword || ""}
+              </a>
+            ))
         }
       </div>
     </div>
