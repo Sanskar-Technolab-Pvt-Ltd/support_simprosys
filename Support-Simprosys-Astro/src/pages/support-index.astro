@@ -154,6 +154,7 @@ const SupportSearchData = SupportSearchJson.data;
 
           <!-- Links Section -->
           <div
+            id="keyword-container"
             class="content-section px-5 sm:px-11 flex flex-wrap sm:flex-row sm:items-center justify-center gap-2 md:max-w-3xl lg:max-x-xl xl:max-w-4xl 2xl:max-w-5xl"
           >
             {
@@ -308,3 +309,23 @@ const SupportSearchData = SupportSearchJson.data;
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
   ></script>
 </Layout>
+
+<script is:inline>
+  function updateVisibleKeywords() {
+    const links = document.querySelectorAll("#keyword-container .link-item");
+    if (!links.length) return;
+
+    if (window.innerWidth < 768) {
+      links.forEach((link, index) => {
+        link.style.display = index < 5 ? "inline-flex" : "none";
+      });
+    } else {
+      links.forEach((link) => {
+        link.style.display = "inline-flex";
+      });
+    }
+  }
+
+  window.addEventListener("DOMContentLoaded", updateVisibleKeywords);
+  window.addEventListener("resize", updateVisibleKeywords);
+</script>
