@@ -1151,3 +1151,20 @@ def trigger_astro_build_realtime():
         update_log(f"❗ Exception: {str(e)}", status="Failed")
         frappe.log_error(str(e), "Astro Build Error")
         return {"status": "error", "message": str(e)}
+    
+
+
+@frappe.whitelist(allow_guest=True)
+def get_blog_by_slug(slug):
+    if not slug:
+        return {"error": "Slug is required"}
+
+    blog = frappe.get_all("Simprosys Blog",
+        filters={"slug": slug},
+        fields=["name", "slug", "post_category", "blog_title", "content_details"]
+    )
+
+    if not blog:
+        return {"error": "Blog not found"}
+
+    return blog[0]
