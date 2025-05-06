@@ -9,7 +9,7 @@
   "hide_custom": 0,
   "icon": "website",
   "indicator_color": null,
-  "is_hidden": 1,
+  "is_hidden": 0,
   "label": "Website",
   "links": [
    {
@@ -495,7 +495,7 @@
   "hide_custom": 0,
   "icon": "tool",
   "indicator_color": null,
-  "is_hidden": 1,
+  "is_hidden": 0,
   "label": "Tools",
   "links": [
    {
@@ -1307,7 +1307,7 @@
     "parent": "Users",
     "parentfield": "links",
     "parenttype": "Workspace",
-    "report_ref_doctype": null,
+    "report_ref_doctype": "DocShare",
     "type": "Link"
    },
    {
@@ -1505,7 +1505,7 @@
   "hide_custom": 0,
   "icon": "integration",
   "indicator_color": null,
-  "is_hidden": 1,
+  "is_hidden": 0,
   "label": "Integrations",
   "links": [
    {
@@ -1970,7 +1970,7 @@
   "hide_custom": 0,
   "icon": "tool",
   "indicator_color": null,
-  "is_hidden": 1,
+  "is_hidden": 0,
   "label": "Build",
   "links": [
    {
@@ -2668,7 +2668,7 @@
  },
  {
   "charts": [],
-  "content": "[{\"id\":\"UDZZHMG3aT\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Platform Wise Categories</b></span>\",\"col\":12}},{\"id\":\"wtysfxmhLV\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shopify\",\"col\":3}},{\"id\":\"Cij0JLPqKA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shopline\",\"col\":3}},{\"id\":\"0CJ-cAt3G2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WooCommerce\",\"col\":3}},{\"id\":\"I6Efi2uKzu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Wix\",\"col\":3}},{\"id\":\"ODWTriB55T\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"BigCommerce\",\"col\":3}},{\"id\":\"3Nt5eVhFGO\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Support Doctypes</span>\",\"col\":12}},{\"id\":\"Clhvbq9gVQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Doc Category\",\"col\":3}},{\"id\":\"HfyoJkP7Ci\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Docs\",\"col\":3}},{\"id\":\"0b2Vr_Gwgu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Video settings\",\"col\":3}},{\"id\":\"qlde_Xogin\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Recent articles settings\",\"col\":3}},{\"id\":\"375qeKpkRG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Support Ticket\",\"col\":3}},{\"id\":\"7V3PhvN5LV\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>API &amp; Website Settings</b></span>\",\"col\":12}},{\"id\":\"XCZX0oPtQZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Home Page\",\"col\":3}},{\"id\":\"c3JamQ62oN\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Search Keyword\",\"col\":3}},{\"id\":\"bRpIDnyBUO\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Article Setting\",\"col\":3}},{\"id\":\"3YehNVpgyK\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Youtube Settings\",\"col\":3}},{\"id\":\"QpYJA-nM6f\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Update Website\",\"col\":3}},{\"id\":\"MiF0Ly22wc\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Tree View\",\"col\":3}}]",
+  "content": "[{\"id\":\"UDZZHMG3aT\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Platform Wise Categories</b></span>\",\"col\":12}},{\"id\":\"wtysfxmhLV\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shopify\",\"col\":3}},{\"id\":\"Cij0JLPqKA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shopline\",\"col\":3}},{\"id\":\"0CJ-cAt3G2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WooCommerce\",\"col\":3}},{\"id\":\"I6Efi2uKzu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Wix\",\"col\":3}},{\"id\":\"ODWTriB55T\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"BigCommerce\",\"col\":3}},{\"id\":\"3Nt5eVhFGO\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Support Doctypes</span>\",\"col\":12}},{\"id\":\"Clhvbq9gVQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Doc Category\",\"col\":3}},{\"id\":\"HfyoJkP7Ci\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Docs\",\"col\":3}},{\"id\":\"0b2Vr_Gwgu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Video settings\",\"col\":3}},{\"id\":\"qlde_Xogin\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Recent articles settings\",\"col\":3}},{\"id\":\"375qeKpkRG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Support Ticket\",\"col\":3}},{\"id\":\"BHAKMDlDCu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Subscriber Email\",\"col\":3}},{\"id\":\"7V3PhvN5LV\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>API &amp; Website Settings</b></span>\",\"col\":12}},{\"id\":\"XCZX0oPtQZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Home Page\",\"col\":3}},{\"id\":\"c3JamQ62oN\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Search Keyword\",\"col\":3}},{\"id\":\"bRpIDnyBUO\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Article Setting\",\"col\":3}},{\"id\":\"3YehNVpgyK\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Youtube Settings\",\"col\":3}},{\"id\":\"QpYJA-nM6f\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Update Website\",\"col\":3}},{\"id\":\"MiF0Ly22wc\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Tree View\",\"col\":3}},{\"id\":\"9-oGADPFm7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Build logs\",\"col\":3}}]",
   "custom_blocks": [],
   "docstatus": 0,
   "doctype": "Workspace",
@@ -2679,7 +2679,7 @@
   "is_hidden": 0,
   "label": "Support-Simprosys",
   "links": [],
-  "modified": "2025-03-26 15:47:22.856304",
+  "modified": "2025-04-30 11:18:01.705618",
   "module": "Support Simprosys",
   "name": "Support-Simprosys",
   "number_cards": [],
@@ -2703,6 +2703,38 @@
     "parenttype": "Workspace",
     "restrict_to_domain": null,
     "stats_filter": "[[\"Simprosys Post Category\",\"category_criteria\",\"=\",\"Category\",false],[\"Simprosys Post Category\",\"parent_simprosys_post_category\",\"=\",\"Shopify-5565\",false]]",
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Subscriber Email",
+    "link_to": "Simprosy Newsletter Subscriber",
+    "parent": "Support-Simprosys",
+    "parentfield": "shortcuts",
+    "parenttype": "Workspace",
+    "restrict_to_domain": null,
+    "stats_filter": "[]",
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Build logs",
+    "link_to": "Astro Build Logs",
+    "parent": "Support-Simprosys",
+    "parentfield": "shortcuts",
+    "parenttype": "Workspace",
+    "restrict_to_domain": null,
+    "stats_filter": "[]",
     "type": "DocType",
     "url": null
    },
