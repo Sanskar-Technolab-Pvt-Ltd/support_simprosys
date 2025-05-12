@@ -150,7 +150,7 @@ frappe.ui.form.on("Update Simprosys Website", {
         "support_simprosys.support_simprosys.api.trigger_astro_build_realtime",
       callback: function (r) {
         if (r.message.status === "success") {
-          frappe.msgprint("✅ Build Started");
+          frappe.msgprint("✅ Build successfully Completed");
         } else if (r.message.status === "in_progress") {
           frappe.msgprint("⏳ Build already in progress.");
         } else {
