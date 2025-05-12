@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_import": 1,
- "autoname": "format:{post_category_name}-{##}",
+ "autoname": "format:{post_category_name}-{##} ",
  "creation": "2025-01-18 15:42:22.243232",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -12,6 +12,8 @@
   "is_group",
   "parent_simprosys_post_category",
   "parent_post_category_name",
+  "grand_parent",
+  "grand_parent_name",
   "platform_logo",
   "icon",
   "column_break_oobo",
@@ -262,6 +264,21 @@
    "fieldtype": "Data",
    "label": "Parent Post Category Name",
    "read_only": 1
+  },
+  {
+   "fetch_from": "parent_simprosys_post_category.parent_simprosys_post_category",
+   "fieldname": "grand_parent",
+   "fieldtype": "Link",
+   "label": "Grand Parent",
+   "options": "Simprosys Post Category",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "grand_parent.post_category_name",
+   "fieldname": "grand_parent_name",
+   "fieldtype": "Data",
+   "label": "Grand Parent Name",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
@@ -269,15 +286,15 @@
  "is_tree": 1,
  "links": [],
  "make_attachments_public": 1,
- "modified": "2025-05-01 16:55:10.390998",
- "modified_by": "Administrator",
+ "modified": "2025-05-09 19:12:13.078088",
+ "modified_by": "nil@sanskartechnolab.com",
  "module": "Support Simprosys",
  "name": "Simprosys Post Category",
  "naming_rule": "Expression",
  "nsm_parent_field": "parent_simprosys_post_category",
  "owner": "Administrator",
  "permissions": [],
- "search_fields": "parent_post_category_name",
+ "search_fields": "parent_post_category_name,grand_parent_name",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
