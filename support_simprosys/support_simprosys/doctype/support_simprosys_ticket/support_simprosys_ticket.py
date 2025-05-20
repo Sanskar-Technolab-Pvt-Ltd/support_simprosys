@@ -68,7 +68,7 @@ def after_insert(self, *args, **kwargs):
     recipients_email = None  # Default to None to avoid sending emails for other cases
 
     if self.plugin_or_app_related_queries == "Career opportunities":
-        recipients_email = ["career@simprosys.com"]
+        recipients_email = ["careers@simprosys.com"]
     elif self.plugin_or_app_related_queries == "Partnership opportunities":
         recipients_email = ["partnerships@simprosys.com"]
     else:
