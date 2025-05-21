@@ -14,6 +14,30 @@ from frappe.email.queue import flush
 def after_insert(self, *args, **kwargs):
     subject = "Support Simprosys Ticket - "
 
+    ticket_id_row = ""
+    if self.plugin_or_app_related_queries in ["Career opportunities", "Partnership opportunities"]:
+        ticket_id_row = f"""
+        <tr>
+            <td><strong>Ticket ID</strong></td>
+            <td>{self.name}</td>
+        </tr>
+        """
+
+    platform_app_row = ""
+    if self.plugin_or_app_related_queries in ["Plugin and App related query"]:
+        platform_app_row = f"""
+        <tr>
+            <td><strong>Platform</strong></td>
+            <td>{self.platform}</td>
+        </tr>
+        <tr>
+            <td><strong>App</strong></td>
+            <td>{self.app}</td>
+        </tr>
+        """
+
+
+    
     content = f"""
     <html>
     <body>
@@ -22,36 +46,38 @@ def after_insert(self, *args, **kwargs):
         
         <table border="1" cellspacing="0" cellpadding="8" style="border-collapse: collapse; width: 100%;">
             <tr>
-                <th style="background-color: #f2f2f2; text-align: left;">Field</th>
-                <th style="background-color: #f2f2f2; text-align: left;">Value</th>
+                <th style="background-color: #f2f2f2; text-align: left; width: 50%;">Field</th>
+                <th style="background-color: #f2f2f2; text-align: left; width: 50%;">Value</th>
+            </tr>
+            {ticket_id_row}
+            <tr>
+                <td style="width: 50%;"><strong>Name</strong></td>
+                <td style="width: 50%;">{self.name1}</td>
             </tr>
             <tr>
-                <td><strong>Ticket ID</strong></td>
-                <td>{self.name}</td>
+                <td style="width: 50%;"><strong>Company Name</strong></td>
+                <td style="width: 50%;">{self.company_name}</td>
             </tr>
             <tr>
-                <td><strong>Name</strong></td>
-                <td>{self.name1}</td>
+                <td style="width: 50%;"><strong>Store URL</strong></td>
+                <td style="width: 50%;"><a href="{self.store_url}" target="_blank">{self.store_url}</a></td>
             </tr>
             <tr>
-                <td><strong>Company Name</strong></td>
-                <td>{self.company_name}</td>
+                <td style="width: 50%;"><strong>Reason for Raising a Ticket</strong></td>
+                <td style="width: 50%;">{self.plugin_or_app_related_queries}</td>
+            </tr>
+            {platform_app_row}
+            <tr>
+                <td style="width: 50%;"><strong>Email</strong></td>
+                <td style="width: 50%;">{self.email}</td>
             </tr>
             <tr>
-                <td><strong>Store URL</strong></td>
-                <td><a href="{self.store_url}" target="_blank">{self.store_url}</a></td>
+                <td style="width: 50%;"><strong>Store ID</strong></td>
+                <td style="width: 50%;">{self.store_id}</td>
             </tr>
             <tr>
-                <td><strong>Email</strong></td>
-                <td>{self.email}</td>
-            </tr>
-            <tr>
-                <td><strong>Store ID</strong></td>
-                <td>{self.store_id}</td>
-            </tr>
-            <tr>
-                <td><strong>Additional Details</strong></td>
-                <td>{self.additional_details}</td>
+                <td style="width: 50%;"><strong>Additional Details</strong></td>
+                <td style="width: 50%;">{self.additional_details}</td>
             </tr>
         </table>
 
@@ -61,8 +87,7 @@ def after_insert(self, *args, **kwargs):
     </body>
     </html>
     """
-
-    print(self.plugin_or_app_related_queries)  # Debugging purpose
+    
 
     # Determine sender email based on query type
     recipients_email = None  # Default to None to avoid sending emails for other cases

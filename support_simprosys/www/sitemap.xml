@@ -473,7 +473,7 @@
       <url>
         <loc>https://simprosys.frappe.cloud/faq/how-do-product-labels-work-for-the-instant-search-widget-and-search-result-page</loc>
         <priority>1.0</priority>
-        <lastmod>2025-04-03</lastmod>
+        <lastmod>2025-05-15</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -550,7 +550,7 @@
       <url>
         <loc>https://simprosys.frappe.cloud/faq/steps-to-follow-when-your-facebook-page-doesn-t-show-up-after-connecting-with-your-facebook-account</loc>
         <priority>1.0</priority>
-        <lastmod>2025-04-03</lastmod>
+        <lastmod>2025-05-13</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -1285,7 +1285,7 @@
       <url>
         <loc>https://simprosys.frappe.cloud/faq/step-by-step-self-installation-guide-of-proviews-product-reviews-q-a</loc>
         <priority>1.0</priority>
-        <lastmod>2025-04-03</lastmod>
+        <lastmod>2025-05-13</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -1915,7 +1915,14 @@
       <url>
         <loc>https://simprosys.frappe.cloud/faq/test-doc</loc>
         <priority>1.0</priority>
-        <lastmod>2025-05-08</lastmod>
+        <lastmod>2025-05-20</lastmod>
+        <changefreq>daily</changefreq>
+      </url>
+    
+      <url>
+        <loc>https://simprosys.frappe.cloud/faq/testing-to-upload-a-doc</loc>
+        <priority>1.0</priority>
+        <lastmod>2025-05-20</lastmod>
         <changefreq>daily</changefreq>
       </url>
     

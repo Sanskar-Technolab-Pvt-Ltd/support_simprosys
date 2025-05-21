@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         platformSelect.innerHTML += data.data
           .map(
             (platform) =>
-              `<option value="${platform.name}">${platform.post_category_name}</option>`
+              `<option value="${platform.name}" data-display-name="${platform.post_category_name}">${platform.post_category_name}</option>`
           )
           .join("");
 
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         appSelect.innerHTML += data.data
           .map(
             (app) =>
-              `<option value="${app.name}">${app.post_category_name}</option>`
+              `<option value="${app.name}" data-display-name="${app.post_category_name}">${app.post_category_name}</option>`
           )
           .join("");
       }
@@ -612,6 +612,11 @@ async function submitTicket(event) {
     }
   }
   
+  const platformSelectEl = document.querySelector("#platformSelect");
+  const appSelectEl = document.querySelector("#appSelect");
+  const selectedPlatform = platformSelectEl.options[platformSelectEl.selectedIndex];
+  const selectedApp = appSelectEl.options[appSelectEl.selectedIndex];
+
 
   const formData = {
     name1: document.querySelector("#name1").value,
@@ -621,8 +626,8 @@ async function submitTicket(event) {
     plugin_or_app_related_queries: document.querySelector(
       "#plugin_or_app_related_queries"
     ).value,
-    platform: document.querySelector("#platformSelect").value,
-    app: document.querySelector("#appSelect").value,
+    platform: selectedPlatform ? selectedPlatform.getAttribute("data-display-name") : "",
+    app: selectedApp ? selectedApp.getAttribute("data-display-name") : "",
     additional_details: document.querySelector("#message").value,
   };
 
