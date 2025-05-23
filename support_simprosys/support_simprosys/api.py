@@ -1174,11 +1174,109 @@ def get_blog_by_slug(slug):
 import frappe
 from frappe.email.queue import flush
 
+# def send_support_ticket_email(docname):
+#     doc = frappe.get_doc("Support Simprosys Ticket", docname)
+
+#     subject = "Support Simprosys Ticket - "
+
+#     ticket_id_row = ""
+#     if doc.plugin_or_app_related_queries in ["Career opportunities", "Partnership opportunities"]:
+#         ticket_id_row = f"""
+#         <tr>
+#             <td><strong>Ticket ID</strong></td>
+#             <td>{doc.name}</td>
+#         </tr>
+#         """
+
+#     platform_app_row = ""
+#     if doc.plugin_or_app_related_queries == "Plugin and App related query":
+#         platform_app_row = f"""
+#         <tr>
+#             <td><strong>Platform</strong></td>
+#             <td>{doc.platform}</td>
+#         </tr>
+#         <tr>
+#             <td><strong>App</strong></td>
+#             <td>{doc.app}</td>
+#         </tr>
+#         """
+
+#     content = f"""
+#     <html>
+#     <body>
+#         <p>Hello,</p>
+#         <p>A new Support Simprosys Ticket has been raised.</p>
+        
+#         <table border="1" cellspacing="0" cellpadding="8" style="border-collapse: collapse; width: 100%;">
+#             <tr>
+#                 <th style="background-color: #f2f2f2;">Field</th>
+#                 <th style="background-color: #f2f2f2;">Value</th>
+#             </tr>
+#             {ticket_id_row}
+#             <tr><td><strong>Name</strong></td><td>{doc.name1}</td></tr>
+#             <tr><td><strong>Company Name</strong></td><td>{doc.company_name}</td></tr>
+#             <tr><td><strong>Store URL</strong></td><td><a href="{doc.store_url}" target="_blank">{doc.store_url}</a></td></tr>
+#             <tr><td><strong>Reason</strong></td><td>{doc.plugin_or_app_related_queries}</td></tr>
+#             {platform_app_row}
+#             <tr><td><strong>Email</strong></td><td>{doc.email}</td></tr>
+#             <tr><td><strong>Store ID</strong></td><td>{doc.store_id}</td></tr>
+#             <tr><td><strong>Additional Details</strong></td><td>{doc.additional_details}</td></tr>
+#         </table>
+
+#         <p>Please take appropriate action.</p>
+#         <p>Thanks,<br>Support Simprosys</p>
+#     </body>
+#     </html>
+#     """
+
+#     recipients_email = None
+#     if doc.plugin_or_app_related_queries == "Career opportunities":
+#         # recipients_email = ["careers@simprosys.com"]
+#         recipients_email = ["nil@sanskartechnolab.com"]
+#     elif doc.plugin_or_app_related_queries == "Partnership opportunities":
+#         # recipients_email = ["partnerships@simprosys.com"]
+#         recipients_email = ["nil@sanskartechnolab.com"]
+#     else:
+#         # recipients_email = ["support@simprosys.com"]
+#         recipients_email = ["nil@sanskartechnolab.com"]
+
+
+#     attachments = []
+#     attached_files = frappe.get_all(
+#         "File",
+#         filters={
+#             "attached_to_doctype": doc.doctype,
+#             "attached_to_name": doc.name
+#         },
+#         fields=["name", "file_name", "file_url"]
+#     )
+
+#     for file in attached_files:
+#         file_doc = frappe.get_doc("File", file.name)
+#         attachments.append({
+#             "fname": file_doc.file_name,
+#             "fcontent": file_doc.get_content()
+#         })
+
+#     if recipients_email:
+#         frappe.sendmail(
+#             recipients=recipients_email,
+#             subject=subject,
+#             message=content,
+#             attachments=attachments
+#         )
+#         flush()
+
+
+import frappe
+from frappe.utils import get_url
+
 def send_support_ticket_email(docname):
     doc = frappe.get_doc("Support Simprosys Ticket", docname)
 
     subject = "Support Simprosys Ticket - "
 
+    # Conditional fields
     ticket_id_row = ""
     if doc.plugin_or_app_related_queries in ["Career opportunities", "Partnership opportunities"]:
         ticket_id_row = f"""
@@ -1201,6 +1299,35 @@ def send_support_ticket_email(docname):
         </tr>
         """
 
+    # Get attached files
+    attached_files = frappe.get_all(
+        "File",
+        filters={
+            "attached_to_doctype": doc.doctype,
+            "attached_to_name": doc.name
+        },
+        fields=["name", "file_name", "file_url"]
+    )
+
+    # For email attachments
+    attachments = []
+    for file in attached_files:
+        file_doc = frappe.get_doc("File", file.name)
+        attachments.append({
+            "fname": file_doc.file_name,
+            "fcontent": file_doc.get_content()
+        })
+
+    # For display in email
+    attachment_names = "<br>".join([f"https://simprosys.frappe.cloud/files/{file['file_name']}" for file in attached_files]) if attached_files else "No Attachments"
+    attachments_row = f"""
+    <tr>
+        <td><strong>Attachments</strong></td>
+        <td>{attachment_names}</td>
+    </tr>
+    """
+
+    # Email body
     content = f"""
     <html>
     <body>
@@ -1209,18 +1336,19 @@ def send_support_ticket_email(docname):
         
         <table border="1" cellspacing="0" cellpadding="8" style="border-collapse: collapse; width: 100%;">
             <tr>
-                <th style="background-color: #f2f2f2;">Field</th>
-                <th style="background-color: #f2f2f2;">Value</th>
+                <th style="background-color: #f2f2f2; width: 50%;">Field</th>
+                <th style="background-color: #f2f2f2; width: 50%;">Value</th>
             </tr>
-            {ticket_id_row}
-            <tr><td><strong>Name</strong></td><td>{doc.name1}</td></tr>
-            <tr><td><strong>Company Name</strong></td><td>{doc.company_name}</td></tr>
-            <tr><td><strong>Store URL</strong></td><td><a href="{doc.store_url}" target="_blank">{doc.store_url}</a></td></tr>
-            <tr><td><strong>Reason</strong></td><td>{doc.plugin_or_app_related_queries}</td></tr>
-            {platform_app_row}
-            <tr><td><strong>Email</strong></td><td>{doc.email}</td></tr>
-            <tr><td><strong>Store ID</strong></td><td>{doc.store_id}</td></tr>
-            <tr><td><strong>Additional Details</strong></td><td>{doc.additional_details}</td></tr>
+            {ticket_id_row.replace('<td>', '<td style="width: 50%;">')}
+            <tr><td style="width: 50%;"><strong>Name</strong></td><td style="width: 50%;">{doc.name1}</td></tr>
+            <tr><td style="width: 50%;"><strong>Company Name</strong></td><td style="width: 50%;">{doc.company_name}</td></tr>
+            <tr><td style="width: 50%;"><strong>Store URL</strong></td><td style="width: 50%;"><a href="{doc.store_url}" target="_blank">{doc.store_url}</a></td></tr>
+            <tr><td style="width: 50%;"><strong>Reason</strong></td><td style="width: 50%;">{doc.plugin_or_app_related_queries}</td></tr>
+            {platform_app_row.replace('<td>', '<td style="width: 50%;">')}
+            <tr><td style="width: 50%;"><strong>Email</strong></td><td style="width: 50%;">{doc.email}</td></tr>
+            <tr><td style="width: 50%;"><strong>Store ID</strong></td><td style="width: 50%;">{doc.store_id}</td></tr>
+            <tr><td style="width: 50%;"><strong>Additional Details</strong></td><td style="width: 50%;">{doc.additional_details}</td></tr>
+            {attachments_row.replace('<td>', '<td style="width: 50%;">')}
         </table>
 
         <p>Please take appropriate action.</p>
@@ -1231,32 +1359,11 @@ def send_support_ticket_email(docname):
 
     recipients_email = None
     if doc.plugin_or_app_related_queries == "Career opportunities":
-        # recipients_email = ["careers@simprosys.com"]
-        recipients_email = ["nil@sanskartechnolab.com"]
+        recipients_email = ["careers@simprosys.com"]
     elif doc.plugin_or_app_related_queries == "Partnership opportunities":
-        # recipients_email = ["partnerships@simprosys.com"]
-        recipients_email = ["nil@sanskartechnolab.com"]
+        recipients_email = ["partnerships@simprosys.com"]
     else:
-        # recipients_email = ["support@simprosys.com"]
-        recipients_email = ["nil@sanskartechnolab.com"]
-
-
-    attachments = []
-    attached_files = frappe.get_all(
-        "File",
-        filters={
-            "attached_to_doctype": doc.doctype,
-            "attached_to_name": doc.name
-        },
-        fields=["name", "file_name", "file_url"]
-    )
-
-    for file in attached_files:
-        file_doc = frappe.get_doc("File", file.name)
-        attachments.append({
-            "fname": file_doc.file_name,
-            "fcontent": file_doc.get_content()
-        })
+        recipients_email = ["support@simprosys.com"]
 
     if recipients_email:
         frappe.sendmail(
@@ -1265,4 +1372,10 @@ def send_support_ticket_email(docname):
             message=content,
             attachments=attachments
         )
-        flush()
+
+    # Save full URLs in attachment_urls field (one per line)
+    doc.attachment_urls = "\n".join([
+        get_url(file["file_url"]) for file in attached_files
+    ])
+    doc.save(ignore_permissions=True)
+    flush()
