@@ -1915,14 +1915,21 @@
       <url>
         <loc>https://simprosys.frappe.cloud/faq/test-doc</loc>
         <priority>1.0</priority>
-        <lastmod>2025-05-20</lastmod>
+        <lastmod>2025-05-21</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
       <url>
         <loc>https://simprosys.frappe.cloud/faq/testing-to-upload-a-doc</loc>
         <priority>1.0</priority>
-        <lastmod>2025-05-20</lastmod>
+        <lastmod>2025-05-21</lastmod>
+        <changefreq>daily</changefreq>
+      </url>
+    
+      <url>
+        <loc>https://simprosys.frappe.cloud/faq/test-hinali</loc>
+        <priority>1.0</priority>
+        <lastmod>2025-05-22</lastmod>
         <changefreq>daily</changefreq>
       </url>
     

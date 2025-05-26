@@ -572,17 +572,20 @@ async function submitTicket(event) {
   const apiKey = import.meta.env.PUBLIC_ApiKey;
   const secretKey = import.meta.env.PUBLIC_SecretKey;
   const fileInput = document.querySelector("#attach_file");
-
+  console.log("Called")
   let uploadedFiles = [];
 
   if (fileInput.files.length > 0) {
     for (let i = 0; i < fileInput.files.length; i++) {
       const file = fileInput.files[i];
+      console.log("File",file)
       const uploadData = new FormData();
       uploadData.append("file", file);
       uploadData.append("is_private", 0);
+      console.log(uploadData)
 
       try {
+        console.log(uploadData)
         const uploadResponse = await fetch(
           `${api_URL}/api/method/upload_file`,
           {
@@ -597,6 +600,8 @@ async function submitTicket(event) {
         const uploadResult = await uploadResponse.json();
         if (uploadResponse.ok && uploadResult.message.file_url) {
           uploadedFiles.push(uploadResult.message.file_url);
+          console.log("result")
+          console.log(uploadResult)
         } else {
           alert(
             "File upload failed: " +
@@ -664,7 +669,8 @@ async function attachFilesToDoctype(ticketName, fileUrls) {
   const api_URL = import.meta.env.PUBLIC_ApiUrl;
   const apiKey = import.meta.env.PUBLIC_ApiKey;
   const secretKey = import.meta.env.PUBLIC_SecretKey;
-
+  console.log("\nTicket Name",ticketName)
+  console.log("\nFile URL",fileUrls)
   for (let fileUrl of fileUrls) {
     const attachData = {
       file_url: fileUrl,
