@@ -460,17 +460,8 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
 
                 <div class="space-y-8">
                   <div
-                    class=`flex ${blog_details.featured_image ? "space-x-2 item-start xl:items-center" : ""}`
+                    class=`flex space-x-2 item-start xl:items-center`
                   >
-                    <div
-                      class=`p-5 ${blog_details.featured_image ? "" : "hidden"} h-fit rounded-full w-fit bg-[#E9F6FF] content-center`
-                    >
-                      <img
-                        class="w-16"
-                        src=`${API_URL}${blog_details.featured_image}`
-                        alt="featured-icon"
-                      />
-                    </div>
                     <div class="space-y-2">
                       <h2
                         class="font-semibold text-2xl md:text-3xl lg:text-4px 2xl:text-[40px] 2xl:leading-[54px]"
@@ -482,6 +473,12 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
                           <p class="text-black opacity-70">{formattedDate}</p>
                         )
                       }
+
+                      <img
+                        class="!max-w-full"
+                        src=`${API_URL}${blog_details.featured_image}`
+                        alt="featured-icon"
+                      />
                     </div>
                   </div>
                   <div class="table-wrapper">
@@ -686,4 +683,4 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
 
   return paths;
 }
- -->
+-->
