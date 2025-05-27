@@ -653,15 +653,17 @@ async function submitTicket(event) {
 
     if (response.ok) {
       let ticketName = result.data.name;
+      console.log("Ticket Name",ticketName)
       await attachFilesToDoctype(ticketName, uploadedFiles);
       showpopup(response);
+      await sendEmail(ticketName)
     } else {
       alert("Error: " + result.error);
     }
-  } catch (error) {
-    console.error("Form submission error:", error);
-    alert("Failed to submit ticket!");
-  }
+    } catch (error) {
+      console.error("Form submission error:", error);
+      alert("Failed to submit ticket!");
+    }
 }
 }
 
@@ -692,5 +694,31 @@ async function attachFilesToDoctype(ticketName, fileUrls) {
     }
   }
 }
+
+async function sendEmail(ticketName){
+  const api_URL = import.meta.env.PUBLIC_ApiUrl;
+  const apiKey = import.meta.env.PUBLIC_ApiKey;
+  const secretKey = import.meta.env.PUBLIC_SecretKey;
+  try {
+  const emailResponse = await fetch(
+    `${api_URL}/api/method/support_simprosys.support_simprosys.api.send_support_ticket_email?docname=${ticketName}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `token ${apiKey}:${secretKey}`,
+          },
+        }
+      );
+
+      console.log("Email Response Status:", emailResponse.status);
+      const emailResult = await emailResponse.json();
+      console.log("Email API response:", emailResult);
+    } catch (emailErr) {
+      console.error("Email sending failed:", emailErr);
+    }
+
+
+}
+
 
 window.submitTicket = submitTicket;
