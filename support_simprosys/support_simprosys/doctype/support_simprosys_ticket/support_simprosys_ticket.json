@@ -10,6 +10,7 @@
   "company_name",
   "store_url",
   "email",
+  "date_time",
   "column_break_opdw",
   "store_id",
   "plugin_or_app_related_queries",
@@ -81,12 +82,17 @@
    "fieldname": "store_url",
    "fieldtype": "Data",
    "label": "Store URL"
+  },
+  {
+   "fieldname": "date_time",
+   "fieldtype": "Datetime",
+   "label": "Date Time "
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-03-26 10:31:05.313613",
+ "modified": "2025-05-27 16:55:59.618240",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Support Simprosys Ticket",
@@ -106,6 +112,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

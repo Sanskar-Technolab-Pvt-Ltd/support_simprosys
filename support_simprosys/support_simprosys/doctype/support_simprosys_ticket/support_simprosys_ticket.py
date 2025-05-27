@@ -3,11 +3,11 @@
 
 import frappe
 from frappe.model.document import Document
+from frappe.utils import now_datetime
 
 
 class SupportSimprosysTicket(Document):
     pass
-
 
 # from frappe.email.queue import flush
 
@@ -145,7 +145,11 @@ def after_insert(self, method=None):
     frappe.enqueue(
         method="support_simprosys.support_simprosys.api.send_support_ticket_email",
         queue='default',
-        timeout=1000,
+        timeout=200,
         now=False,
         docname=self.name
     )
+
+
+# def after_insert(self, method=None):
+#         self.db_set("date_time", now_datetime())
