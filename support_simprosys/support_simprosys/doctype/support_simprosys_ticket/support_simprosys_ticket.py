@@ -145,7 +145,7 @@ def after_insert(self, method=None):
     frappe.enqueue(
         method="support_simprosys.support_simprosys.api.send_support_ticket_email",
         queue='default',
-        timeout=200,
+        timeout=1000,
         now=False,
         docname=self.name
     )
