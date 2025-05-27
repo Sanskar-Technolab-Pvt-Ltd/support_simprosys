@@ -142,13 +142,7 @@ class SupportSimprosysTicket(Document):
 #         flush()
 
 def after_insert(self, method=None):
-    frappe.enqueue(
-        method="support_simprosys.support_simprosys.api.send_support_ticket_email",
-        queue='default',
-        timeout=1000,
-        now=False,
-        docname=self.name
-    )
+    pass
 
 
 # def after_insert(self, method=None):

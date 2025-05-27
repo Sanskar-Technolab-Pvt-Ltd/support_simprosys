@@ -1319,14 +1319,6 @@ def send_support_ticket_email(docname):
             "fcontent": file_doc.get_content()
         })
 
-    # For display in email
-    attachment_names = "<br>".join([f"https://simprosys.frappe.cloud/files/{file['file_name']}" for file in attached_files]) if attached_files else "No Attachments"
-    attachments_row = f"""
-    <tr>
-        <td><strong>Attachments</strong></td>
-        <td>{attachment_names}</td>
-    </tr>
-    """
 
     # Email body
     content = f"""
@@ -1349,7 +1341,6 @@ def send_support_ticket_email(docname):
             <tr><td style="width: 50%;"><strong>Email</strong></td><td style="width: 50%;">{doc.email}</td></tr>
             <tr><td style="width: 50%;"><strong>Store ID</strong></td><td style="width: 50%;">{doc.store_id}</td></tr>
             <tr><td style="width: 50%;"><strong>Additional Details</strong></td><td style="width: 50%;">{doc.additional_details}</td></tr>
-            {attachments_row.replace('<td>', '<td style="width: 50%;">')}
         </table>
 
         <p>Please take appropriate action.</p>
@@ -1360,14 +1351,11 @@ def send_support_ticket_email(docname):
 
     recipients_email = None
     if doc.plugin_or_app_related_queries == "Career opportunities":
-        # recipients_email = ["careers@simprosys.com"]
-        recipients_email = ["nil@sanskartechnolab.com"]
+        recipients_email = ["careers@simprosys.com"]
     elif doc.plugin_or_app_related_queries == "Partnership opportunities":
-        # recipients_email = ["partnerships@simprosys.com"]
-        recipients_email = ["nil@sanskartechnolab.com"]
+        recipients_email = ["partnerships@simprosys.com"]
     else:
-        # recipients_email = ["support@simprosys.com"]
-        recipients_email = ["nil@sanskartechnolab.com"]
+        recipients_email = ["support@simprosys.com"]
 
     if recipients_email:
         frappe.sendmail(
