@@ -699,6 +699,7 @@ async function sendEmail(ticketName){
   const api_URL = import.meta.env.PUBLIC_ApiUrl;
   const apiKey = import.meta.env.PUBLIC_ApiKey;
   const secretKey = import.meta.env.PUBLIC_SecretKey;
+  console.log("Email Send")
   try {
   const emailResponse = await fetch(
     `${api_URL}/api/method/support_simprosys.support_simprosys.api.send_support_ticket_email?docname=${ticketName}`,
@@ -716,8 +717,7 @@ async function sendEmail(ticketName){
     } catch (emailErr) {
       console.error("Email sending failed:", emailErr);
     }
-
-
+    console.log("Email successfully gone ")
 }
 
 
