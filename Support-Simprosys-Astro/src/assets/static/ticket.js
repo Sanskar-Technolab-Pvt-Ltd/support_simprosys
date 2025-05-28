@@ -535,7 +535,7 @@ function showpopup(response) {
       document.getElementById("attach_file_text").textContent = "Attach File";
       document.getElementById("file_list").innerHTML = "";
       form.reset(); // Reset the form
-      document.querySelector("#attach_file").value = ""; // Clears file input
+      location.reload(); // Reloads the entire page
     });
 
     // Hide the pop-up and reset the form after 3 seconds
@@ -543,9 +543,9 @@ function showpopup(response) {
       successPopup.classList.add("hidden");
       cancelButton.classList.add("hidden"); 
       document.getElementById("attach_file_text").textContent = "Attach File";
-      document.getElementById("file_list").innerHTML = "";
+      document.getElementById("file_list").value = "";
       form.reset(); // Reset the form
-      document.querySelector("#attach_file").value = ""; // Clears file input
+      location.reload(); // Reloads the entire page
 
     }, 3000); // 3000 milliseconds (3 seconds)
 

@@ -1351,14 +1351,14 @@ def send_support_ticket_email(docname):
 
     recipients_email = None
     if doc.plugin_or_app_related_queries == "Career opportunities":
-        recipients_email = ["careers@simprosys.com"]
-        # recipients_email = ["nil@sanskartechnolab.com"]
+        # recipients_email = ["careers@simprosys.com"]
+        recipients_email = ["nil@sanskartechnolab.com"]
     elif doc.plugin_or_app_related_queries == "Partnership opportunities":
-        recipients_email = ["partnerships@simprosys.com"]
-        # recipients_email = ["nil@sanskartechnolab.com"]
+        # recipients_email = ["partnerships@simprosys.com"]
+        recipients_email = ["nil@sanskartechnolab.com"]
     else:
-        recipients_email = ["support@simprosys.com"]
-        # recipients_email = ["nil@sanskartechnolab.com"]
+        # recipients_email = ["support@simprosys.com"]
+        recipients_email = ["nil@sanskartechnolab.com"]
 
     if recipients_email:
         frappe.sendmail(
