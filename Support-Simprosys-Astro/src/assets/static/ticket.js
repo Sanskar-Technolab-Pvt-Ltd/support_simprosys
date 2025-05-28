@@ -535,7 +535,7 @@ function showpopup(response) {
       document.getElementById("attach_file_text").textContent = "Attach File";
       document.getElementById("file_list").innerHTML = "";
       form.reset(); // Reset the form
-      document.querySelector("#attach_file").value = ""; // Clears file input
+      location.reload(); // Reloads the entire page
     });
 
     // Hide the pop-up and reset the form after 3 seconds
@@ -543,9 +543,9 @@ function showpopup(response) {
       successPopup.classList.add("hidden");
       cancelButton.classList.add("hidden"); 
       document.getElementById("attach_file_text").textContent = "Attach File";
-      document.getElementById("file_list").innerHTML = "";
+      document.getElementById("file_list").value = "";
       form.reset(); // Reset the form
-      document.querySelector("#attach_file").value = ""; // Clears file input
+      location.reload(); // Reloads the entire page
 
     }, 3000); // 3000 milliseconds (3 seconds)
 
@@ -567,12 +567,26 @@ function showpopup(response) {
  *
  * @param {Event} event - The form submission event
  */
+
+
+function showLoader() {
+  document.getElementById("loader").classList.remove("hidden");
+}
+
+function hideLoader() {
+  document.getElementById("loader").classList.add("hidden");
+}
+
+
+
+
   async function submitTicket(event) {
     event.preventDefault();
     
     
     const validationForm = handleInput();
     if (validationForm) {
+    showLoader(); // Show loading overlay
     const api_URL = import.meta.env.PUBLIC_ApiUrl;
     const apiKey = import.meta.env.PUBLIC_ApiKey;
     const secretKey = import.meta.env.PUBLIC_SecretKey;
@@ -652,6 +666,7 @@ function showpopup(response) {
     if (response.ok) {
       let ticketName = result.data.name;
       console.log("Ticket Name",ticketName)
+      hideLoader(); // Hide the loader
       showpopup(response);
       await attachFilesToDoctype(ticketName, uploadedFiles);
       await sendEmail(ticketName)
@@ -659,6 +674,7 @@ function showpopup(response) {
       alert("Error: " + result.error);
     }
     } catch (error) {
+      hideLoader();
       console.error("Form submission error:", error);
       alert("Failed to submit ticket!");
     }
