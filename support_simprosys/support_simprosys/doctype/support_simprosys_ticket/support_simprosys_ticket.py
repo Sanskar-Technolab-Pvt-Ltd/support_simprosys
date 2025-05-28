@@ -7,7 +7,11 @@ from frappe.utils import now_datetime
 
 
 class SupportSimprosysTicket(Document):
-    pass
+    def after_insert(self, method=None):
+        if self.store_url and not self.store_url.startswith(('http://', 'https://')):
+            self.store_url = f'https://{self.store_url}'
+            self.db_set('store_url', self.store_url)  # Update field in the database
+
 
 # from frappe.email.queue import flush
 
@@ -143,7 +147,3 @@ class SupportSimprosysTicket(Document):
 
 def after_insert(self, method=None):
     pass
-
-
-# def after_insert(self, method=None):
-#         self.db_set("date_time", now_datetime())
