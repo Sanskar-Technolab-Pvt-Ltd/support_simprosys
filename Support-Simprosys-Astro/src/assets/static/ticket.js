@@ -144,6 +144,8 @@ let emailMsg = document.getElementById("email_valid");
 
 const nameRegex =
   /^(?=(?:[^A-Za-z]*[A-Za-z]){2})(?![^\d~`?!^*¨ˆ;@=$%{}\[\]|\\\/<>#“.,]*[\d~`?!^*¨ˆ;@=$%{}\[\]|\\\/<>#“.,])\S+(?: \S+){0,2}$/;
+const companyNameRegex = /^(?=(?:[^A-Za-z]*[A-Za-z]){2})(?![^A-Za-z0-9 ]*$)[A-Za-z0-9]+(?: [A-Za-z0-9]+){0,2}$/;
+
 const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
 //* URL regex
@@ -185,7 +187,7 @@ company_name.addEventListener("input", () => {
   if (companyValue === "") {
     companyMsg.classList.remove("hidden");
     companyMsg.textContent = "Please fill out this field";
-  } else if (!nameRegex.test(companyValue)) {
+  } else if (!companyNameRegex.test(companyValue)) {
     companyMsg.classList.remove("hidden");
     companyMsg.textContent = "Please Enter Valid Company name";
   } else {
@@ -302,7 +304,7 @@ function handleInput() {
     companyMsg.classList.remove("hidden");
     companyMsg.textContent = "Please fill out this field";
     isCompanyNameValid = false;
-  } else if (!nameRegex.test(CompanyNameValue)) {
+  } else if (!companyNameRegex.test(CompanyNameValue)) {
     companyMsg.classList.remove("hidden");
     companyMsg.textContent = "Please Enter Valid Company name";
     isCompanyNameValid = false;
@@ -533,6 +535,7 @@ function showpopup(response) {
       document.getElementById("attach_file_text").textContent = "Attach File";
       document.getElementById("file_list").innerHTML = "";
       form.reset(); // Reset the form
+      document.querySelector("#attach_file").value = ""; // Clears file input
     });
 
     // Hide the pop-up and reset the form after 3 seconds
@@ -542,6 +545,8 @@ function showpopup(response) {
       document.getElementById("attach_file_text").textContent = "Attach File";
       document.getElementById("file_list").innerHTML = "";
       form.reset(); // Reset the form
+      document.querySelector("#attach_file").value = ""; // Clears file input
+
     }, 3000); // 3000 milliseconds (3 seconds)
 
     if (response.status === 100) {
@@ -562,59 +567,52 @@ function showpopup(response) {
  *
  * @param {Event} event - The form submission event
  */
-async function submitTicket(event) {
-  event.preventDefault();
-  
-  
-  const validationForm = handleInput();
-  if (validationForm) {
-  const api_URL = import.meta.env.PUBLIC_ApiUrl;
-  const apiKey = import.meta.env.PUBLIC_ApiKey;
-  const secretKey = import.meta.env.PUBLIC_SecretKey;
-  const fileInput = document.querySelector("#attach_file");
-  console.log("Called")
-  let uploadedFiles = [];
+  async function submitTicket(event) {
+    event.preventDefault();
+    
+    
+    const validationForm = handleInput();
+    if (validationForm) {
+    const api_URL = import.meta.env.PUBLIC_ApiUrl;
+    const apiKey = import.meta.env.PUBLIC_ApiKey;
+    const secretKey = import.meta.env.PUBLIC_SecretKey;
+    const fileInput = document.querySelector("#attach_file");
+    console.log("Called")
+    let uploadedFiles = [];
 
-  if (fileInput.files.length > 0) {
-    for (let i = 0; i < fileInput.files.length; i++) {
-      const file = fileInput.files[i];
-      console.log("File",file)
-      const uploadData = new FormData();
-      uploadData.append("file", file);
-      uploadData.append("is_private", 0);
-      console.log(uploadData)
+    if (fileInput.files.length > 0) {
+      const fileUploadPromises = [...fileInput.files].map(async (file) => {
+    const uploadData = new FormData();
+    uploadData.append("file", file);
+    uploadData.append("is_private", 0);
 
-      try {
-        console.log(uploadData)
-        const uploadResponse = await fetch(
-          `${api_URL}/api/method/upload_file`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `token ${apiKey}:${secretKey}`,
-            },
-            body: uploadData,
-          }
-        );
+    const uploadResponse = await fetch(`${api_URL}/api/method/upload_file`, {
+      method: "POST",
+      headers: {
+        Authorization: `token ${apiKey}:${secretKey}`,
+      },
+      body: uploadData,
+    });
 
-        const uploadResult = await uploadResponse.json();
-        if (uploadResponse.ok && uploadResult.message.file_url) {
-          uploadedFiles.push(uploadResult.message.file_url);
-          console.log("result")
-          console.log(uploadResult)
-        } else {
-          alert(
-            "File upload failed: " +
-              (uploadResult.message.error || "Unknown error")
-          );
-          return;
-        }
-      } catch (error) {
-        console.error("File upload error:", error);
-        alert("File upload failed!");
-        return;
-      }
+    const uploadResult = await uploadResponse.json();
+
+    if (uploadResponse.ok && uploadResult.message.file_url) {
+      return uploadResult.message.file_url;
+    } else {
+      throw new Error(
+        "File upload failed: " + (uploadResult.message?.error || "Unknown error")
+      );
     }
+  });
+
+  try {
+    uploadedFiles = await Promise.all(fileUploadPromises);
+  } catch (err) {
+    console.error("Upload error:", err);
+    alert("File upload failed: " + err.message);
+    return;
+  }
+
   }
   
   const platformSelectEl = document.querySelector("#platformSelect");
@@ -654,8 +652,8 @@ async function submitTicket(event) {
     if (response.ok) {
       let ticketName = result.data.name;
       console.log("Ticket Name",ticketName)
-      await attachFilesToDoctype(ticketName, uploadedFiles);
       showpopup(response);
+      await attachFilesToDoctype(ticketName, uploadedFiles);
       await sendEmail(ticketName)
     } else {
       alert("Error: " + result.error);
