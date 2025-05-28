@@ -473,12 +473,11 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
                           <p class="text-black opacity-70">{formattedDate}</p>
                         )
                       }
-
-                      <img
-                        class="!max-w-full"
-                        src=`${API_URL}${blog_details.featured_image}`
-                        alt="featured-icon"
-                      />
+                      {
+                        blog_details.featured_image && (
+                          <img class="!max-w-full" src={`${API_URL}${blog_details.featured_image}`} alt="featured-image" />
+                        )
+                      }
                     </div>
                   </div>
                   <div class="table-wrapper">

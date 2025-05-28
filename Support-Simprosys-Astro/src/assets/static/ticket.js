@@ -144,7 +144,7 @@ let emailMsg = document.getElementById("email_valid");
 
 const nameRegex =
   /^(?=(?:[^A-Za-z]*[A-Za-z]){2})(?![^\d~`?!^*¨ˆ;@=$%{}\[\]|\\\/<>#“.,]*[\d~`?!^*¨ˆ;@=$%{}\[\]|\\\/<>#“.,])\S+(?: \S+){0,2}$/;
-const companyNameRegex = /^(?=(?:[^A-Za-z]*[A-Za-z]){2})(?![^A-Za-z0-9 ]*$)[A-Za-z0-9]+(?: [A-Za-z0-9]+){0,2}$/;
+const companyNameRegex = /^[A-Za-z0-9 ]+$/;
 
 const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
@@ -594,8 +594,8 @@ function hideLoader() {
     console.log("Called")
     let uploadedFiles = [];
 
-    if (fileInput.files.length > 0) {
-      const fileUploadPromises = [...fileInput.files].map(async (file) => {
+    if (selectedFiles.length > 0) {
+      const fileUploadPromises = selectedFiles.map(async (file) => {
     const uploadData = new FormData();
     uploadData.append("file", file);
     uploadData.append("is_private", 0);
@@ -666,9 +666,9 @@ function hideLoader() {
     if (response.ok) {
       let ticketName = result.data.name;
       console.log("Ticket Name",ticketName)
+      await attachFilesToDoctype(ticketName, uploadedFiles);
       hideLoader(); // Hide the loader
       showpopup(response);
-      await attachFilesToDoctype(ticketName, uploadedFiles);
       await sendEmail(ticketName)
     } else {
       alert("Error: " + result.error);
