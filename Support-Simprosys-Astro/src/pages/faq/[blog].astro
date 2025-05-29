@@ -218,13 +218,27 @@ decodedContent = decodedContent.replace(
 );
 
 // Step 1: Add target="_blank" to <a> inside <strong>
-decodedContent = decodedContent.replace(
-  /(<strong[^>]*>[\s\S]*?<a\s+)(?![^>]*target=)([^>]*>)/gi,
-  '$1target="_blank" rel="noopener noreferrer" $2'
-);
+// decodedContent = decodedContent.replace(
+//   /(<strong[^>]*>[\s\S]*?<a\s+)(?![^>]*target=)([^>]*>)/gi,
+//   '$1target="_blank" rel="noopener noreferrer" $2'
+// );
 
 // Step 2: Remove <strong> and </strong> tags
-decodedContent = decodedContent.replace(/<\/?strong[^>]*>/gi, "");
+// decodedContent = decodedContent.replace(/<\/?strong[^>]*>/gi, "");
+
+// 1️⃣ Add target="_blank" and rel="noopener noreferrer" ONLY to <a> inside <strong>
+decodedContent = decodedContent.replace(
+  /<strong>\s*(<a(?![^>]*\btarget=)([^>]*href=["'][^"']*["']))([^>]*)>(.*?)<\/a>\s*<\/strong>/gi,
+  '<a$2$3 target="_blank" rel="noopener noreferrer">$4</a>'
+);
+
+// 2️⃣ Remove <strong> ONLY if it wraps an <a> tag (and the tag already has target from above)
+decodedContent = decodedContent.replace(
+  /<strong>\s*(<a[^>]*>.*?<\/a>)\s*<\/strong>/gi,
+  '$1'
+);
+
+
 
 // Remove the <BR> tags
 decodedContent = decodedContent.replace(/<span[^>]*>\s*<br>\s*<\/span>/gi, "");
