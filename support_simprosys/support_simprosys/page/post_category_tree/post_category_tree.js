@@ -11,7 +11,7 @@
 frappe.pages["post-category-tree"].on_page_load = function (wrapper) {
   let page = frappe.ui.make_app_page({
     parent: wrapper,
-    title: "Simprosys Blog Category Mapping",
+    title: "Simprosys Doc Category Mapping",
     single_column: true,
   });
 
