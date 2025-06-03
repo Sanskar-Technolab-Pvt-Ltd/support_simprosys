@@ -95,7 +95,7 @@
    "fieldname": "blog_title",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Blog Title",
+   "label": "Doc Title",
    "reqd": 1
   },
   {
@@ -180,7 +180,7 @@
  "index_web_pages_for_search": 1,
  "links": [],
  "make_attachments_public": 1,
- "modified": "2025-05-01 12:55:04.733427",
+ "modified": "2025-06-03 12:16:11.795939",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Simprosys Blog",
@@ -200,6 +200,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
