@@ -1275,7 +1275,7 @@ from frappe.utils import get_url
 def send_support_ticket_email(docname):
     doc = frappe.get_doc("Support Simprosys Ticket", docname)
 
-    subject = "Support Simprosys Ticket - "
+    subject = f"Support Simprosys Ticket - {doc.email}"
 
     # Conditional fields
     ticket_id_row = ""
