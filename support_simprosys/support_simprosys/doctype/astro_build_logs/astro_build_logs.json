@@ -43,7 +43,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-24 15:32:08.037281",
+ "modified": "2025-06-09 10:56:29.600135",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Astro Build Logs",
@@ -63,7 +63,9 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }
