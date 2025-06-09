@@ -57,6 +57,7 @@
    "fieldname": "slug",
    "fieldtype": "Data",
    "label": "Slug",
+   "reqd": 1,
    "unique": 1
   },
   {
@@ -179,7 +180,7 @@
  "index_web_pages_for_search": 1,
  "links": [],
  "make_attachments_public": 1,
- "modified": "2025-06-06 17:38:20.800466",
+ "modified": "2025-06-09 13:05:29.716715",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Simprosys Blog",
@@ -203,5 +204,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "blog_title"
+ "title_field": "blog_title",
+ "track_changes": 1
 }
