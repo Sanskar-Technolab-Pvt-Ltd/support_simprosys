@@ -72,7 +72,7 @@ ul {
 /*? Apply styles to the Quill editor */
 .ql-editor {
   word-break: break-word !important;
-  color: #25282B;
+  /* color: #25282B; */
   font-size: 16px;
   line-height: 20px;
   width: 100% !important;
@@ -173,27 +173,43 @@ ul {
 
 /** Lists */
 .ql-editor * {
-  color:#25282B !important;
+  /* color:#25282B !important; */
   font-family: "Poppins", serif !important;
 }
 
 .ql-editor ul,
 .ql-editor ol {
+  font-size: 18px !important;
   margin-bottom: 1rem;
   padding-left: 20px;
 }
 
 .ql-editor ul li {
+  font-size: 18px !important;
   list-style-type: disc;
   margin-bottom: 0.75rem;
   line-height: 24px;
 }
 
 .ql-editor ol li {
+  font-size: 18px !important;
   list-style-type: decimal;
   margin-bottom: 0.75rem;
   line-height: 24px;
 }
+
+  .ql-editor ul,
+  .ql-editor ol *{
+    font-size: 18px !important;
+  }
+
+  .ql-editor ul li *{
+    font-size: 18px !important;
+  }
+
+  .ql-editor ol li *{
+    font-size: 18px !important;
+  }
 
 
 /* Tables */
@@ -341,6 +357,19 @@ ul {
     font-size: 16px !important;
     margin-bottom: 10px !important;
     line-height: 27px !important;
+  }
+
+  .ql-editor ul,
+  .ql-editor ol *{
+    font-size: 16px !important;
+  }
+
+  .ql-editor ul li *{
+    font-size: 16px !important;
+  }
+
+  .ql-editor ol li *{
+    font-size: 16px !important;
   }
 
   .ql-editor h2{
