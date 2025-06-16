@@ -259,6 +259,23 @@ decodedContent = decodedContent.replace(
   `${API_URL}/files/uploads`
 );
 
+// Match alt tag
+decodedContent = decodedContent.replace(
+  /<p>\s*(<img[^>]*>)\s*<\/p>\s*<p>\s*alt="([^"]+)"(?:<br\s*\/?>)?\s*<\/p>/gi,
+  (match, imgTag, altText) => {
+    // Add or update alt attribute
+    if (/alt\s*=\s*"/i.test(imgTag)) {
+      imgTag = imgTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
+    } else {
+      imgTag = imgTag.replace(/<img/i, `<img alt="${altText}"`);
+    }
+    return `<p>${imgTag}</p>`;
+  }
+);
+
+
+
+
 
 // Remove any remaining unwanted "//" at the start of the lines
 decodedContent = decodedContent
@@ -390,7 +407,7 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
                   />
                 </div>
                 <p class="text-xl lg:text-2xl">
-                  {post_category_name}
+                  {he.decode(post_category_name)}
                 </p>
               </div>
             </div>
@@ -585,7 +602,7 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
       </div>
     </div>
 
-    <MobileDropdown Data={CategoryData} Slug={blog_details.slug} />
+    <MobileDropdown HeadingTitle={he.decode(post_category_name)} Data={CategoryData} Slug={blog_details.slug} />
   </main>
 
   <script src="../../../src/assets/static/blog.js"></script>

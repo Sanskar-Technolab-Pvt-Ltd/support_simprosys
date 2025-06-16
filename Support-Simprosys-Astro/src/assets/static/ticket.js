@@ -394,7 +394,6 @@ function handleInput() {
     isPluginValid &&
     isPlatformValid &&
     isAppValid &&
-    isFileValid &&
     isURLValid
   ) {
     // Check if all validations passed
@@ -518,48 +517,74 @@ document.getElementById("cancel_file").addEventListener("click", function () {
 const form = document.getElementById("form_id");
 // Submit
 
+// ! Old code for remove console error 
+// function showpopup(response) {
+//   const successPopup = document.getElementById("success-popup");
+//   const form = document.getElementById("form_id"); // Replace with your actual form ID
+//   let cancelButton = document.getElementById("cancel_file");
+
+//   if (response.ok) {
+//     // Show the pop-up message
+//     successPopup.classList.remove("hidden");
+
+//     // Close popup when clicked
+//     document.getElementById("closePopup").addEventListener("click", () => {
+//       successPopup.classList.add("hidden");
+//       cancelButton.classList.add("hidden"); 
+//       document.getElementById("attach_file_text").textContent = "Attach File";
+//       document.getElementById("file_list").innerHTML = "";
+//       form.reset(); // Reset the form
+//       location.reload(); // Reloads the entire page
+//     });
+
+//     // Hide the pop-up and reset the form after 3 seconds
+//     setTimeout(() => {
+//       successPopup.classList.add("hidden");
+//       cancelButton.classList.add("hidden"); 
+//       document.getElementById("attach_file_text").textContent = "Attach File";
+//       document.getElementById("file_list").value = "";
+//       form.reset(); // Reset the form
+//       location.reload(); // Reloads the entire page
+
+//     }, 3000); // 3000 milliseconds (3 seconds)
+
+//     if (response.status === 100) {
+//       // Show the pop-up message
+//       successPopup.classList.remove("hidden");
+//     } else {
+//       console.error("Failed to create document.");
+//     }
+//   } else {
+//     console.error("Failed to create document.");
+//   }
+// }
+
+// ? New code for remove console error
 function showpopup(response) {
   const successPopup = document.getElementById("success-popup");
-  const form = document.getElementById("form_id"); // Replace with your actual form ID
-  let cancelButton = document.getElementById("cancel_file");
+  const cancelButton = document.getElementById("cancel_file");
+  const formElement = document.getElementById("form_id");
 
   if (response.ok) {
-    // Show the pop-up message
     successPopup.classList.remove("hidden");
-    console.log("Ticket created successfully.");
 
-    // Close popup when clicked
-    document.getElementById("closePopup").addEventListener("click", () => {
+    const closeHandler = () => {
       successPopup.classList.add("hidden");
-      cancelButton.classList.add("hidden"); 
+      cancelButton.classList.add("hidden");
       document.getElementById("attach_file_text").textContent = "Attach File";
       document.getElementById("file_list").innerHTML = "";
-      form.reset(); // Reset the form
-      location.reload(); // Reloads the entire page
-    });
+      formElement.reset();
+      location.reload();
+    };
 
-    // Hide the pop-up and reset the form after 3 seconds
-    setTimeout(() => {
-      successPopup.classList.add("hidden");
-      cancelButton.classList.add("hidden"); 
-      document.getElementById("attach_file_text").textContent = "Attach File";
-      document.getElementById("file_list").value = "";
-      form.reset(); // Reset the form
-      location.reload(); // Reloads the entire page
+    document.getElementById("closePopup").addEventListener("click", closeHandler);
 
-    }, 3000); // 3000 milliseconds (3 seconds)
-
-    if (response.status === 100) {
-      // Show the pop-up message
-      successPopup.classList.remove("hidden");
-      console.log("Document created successfully.");
-    } else {
-      console.error("Failed to create document.");
-    }
+    setTimeout(closeHandler, 3000);
   } else {
     console.error("Failed to create document.");
   }
 }
+
 
 /**
  * Handles the form submission event for creating a support ticket.
@@ -591,7 +616,6 @@ function hideLoader() {
     const apiKey = import.meta.env.PUBLIC_ApiKey;
     const secretKey = import.meta.env.PUBLIC_SecretKey;
     const fileInput = document.querySelector("#attach_file");
-    console.log("Called")
     let uploadedFiles = [];
 
     if (selectedFiles.length > 0) {
@@ -665,7 +689,6 @@ function hideLoader() {
 
     if (response.ok) {
       let ticketName = result.data.name;
-      console.log("Ticket Name",ticketName)
       await attachFilesToDoctype(ticketName, uploadedFiles);
       hideLoader(); // Hide the loader
       showpopup(response);
@@ -685,8 +708,6 @@ async function attachFilesToDoctype(ticketName, fileUrls) {
   const api_URL = import.meta.env.PUBLIC_ApiUrl;
   const apiKey = import.meta.env.PUBLIC_ApiKey;
   const secretKey = import.meta.env.PUBLIC_SecretKey;
-  console.log("\nTicket Name",ticketName)
-  console.log("\nFile URL",fileUrls)
   for (let fileUrl of fileUrls) {
     const attachData = {
       file_url: fileUrl,
@@ -713,7 +734,6 @@ async function sendEmail(ticketName){
   const api_URL = import.meta.env.PUBLIC_ApiUrl;
   const apiKey = import.meta.env.PUBLIC_ApiKey;
   const secretKey = import.meta.env.PUBLIC_SecretKey;
-  console.log("Email Send")
   try {
   const emailResponse = await fetch(
     `${api_URL}/api/method/support_simprosys.support_simprosys.api.send_support_ticket_email?docname=${ticketName}`,
@@ -724,14 +744,10 @@ async function sendEmail(ticketName){
           },
         }
       );
-
-      console.log("Email Response Status:", emailResponse.status);
       const emailResult = await emailResponse.json();
-      console.log("Email API response:", emailResult);
     } catch (emailErr) {
       console.error("Email sending failed:", emailErr);
     }
-    console.log("Email successfully gone ")
 }
 
 
