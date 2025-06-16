@@ -62,7 +62,7 @@
   },
   {
    "fieldname": "alt",
-   "fieldtype": "Data",
+   "fieldtype": "Small Text",
    "label": "Alt"
   },
   {
@@ -151,7 +151,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-09 10:56:50.559401",
+ "modified": "2025-06-16 12:01:35.064673",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Article",

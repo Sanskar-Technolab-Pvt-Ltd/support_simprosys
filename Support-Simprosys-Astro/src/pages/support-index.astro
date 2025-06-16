@@ -271,7 +271,7 @@ const SupportSearchData = SupportSearchJson.data;
               </h2>
               <p
                 class="text-base text-[#25282B]"
-                set:html={youtube_description || ""}
+                set:html={he.decode(youtube_description) || ""}
               />
               <div>
                 <a

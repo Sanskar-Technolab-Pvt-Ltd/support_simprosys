@@ -389,9 +389,9 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
                     alt="icon"
                   />
                 </div>
-                <h1 class="text-xl lg:text-2xl">
+                <p class="text-xl lg:text-2xl">
                   {post_category_name}
-                </h1>
+                </p>
               </div>
             </div>
             <div>
@@ -484,11 +484,11 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
                     class=`flex space-x-2 item-start xl:items-center`
                   >
                     <div class="space-y-2">
-                      <h2
+                      <h1
                         class="font-semibold text-2xl md:text-3xl lg:text-4px 2xl:text-[40px] 2xl:leading-[54px]"
                       >
-                        {heading}
-                      </h2>
+                        {he.decode(heading)}
+                      </h1>
                       {
                         blog_details.publish_date && (
                           <p class="text-black opacity-70">{formattedDate}</p>
