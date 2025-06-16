@@ -248,10 +248,17 @@ decodedContent = decodedContent.replace(
   /<ol[^>]*>\s*(<li>\s*<\/li>\s*)+<\/ol>/gis,
   ""
 );
+
+// decodedContent = decodedContent.replace(
+//   /\/files\/uploads\//g,
+//   `${API_URL}/files/uploads/`
+// );
+
 decodedContent = decodedContent.replace(
-  /\/files\/uploads\//g,
-  `${API_URL}/files/uploads/`
+  /https:\/\/support\.simprosys\.com\/wp-content\/uploads/g,
+  `${API_URL}/files/uploads`
 );
+
 
 // Remove any remaining unwanted "//" at the start of the lines
 decodedContent = decodedContent

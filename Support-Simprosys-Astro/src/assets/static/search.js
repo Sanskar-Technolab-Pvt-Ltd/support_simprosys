@@ -223,6 +223,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("search-term").textContent = keyword || "None";
   document.getElementById("searchInput").value = keyword;
 
+  // const searchTermEl = document.getElementById("search-term");
+  // if (searchTermEl) {
+  //   searchTermEl.textContent = keyword || "None";
+  // }
+
+  // const searchInputEl = document.getElementById("searchInput");
+  // if (searchInputEl) {
+  //   searchInputEl.value = keyword;
+  // }
+
   if (keyword.length >= 2) {
     try {
       const response = await fetch(

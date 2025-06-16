@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-//? Footer Email
+//? Footer Newsletter Email
 
 const api_URL = import.meta.env.PUBLIC_ApiUrl;
 const apiKey = import.meta.env.PUBLIC_ApiKey;
@@ -267,7 +267,7 @@ document
     // Step 3: Check if email already exists
     try {
       const checkResponse = await fetch(
-        `${api_URL}/api/resource/Simprosy%20Newsletter%20Subscriber?filters=[["email","=","${email}"]]`,
+        `${api_URL}/api/resource/Simprosy%20Newsletter%20Subscriber?filters=${encodeURIComponent(JSON.stringify([["email", "=", email]]))}`,
         {
           headers: {
             Authorization: `token ${apiKey}:${secretKey}`,
