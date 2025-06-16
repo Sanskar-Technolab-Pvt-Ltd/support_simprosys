@@ -1,4 +1,6 @@
 ---
+import he from 'he';
+
 // Components
 import MobileMenu from "../components/MobileMenu.astro";
 import Layout from "../layouts/Layout.astro";
@@ -218,10 +220,10 @@ const platform = platformJson.data || [];
                       <h1
                         class="font-semibold text-[18px] xl:text-[40px] xl:leading-[54px]"
                       >
-                        {integration_details.post_category_name || ""}
+                        {he.decode(integration_details.post_category_name) || ""}
                       </h1>
                       <p class="text-sm xl:text-base text-[#25282B]">
-                        {integration_details.description}
+                        {he.decode(integration_details.description)}
                       </p>
                     </div>
                   </div>
