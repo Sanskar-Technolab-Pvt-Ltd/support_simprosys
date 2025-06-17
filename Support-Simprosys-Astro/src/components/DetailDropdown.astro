@@ -1,4 +1,5 @@
 ---
+import he from 'he';
 import ToggleArrow from "../assets/img/toggle-arrow.png";
 import DetailDropdownLinks from "./DetailDropdownLinks.astro";
 
@@ -28,7 +29,7 @@ const BlogCount = Blog.length;
       <div
         class={`${DropdownClass || "dropdown cursor-pointer"} flex py-4 justify-between w-full`}
       >
-        <p class="text-base font-medium">{Label}</p>
+        <p class="text-base font-medium">{he.decode(Label)}</p>
         <img
           class="arrow-icon h-full"
           src={ToggleArrow.src}
