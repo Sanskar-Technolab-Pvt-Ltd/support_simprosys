@@ -467,8 +467,8 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
                       />
                       <span
                         class="hidden ssm:block overflow-hidden text-ellipsis whitespace-nowrap text-[#25282B] opacity-70"
-                        title={post_category_name}
-                        >{post_category_name}
+                        title={he.decode(post_category_name)}
+                        >{he.decode(post_category_name)}
                       </span>
                     </a>
 

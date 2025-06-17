@@ -113,13 +113,13 @@ const platform = platformJson.data || [];
 ---
 
 <Layout
-  Title={integration_details.post_category_name
+  Title={he.decode(integration_details.post_category_name)
     ? `${integration_details.post_category_name} - Simprosys InfoMedia Help Centre`
     : "Shopify Product Feed and Google Shopping Ads Management App by Simprosys"}
   meta_title={integration_details.meta_title}
   meta_desc={integration_details.meta_desc}
   canonicalURL=`${platform.canonical_url || ""}`
-  AppName={integration_details.post_category_name || ""}
+  AppName={he.decode(integration_details.post_category_name) || ""}
   PlatformName={platform[0].post_category_name || ""}
 >
   <main>
@@ -191,7 +191,7 @@ const platform = platformJson.data || [];
                         alt={platform[0]?.name ? `${platform[0].name}` : ""}
                       />
                       <span>
-                        {integration_details.post_category_name || ""}
+                        {he.decode(integration_details.post_category_name) || ""}
                       </span>
                     </a>
                   </div>
