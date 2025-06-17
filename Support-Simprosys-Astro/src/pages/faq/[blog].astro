@@ -262,7 +262,7 @@ decodedContent = decodedContent.replace(
 // Match alt tag
 decodedContent = decodedContent.replace(
   /<p>\s*(<img[^>]*>)\s*<\/p>\s*<p>\s*alt="([^"]+)"(?:<br\s*\/?>)?\s*<\/p>/gi,
-  (match, imgTag, altText) => {
+  (match:any, imgTag:any, altText:any) => {
     // Add or update alt attribute
     if (/alt\s*=\s*"/i.test(imgTag)) {
       imgTag = imgTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
@@ -273,6 +273,18 @@ decodedContent = decodedContent.replace(
   }
 );
 
+// Match ALT Tag
+decodedContent = decodedContent.replace(
+  /<p>\s*<span[^>]*>\s*(<img[^>]*>)\s*<\/span>\s*<\/p>\s*<p>\s*<span[^>]*>\s*alt="([^"]+)"\s*<\/span>\s*<\/p>/gi,
+  (match, imgTag, altText) => {
+    if (/alt\s*=\s*"/i.test(imgTag)) {
+      imgTag = imgTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
+    } else {
+      imgTag = imgTag.replace(/<img/i, `<img alt="${altText}"`);
+    }
+    return `<p><span>${imgTag}</span></p>`;
+  }
+);
 
 
 
