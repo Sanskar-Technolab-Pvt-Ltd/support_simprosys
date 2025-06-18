@@ -286,6 +286,21 @@ decodedContent = decodedContent.replace(
   }
 );
 
+// Match alt tag in table 
+decodedContent = decodedContent.replace(
+  /(<td[^>]*>\s*<img[^>]*?)>(?:\s|&nbsp;)*alt="([^"]+)"(?:<br\s*\/?>)?/gi,
+  (match, imgStartTag, altText) => {
+    // If the img already has an alt attribute, replace it
+    if (/alt\s*=\s*"/i.test(imgStartTag)) {
+      imgStartTag = imgStartTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
+    } else {
+      imgStartTag = imgStartTag.replace(/<img/i, `<img alt="${altText}"`);
+    }
+
+    return `${imgStartTag}>`; // return cleaned-up <td><img ...> without Alt="..." text
+  }
+);
+
 
 
 

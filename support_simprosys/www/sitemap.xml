@@ -2181,7 +2181,21 @@
       <url>
         <loc>https://simprosys.frappe.cloud/faq/image-alt-text</loc>
         <priority>1.0</priority>
-        <lastmod>2025-06-17</lastmod>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+      </url>
+    
+      <url>
+        <loc>https://simprosys.frappe.cloud/faq/final</loc>
+        <priority>1.0</priority>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+      </url>
+    
+      <url>
+        <loc>https://simprosys.frappe.cloud/faq/testttt</loc>
+        <priority>1.0</priority>
+        <lastmod>2025-06-18</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
