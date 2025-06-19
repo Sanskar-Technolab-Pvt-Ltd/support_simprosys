@@ -401,11 +401,11 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
 ---
 
 <Layout
-  Title=`${blog_details.blog_title}`
+  Title=`${he.decode(blog_details.blog_title)}`
   meta_title={blog_details.meta_title}
   meta_desc={blog_details.meta_desc}
   meta_keyword={blog_details.meta_keyword}
-  canonicalURL=`${blog_details.canonical_url || ""}`
+  canonicalURL=`${API_URL}/faq/${blog_details.slug}`
   blogSchemaName={blog_details.blog_title || ""}
   youtubeVideoDetails={videoDetails || ""}
   blogSlug={blog_details.slug || ""}
