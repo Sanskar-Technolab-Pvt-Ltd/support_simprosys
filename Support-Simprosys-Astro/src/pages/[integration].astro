@@ -118,7 +118,7 @@ const platform = platformJson.data || [];
     : "Shopify Product Feed and Google Shopping Ads Management App by Simprosys"}
   meta_title={integration_details.meta_title}
   meta_desc={integration_details.meta_desc}
-  canonicalURL=`${platform.canonical_url || ""}`
+  canonicalURL=`${URL}/${integration_details.slug}`
   AppName={he.decode(integration_details.post_category_name) || ""}
   PlatformName={platform[0].post_category_name || ""}
 >

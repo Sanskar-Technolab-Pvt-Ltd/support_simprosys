@@ -5,6 +5,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "support_index_tab",
   "header_details_section",
   "canonical_url",
   "meta_title",
@@ -26,7 +27,11 @@
   "article_description",
   "youtube_video_heading_details_section",
   "youtube_video_heading_label",
-  "youtube_video_description"
+  "youtube_video_description",
+  "raise_a_ticket_tab",
+  "reise_a_ticket_page_meta_details_section",
+  "ticket_meta_name",
+  "ticket_meta_description"
  ],
  "fields": [
   {
@@ -146,13 +151,38 @@
    "fieldname": "schema_url",
    "fieldtype": "Data",
    "label": "Schema URL"
+  },
+  {
+   "fieldname": "support_index_tab",
+   "fieldtype": "Tab Break",
+   "label": "Support Index"
+  },
+  {
+   "fieldname": "raise_a_ticket_tab",
+   "fieldtype": "Tab Break",
+   "label": "Raise A Ticket"
+  },
+  {
+   "fieldname": "reise_a_ticket_page_meta_details_section",
+   "fieldtype": "Section Break",
+   "label": "Reise A Ticket page meta details"
+  },
+  {
+   "fieldname": "ticket_meta_name",
+   "fieldtype": "Data",
+   "label": "Ticket Meta Name"
+  },
+  {
+   "fieldname": "ticket_meta_description",
+   "fieldtype": "Small Text",
+   "label": "Ticket Meta Description"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-06-09 10:56:21.991925",
+ "modified": "2025-06-18 17:12:01.347972",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Support Home Page",
