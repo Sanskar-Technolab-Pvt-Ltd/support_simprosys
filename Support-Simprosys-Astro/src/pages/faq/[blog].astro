@@ -398,7 +398,17 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
   month: "short",
   day: "2-digit",
 });
+const redirect_url = blog_details?.redirect_url || null;
+console.log(redirect_url)
 ---
+<!-- {redirect_url && (
+  <script is:inline>
+    const redirectUrl = {JSON.stringify(redirect_url)};
+    console.log("Redirecting to:", redirectUrl);
+    window.location.href = redirectUrl;
+  </script>
+)} -->
+
 
 <Layout
   Title=`${he.decode(blog_details.blog_title)}`
