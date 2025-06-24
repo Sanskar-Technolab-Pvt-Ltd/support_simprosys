@@ -80,7 +80,6 @@ const CategoryResponse = await fetch(
 );
 const categoryDataJson = await CategoryResponse.json();
 const CategoryData = categoryDataJson.data || [];
-
 const encodedName = encodeURIComponent(name);
 
 // Fetch Subcategories directly from API
@@ -96,6 +95,7 @@ const subCategoryResponse = await fetch(
 
 const subCategoryJson = await subCategoryResponse.json();
 const subCategoryData = subCategoryJson.data || [];
+// console.log(subCategoryData)
 
 // Fetch Platform directly from API
 const platformResponse = await fetch(
