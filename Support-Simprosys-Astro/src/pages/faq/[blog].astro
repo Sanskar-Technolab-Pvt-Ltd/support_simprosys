@@ -84,9 +84,17 @@ const blog_details_api = await fetch(
 const blog_details_json = await blog_details_api.json();
 const blog_details = blog_details_json.data;
 
+const cleanCategory = he.decode(blog_details.post_category);
+
+// Encode filters safely
+const subCategoryFilters = encodeURIComponent(JSON.stringify([
+  ["name", "=", cleanCategory],
+  ["status", "=", "publish"]
+]));
+
 // Fetching Subcategory Data
 const SubCategoryResponse = await fetch(
-  `${API_URL}/api/resource/Simprosys%20Post%20Category?fields=["*"]&filters=[["name","=","${blog_details.post_category}"],["status","=","publish"]]&order_by=\`order\` asc`,
+  `${API_URL}/api/resource/Simprosys%20Post%20Category?fields=["*"]&filters=${subCategoryFilters}&order_by=%60order%60%20asc`,
   {
     method: "GET",
     headers: {
@@ -156,8 +164,16 @@ const platformResponse = await fetch(
 const platformJson = await platformResponse.json();
 const platform = platformJson.data || [];
 
+const cleanPostCategory = he.decode(blog_details.post_category);
+
+const filters = encodeURIComponent(JSON.stringify([
+  ["post_category", "=", cleanPostCategory],
+  ["status", "=", "publish"]
+]));
+
+
 const blogs_api = await fetch(
-  `${API_URL}/api/resource/Simprosys%20Blog?filters=[["post_category","=","${blog_details.post_category}"],["status","=","publish"]]&fields=["name", "slug","blog_title","canonical_url"]&order_by=\`order\` asc&limit_page_length=1000`,
+  `${API_URL}/api/resource/Simprosys%20Blog?filters=${filters}&fields=["name","slug","blog_title","canonical_url"]&order_by=%60order%60%20asc&limit_page_length=1000`,
   {
     method: "GET",
     headers: {
@@ -539,7 +555,7 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
                       }
                       {
                         blog_details.featured_image && (
-                          <img class="!max-w-full" src={`${API_URL}${blog_details.featured_image}`} alt="featured-image" />
+                          <img class="!max-w-full" src={`${API_URL}${blog_details.featured_image}`} alt={blog_details.featured_image_alt_text} />
                         )
                       }
                     </div>

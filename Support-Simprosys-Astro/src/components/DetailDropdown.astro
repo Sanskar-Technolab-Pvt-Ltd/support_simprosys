@@ -7,8 +7,18 @@ const { heading, borderClass, round, Slug, DropdownClass, Label, index } =
   Astro.props;
 
 const API_URL = import.meta.env.PUBLIC_ApiUrl;
+
+// Decode HTML entities from heading if needed (e.g., &amp;)
+const cleanHeading = he.decode(heading);
+
+// Encode the filters parameter properly
+const blogFilters = encodeURIComponent(JSON.stringify([
+  ["post_category", "=", cleanHeading],
+  ["status", "=", "publish"]
+]));
+
 const BlogResponse = await fetch(
-  `${API_URL}/api/resource/Simprosys%20Blog?fields=["*"]&filters=[["post_category", "=", "${heading}"],["status","=","publish"]]&order_by=\`order\` asc&limit_page_length=1000`,
+  `${API_URL}/api/resource/Simprosys%20Blog?fields=["*"]&filters=${blogFilters}&order_by=%60order%60%20asc&limit_page_length=1000`,
   {
     method: "GET",
     headers: {
