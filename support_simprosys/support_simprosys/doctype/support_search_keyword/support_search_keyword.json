@@ -27,9 +27,10 @@
    "label": "order"
   }
  ],
+ "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-02-28 17:39:48.623534",
+ "modified": "2025-06-09 10:56:45.535353",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Support Search Keyword",
@@ -49,8 +50,10 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "keyword"
+ "title_field": "keyword",
+ "track_changes": 1
 }

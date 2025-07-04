@@ -26,7 +26,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-03-17 16:19:08.791390",
+ "modified": "2025-06-09 10:56:11.804697",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Simprosy Newsletter Subscriber",
@@ -46,7 +46,9 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }

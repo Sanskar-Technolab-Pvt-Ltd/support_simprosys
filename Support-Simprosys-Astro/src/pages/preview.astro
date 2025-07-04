@@ -1,0 +1,507 @@
+---
+import slugify from "slugify";
+
+// Images
+import homeIcon from "../assets/img/home-icon.svg";
+import ArrowIcon from "../assets/img/arrowIcon.svg";
+
+// Components
+import Carousel from "../components/Carousel.astro";
+
+// import MobileMenu from "../components/MobileMenu.astro";
+import Layout from "../layouts/Layout.astro";
+import DetailDropdown from "../components/DetailDropdown.astro";
+import MobileDropdown from "../components/MobileDropdown.astro";
+
+const CategoryResponse = await fetch(
+  `${import.meta.env.PUBLIC_ApiUrl}/api/resource/Simprosys%20Post%20Category?fields=["*"]&filters=[["parent_simprosys_post_category", "=", "Simprosys Google Shopping Feed-5580"], ["category_criteria", "=", "Subcategory"],["status","=","publish"]]&order_by=\`order\` asc`,
+  {
+    method: "GET",
+    headers: {
+      Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+    },
+  }
+);
+const categoryDataJson = await CategoryResponse.json();
+const CategoryData = categoryDataJson.data || [];
+---
+
+<Layout>
+  <main class="lg:mb-[-64px] 2xl :mb-[-140px]">
+    <Carousel />
+    <section>
+      <div class="mx-[20px] md:mx-[26px] 2xl:mx-[125px] lg:mx-[50px]">
+        <div class="grid lg:grid-cols-12">
+          <div
+            class="hidden lg:block space-y-8 lg:col-span-4 xl:col-span-3 md:border-r pt-[30px] sm:pt-[50px] md:pt-[64px] lg:pt-[70px] xl:pt-[85px] 2xl:pt-[70px]"
+          >
+            <div class="space-y-[30px]">
+              <div
+                class="flex space-x-6 items-center lg:pr-[23px] 2xl:pr-[46px]"
+              >
+                <div
+                  class="bg-[#E9F6FF] p-5 rounded-full flex items-center justify-center"
+                >
+                  <img
+                    id="imageIcon"
+                    class="h-full w-[44.2px]"
+                    src="https://simprosys.frappe.cloud/files/Union 7.svg"
+                    alt="icon"
+                  />
+                </div>
+                <h1 class="text-xl lg:text-2xl">
+                  Simprosys Google Shopping Feed
+                </h1>
+              </div>
+            </div>
+            <div>
+              <div class="pr-2 lg:pr-[23px] 2xl:pr-[46px]">
+                {
+                  CategoryData.map((item: any, index: number) => (
+                    <DetailDropdown
+                      heading={item.name}
+                      Label={item?.post_category_name || ""}
+                      round="rounded-[12px]"
+                      Slug=""
+                      DropdownClass="dropdown-details cursor-pointer"
+                      index={index}
+                    />
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="xl:col-start-5 lg:px-8 xl:px-0 lg:col-span-8 pt-[30px] sm:pt-[50px] md:pt-[64px] lg:pt-[70px] xl:pt-[85px] 2xl:pt-[70px]"
+          >
+            <div
+              class="mt-[20px] md:mt-[0px] md:pt-[0px] space-y-8 xl:space-y-16 mb-[50px] lg:mb-[92px]"
+            >
+              <div class="space-y-6">
+                <div class="space-y-8">
+                  <div class="hidden ssm:flex space-x-1 lg:space-x-2">
+                    <a
+                      href="../../"
+                      class="text-[#25282B] text-sm opacity-70 hover:underline"
+                    >
+                      <span class="ssm:hidden">
+                        <img
+                          class="w-[22px]"
+                          src={homeIcon.src}
+                          alt="home-icon"
+                        />
+                      </span>
+                      <span class="hidden ssm:block" title="Home"> Home </span>
+                    </a>
+                    <p class="text-[16px] leading-[22px] text-[#929495]">></p>
+                    <a
+                      id="platform_link"
+                      class="flex items-start whitespace-pre-line xl:whitespace-pre-line md:overflow-hidden md:text-ellipsis xl:w-auto font-medium hover:underline text-sm ssm:space-x-1"
+                    >
+                      <img id="platform_icon" class="h-[20px] w-auto" />
+                      <span
+                        id="post_category_name"
+                        class="hidden ssm:block overflow-hidden text-ellipsis whitespace-nowrap text-[#25282B] opacity-70"
+                      >
+                        Simprosys Google Shopping Feed
+                      </span>
+                    </a>
+
+                    <p class="text-[16px] leading-[22px] text-[#929495]">></p>
+                    <a
+                      id="platform_link_anchor"
+                      class="text-[#25282B] whitespace-pre-line xl:whitespace-nowrap md:overflow-hidden md:text-ellipsis opacity-70 font-medium hover:underline text-sm"
+                    >
+                      <!-- {SubCategoryData[0]?.post_category_name || ""} -->
+                      App Processes
+                    </a>
+                    <p
+                      class="hidden xl:flex text-[16px] leading-[22px] text-[#929495]"
+                    >
+                      >
+                    </p>
+                    <a
+                      id="blog_details_link"
+                      class="hidden xl:inline-block text-[#25282B] whitespace-pre-line xl:whitespace-nowrap md:overflow-hidden md:text-ellipsis font-medium hover:underline text-sm"
+                    >
+                    </a>
+                  </div>
+                </div>
+
+                <div class="space-y-8">
+                  <div class=`flex space-x-2 item-start xl:items-center"}`>
+                    <div
+                      id="featured_image_container"
+                      class=`p-5 h-fit rounded-full w-fit bg-[#E9F6FF] content-center`
+                    >
+                      <img
+                        id="featured_image"
+                        class="w-16"
+                        alt="featured-icon"
+                      />
+                    </div>
+                    <div class="space-y-2">
+                      <h2
+                        id="heading"
+                        class="font-semibold text-2xl md:text-3xl lg:text-4px 2xl:text-[40px] 2xl:leading-[54px]"
+                      >
+                      </h2>
+                      <p id="publish_date">
+                        <!-- {
+                        blog_details.publish_date && (
+                          <p class="text-black opacity-70">{formattedDate}</p>
+                        )
+                      } -->
+                      </p>
+                    </div>
+                  </div>
+                  <div class="table-wrapper">
+                    <div id="ql-editor" class="ql-editor"></div>
+
+                    <!-- <div
+                      id="ql-editor"
+                      class="ql-editor read-mode"
+                      set:html={decodedContent}
+                    /> -->
+
+                    <div
+                      class="border-t pt-5 lg:pt-10 text-center lg:text-start"
+                    >
+                      <div
+                        class=`text-base grid grid-cols-12 lg:space-y-0 gap-2`
+                      >
+                        <div class={`col-span-6 space-y-3 text-left`}>
+                          <p class=`font-semibold`>Previous article</p>
+                          <p class="text-[#195279] hover:underline">
+                            <a class="justify-items-start float-left" href=""
+                              ><img
+                                class={`scale-x-[-1] transform transition hover:-translate-x-1 motion-reduce:transition-none motion-reduce:hover:transform-none`}
+                                src={ArrowIcon.src}
+                                alt="Previous-Arrow"
+                              /></a
+                            >
+                          </p>
+                        </div>
+                        <div
+                          class={`col-span-6 justify-items-end space-y-3 text-right`}
+                        >
+                          <p class="font-semibold">Next article</p>
+                          <p class="text-[#195279] hover:underline">
+                            <a class="justify-items-end float-right" href=""
+                              ><img
+                                class="transform transition hover:translate-x-1 motion-reduce:transition-none motion-reduce:hover:transform-none"
+                                src={ArrowIcon.src}
+                                alt="Next-Arrow"
+                              /></a
+                            >
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--* Pop-up Modal -->
+    <div
+      id="mediaModal"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 hidden z-50"
+    >
+      <div
+        class="relative rounded-lg shadow-lg w-full max-w-3xl sm:max-w-4xl xl:max-w-7xl p-4 max-h-[90vh] overflow-y-auto"
+      >
+        <!-- Close Button -->
+        <button
+          id="closeModal"
+          class="absolute top-3 right-3 hover:text-gray-300 text-white text-xl"
+        >
+          ✖
+        </button>
+
+        <!-- Modal Content -->
+        <div id="modalContent" class="p-4 flex justify-center items-center">
+          <img
+            id="modalImage"
+            src=""
+            alt="Large Image"
+            class="max-h-[80vh] w-auto"
+          />
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    import he from "he";
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get("faq");
+
+      const api_url = import.meta.env.PUBLIC_ApiUrl;
+      const api_key = import.meta.env.PUBLIC_ApiKey;
+      const api_secret = import.meta.env.PUBLIC_SecretKey;
+
+      const blog_name_api = await fetch(
+        `${api_url}/api/resource/Simprosys%20Blog?filters=[["slug","=","${slug}"]]`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `token ${api_key}:${api_secret}`,
+          },
+        }
+      );
+
+      const blog_name_json = await blog_name_api.json();
+      if (!blog_name_json.data || blog_name_json.data.length === 0) {
+        // Redirect to 404 page if blog not found
+        window.location.href = "/404";
+        return;
+      }
+      const blog_name = blog_name_json.data;
+
+      const blog_details_api = await fetch(
+        `${api_url}/api/resource/Simprosys%20Blog/${blog_name[0].name}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `token ${api_key}:${api_secret}`,
+          },
+        }
+      );
+
+      const blog_details_json = await blog_details_api.json();
+      const blog_details = blog_details_json.data;
+
+      const publish_date = document.getElementById("publish_date");
+      const dateStr = blog_details.publish_date || "";
+      const dateObj = new Date(dateStr);
+      const formattedDate = dateObj.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+      });
+      publish_date.innerHTML = blog_details.publish_date;
+
+      if (blog_details.featured_image) {
+        document.getElementById("featured_image").src =
+          `${api_url}${blog_details.featured_image}`;
+      } else {
+        document
+          .getElementById("featured_image_container")
+          .classList.add("hidden");
+      }
+
+      const heading = he.decode(blog_details.blog_title);
+      document.getElementById("heading").innerHTML = heading;
+
+      const decodedContentRaw = blog_details.content_details || "Nothing found";
+      let decodedContent = he.decode(decodedContentRaw);
+
+      // Convert YouTube short links to embedded iFrames
+      decodedContent = decodedContent.replace(
+        /https?:\/\/(?:www\.)?youtu\.be\/([\w-]+)/g,
+        '<iframe width="560" height="315" src="https://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>'
+      );
+
+      // Ensure all links have "https://"
+      decodedContent = decodedContent.replace(
+        /\b\/\/([\w.-]+\/[\w-]+)/g,
+        "https://$1"
+      );
+
+      // Remove anchor tags that wrap an iframe
+      decodedContent = decodedContent.replace(
+        /<a[^>]*>\s*(<iframe[^>]*><\/iframe>)\s*<\/a>/gi,
+        "$1"
+      );
+
+      // Fix <strong><a></a></strong> to <a target="_blank"></a>
+      decodedContent = decodedContent.replace(
+        /<strong>\s*<a([^>]*)>(.*?)<\/a>\s*<\/strong>/gi,
+        '<a$1 target="_blank">$2</a>'
+      );
+
+      // Remove empty or redundant tags
+      decodedContent = decodedContent.replace(
+        /<span[^>]*>\s*<br>\s*<\/span>/gi,
+        ""
+      );
+      decodedContent = decodedContent.replace(
+        /<div[^>]*>\s*<br>\s*<\/div>/gi,
+        ""
+      );
+      decodedContent = decodedContent.replace(/<p>\s*<br>\s*<\/p>/gi, "");
+      decodedContent = decodedContent.replace(
+        /<ol[^>]*>\s*(<li>\s*<\/li>\s*)+<\/ol>/gis,
+        ""
+      );
+
+      // Fix file paths
+      decodedContent = decodedContent.replace(
+        /\/files\/uploads\//g,
+        `${api_url}/files/uploads/`
+      );
+
+      // IMage alt tag
+      decodedContent = decodedContent.replace(
+        /<p>\s*(<img[^>]*>)\s*<\/p>\s*<p>\s*alt="([^"]+)"(?:<br\s*\/?>)?\s*<\/p>/gi,
+        (match, imgTag, altText) => {
+          // Add or update alt attribute
+          if (/alt\s*=\s*"/i.test(imgTag)) {
+            imgTag = imgTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
+          } else {
+            imgTag = imgTag.replace(/<img/i, `<img alt="${altText}"`);
+          }
+          return `<p>${imgTag}</p>`;
+        }
+      );
+
+      // Image ALT Tag
+      decodedContent = decodedContent.replace(
+        /<p>\s*<span[^>]*>\s*(<img[^>]*>)\s*<\/span>\s*<\/p>\s*<p>\s*<span[^>]*>\s*alt="([^"]+)"\s*<\/span>\s*<\/p>/gi,
+        (match, imgTag, altText) => {
+          if (/alt\s*=\s*"/i.test(imgTag)) {
+            imgTag = imgTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
+          } else {
+            imgTag = imgTag.replace(/<img/i, `<img alt="${altText}"`);
+          }
+          return `<p><span>${imgTag}</span></p>`;
+        }
+      );
+
+      // Match Alt tag in table
+      decodedContent = decodedContent.replace(
+        /(<td[^>]*>\s*<img[^>]*?)>(?:\s|&nbsp;)*alt="([^"]+)"(?:<br\s*\/?>)?/gi,
+        (match, imgStartTag, altText) => {
+          // If the img already has an alt attribute, replace it
+          if (/alt\s*=\s*"/i.test(imgStartTag)) {
+            imgStartTag = imgStartTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
+          } else {
+            imgStartTag = imgStartTag.replace(/<img/i, `<img alt="${altText}"`);
+          }
+
+          return `${imgStartTag}>`; // return cleaned-up <td><img ...> without Alt="..." text
+        }
+      );
+
+
+      // Escape Jinja/Template Tags
+      decodedContent = decodedContent
+        .replace(/{%/g, "&#123;%")
+        .replace(/%}/g, "%&#125;")
+        .replace(/{{/g, "&#123;&#123;")
+        .replace(/}}/g, "&#125;&#125;");
+
+      // Now insert into the DOM
+      document.getElementById("ql-editor").innerHTML = decodedContent;
+    });
+
+    const SubCategoryResponse = await fetch(
+      `${API_URL}/api/resource/Simprosys%20Post%20Category?fields=["*"]&filters=[["name","=","${blog_details.post_category}"],["status","=","publish"]]&order_by=\`order\` asc`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+        },
+      }
+    );
+
+    const subCategoryDataJson = await SubCategoryResponse.json();
+    const SubCategoryData = subCategoryDataJson.data || [];
+
+    const encodeSubCategory = encodeURIComponent(
+      SubCategoryData[0]?.parent_simprosys_post_category || ""
+    );
+    // Fetching Category Data
+    const CategoryResponse = await fetch(
+      `${API_URL}/api/resource/Simprosys%20Post%20Category?fields=["*"]&filters=[["parent_simprosys_post_category", "=", "${encodeSubCategory}"], ["category_criteria", "=", "Subcategory"],["status","=","publish"]]&order_by=\`order\` asc`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+        },
+      }
+    );
+    const categoryDataJson = await CategoryResponse.json();
+    const CategoryData = categoryDataJson.data || [];
+    let Parent_Slug = "No Slug Found"; // Declare outside
+    let Platform = "#";
+    let Icon = "";
+    let post_category_name = "";
+    if (CategoryData.length > 0) {
+      const ParentCategoryName = encodeURIComponent(
+        CategoryData[0].parent_simprosys_post_category
+          ? CategoryData[0].parent_simprosys_post_category
+          : ""
+      );
+      const ParentCategoryResponse = await fetch(
+        `${API_URL}/api/resource/Simprosys%20Post%20Category?filters=[["name", "=", "${ParentCategoryName}"]]&fields=["slug","parent_simprosys_post_category","icon_image","post_category_name"]`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+          },
+        }
+      );
+      const ParentCategoryJson = await ParentCategoryResponse.json();
+      const ParentCategoryData = ParentCategoryJson.data || [];
+      // Assign value inside the block
+      if (ParentCategoryData.length > 0) {
+        post_category_name = ParentCategoryData[0]?.post_category_name || "";
+        Parent_Slug = ParentCategoryData[0].slug;
+        Platform = ParentCategoryData[0]?.parent_simprosys_post_category || "";
+        Icon = ParentCategoryData[0].icon_image;
+      }
+    }
+
+    // Fetch Platform Data
+    const platformResponse = await fetch(
+      `${API_URL}/api/resource/Simprosys%20Post%20Category?fields=["*"]&filters=[["name", "=", "${Platform}"]]`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+        },
+      }
+    );
+    const platformJson = await platformResponse.json();
+    const platform = platformJson.data || [];
+
+    const blogs_api = await fetch(
+      `${API_URL}/api/resource/Simprosys%20Blog?filters=[["post_category","=","${blog_details.post_category}"],["status","=","publish"]]&fields=["name", "slug","blog_title","canonical_url"]&order_by=\`order\` asc&limit_page_length=1000`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+        },
+      }
+    );
+
+    const blogs_json = await blogs_api.json();
+    const blogs = blogs_json.data || [];
+
+    const currentIndex = blogs.findIndex((blog: any) => {
+      return blog.name === blog_details.name;
+    });
+
+    document.getElementById("platform_link").href = "/" + Parent_Slug;
+    document.getElementById("platform_icon").src =
+      `${API_URL}${platform[0].icon}`;
+    document.getElementById("platform_icon").alt =
+      `${platform[0].post_category_name}`;
+    document.getElementById("post_category_name").innerHTML =
+      `${platform[0].post_category_name}`;
+    document.getElementById("post_category_name").title =
+      `${platform[0].post_category_name}`;
+    document.getElementById("platform_link_anchor").href = "/" + Parent_Slug;
+    document.getElementById("platform_link_anchor").title =
+      `${SubCategoryData[0]?.post_category_name || ""}`;
+    document.getElementById("blog_details_link").href = blog_details.slug;
+    document.getElementById("blog_details_link").title = heading;
+  </script>
+</Layout>

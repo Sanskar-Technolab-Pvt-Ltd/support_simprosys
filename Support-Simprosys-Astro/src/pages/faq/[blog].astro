@@ -15,6 +15,7 @@ import Carousel from "../../components/Carousel.astro";
 import Layout from "../../layouts/Layout.astro";
 import DetailDropdown from "../../components/DetailDropdown.astro";
 import MobileDropdown from "../../components/MobileDropdown.astro";
+import { any } from "astro:schema";
 
 const API_URL = import.meta.env.PUBLIC_ApiUrl;
 
@@ -83,9 +84,17 @@ const blog_details_api = await fetch(
 const blog_details_json = await blog_details_api.json();
 const blog_details = blog_details_json.data;
 
+const cleanCategory = he.decode(blog_details.post_category);
+
+// Encode filters safely
+const subCategoryFilters = encodeURIComponent(JSON.stringify([
+  ["name", "=", cleanCategory],
+  ["status", "=", "publish"]
+]));
+
 // Fetching Subcategory Data
 const SubCategoryResponse = await fetch(
-  `${API_URL}/api/resource/Simprosys%20Post%20Category?fields=["*"]&filters=[["name","=","${blog_details.post_category}"],["status","=","publish"]]&order_by=\`order\` asc`,
+  `${API_URL}/api/resource/Simprosys%20Post%20Category?fields=["*"]&filters=${subCategoryFilters}&order_by=%60order%60%20asc`,
   {
     method: "GET",
     headers: {
@@ -155,8 +164,16 @@ const platformResponse = await fetch(
 const platformJson = await platformResponse.json();
 const platform = platformJson.data || [];
 
+const cleanPostCategory = he.decode(blog_details.post_category);
+
+const filters = encodeURIComponent(JSON.stringify([
+  ["post_category", "=", cleanPostCategory],
+  ["status", "=", "publish"]
+]));
+
+
 const blogs_api = await fetch(
-  `${API_URL}/api/resource/Simprosys%20Blog?filters=[["post_category","=","${blog_details.post_category}"],["status","=","publish"]]&fields=["name", "slug","blog_title","canonical_url"]&order_by=\`order\` asc&limit_page_length=1000`,
+  `${API_URL}/api/resource/Simprosys%20Blog?filters=${filters}&fields=["name","slug","blog_title","canonical_url"]&order_by=%60order%60%20asc&limit_page_length=1000`,
   {
     method: "GET",
     headers: {
@@ -181,6 +198,11 @@ const nextBlog =
 let decodedContent = blog_details.content_details
   ? he.decode(blog_details.content_details)
   : "No content available";
+
+decodedContent = decodedContent.replace(
+  /(https?:\/\/(?:www\.)?youtu\.be\/[\w-]+)\?[\w=&-]*/g,
+  "$1"
+);
 
 // Convert YouTube short links to embedded iFrames
 decodedContent = decodedContent.replace(
@@ -211,6 +233,29 @@ decodedContent = decodedContent.replace(
   '<a$1 target="_blank">$2</a>'
 );
 
+// Step 1: Add target="_blank" to <a> inside <strong>
+// decodedContent = decodedContent.replace(
+//   /(<strong[^>]*>[\s\S]*?<a\s+)(?![^>]*target=)([^>]*>)/gi,
+//   '$1target="_blank" rel="noopener noreferrer" $2'
+// );
+
+// Step 2: Remove <strong> and </strong> tags
+// decodedContent = decodedContent.replace(/<\/?strong[^>]*>/gi, "");
+
+// 1️⃣ Add target="_blank" and rel="noopener noreferrer" ONLY to <a> inside <strong>
+decodedContent = decodedContent.replace(
+  /<strong>\s*(<a(?![^>]*\btarget=)([^>]*href=["'][^"']*["']))([^>]*)>(.*?)<\/a>\s*<\/strong>/gi,
+  '<a$2$3 target="_blank" rel="noopener noreferrer">$4</a>'
+);
+
+// 2️⃣ Remove <strong> ONLY if it wraps an <a> tag (and the tag already has target from above)
+decodedContent = decodedContent.replace(
+  /<strong>\s*(<a[^>]*>.*?<\/a>)\s*<\/strong>/gi,
+  '$1'
+);
+
+
+
 // Remove the <BR> tags
 decodedContent = decodedContent.replace(/<span[^>]*>\s*<br>\s*<\/span>/gi, "");
 decodedContent = decodedContent.replace(/<div[^>]*>\s*<br>\s*<\/div>/gi, "");
@@ -219,10 +264,61 @@ decodedContent = decodedContent.replace(
   /<ol[^>]*>\s*(<li>\s*<\/li>\s*)+<\/ol>/gis,
   ""
 );
+
+// decodedContent = decodedContent.replace(
+//   /\/files\/uploads\//g,
+//   `${API_URL}/files/uploads/`
+// );
+
 decodedContent = decodedContent.replace(
-  /\/files\/uploads\//g,
-  `${API_URL}/files/uploads/`
+  /https:\/\/support\.simprosys\.com\/wp-content\/uploads/g,
+  `${API_URL}/files/uploads`
 );
+
+// Match alt tag
+decodedContent = decodedContent.replace(
+  /<p>\s*(<img[^>]*>)\s*<\/p>\s*<p>\s*alt="([^"]+)"(?:<br\s*\/?>)?\s*<\/p>/gi,
+  (match:any, imgTag:any, altText:any) => {
+    // Add or update alt attribute
+    if (/alt\s*=\s*"/i.test(imgTag)) {
+      imgTag = imgTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
+    } else {
+      imgTag = imgTag.replace(/<img/i, `<img alt="${altText}"`);
+    }
+    return `<p>${imgTag}</p>`;
+  }
+);
+
+// Match ALT Tag
+decodedContent = decodedContent.replace(
+  /<p>\s*<span[^>]*>\s*(<img[^>]*>)\s*<\/span>\s*<\/p>\s*<p>\s*<span[^>]*>\s*alt="([^"]+)"\s*<\/span>\s*<\/p>/gi,
+  (match, imgTag, altText) => {
+    if (/alt\s*=\s*"/i.test(imgTag)) {
+      imgTag = imgTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
+    } else {
+      imgTag = imgTag.replace(/<img/i, `<img alt="${altText}"`);
+    }
+    return `<p><span>${imgTag}</span></p>`;
+  }
+);
+
+// Match alt tag in table 
+decodedContent = decodedContent.replace(
+  /(<td[^>]*>\s*<img[^>]*?)>(?:\s|&nbsp;)*alt="([^"]+)"(?:<br\s*\/?>)?/gi,
+  (match, imgStartTag, altText) => {
+    // If the img already has an alt attribute, replace it
+    if (/alt\s*=\s*"/i.test(imgStartTag)) {
+      imgStartTag = imgStartTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
+    } else {
+      imgStartTag = imgStartTag.replace(/<img/i, `<img alt="${altText}"`);
+    }
+
+    return `${imgStartTag}>`; // return cleaned-up <td><img ...> without Alt="..." text
+  }
+);
+
+
+
 
 // Remove any remaining unwanted "//" at the start of the lines
 decodedContent = decodedContent
@@ -230,6 +326,23 @@ decodedContent = decodedContent
   .replace(/%}/g, "%&#125;")
   .replace(/{{/g, "&#123;&#123;") // Escapes `{{ }}`
   .replace(/}}/g, "&#125;&#125;");
+
+// Bullet <ol> tags
+decodedContent = decodedContent.replace(
+  /<ol>([\s\S]*?)<\/ol>/gi,
+  (match: any, innerContent: any) => {
+    // Check if all <li> tags inside have data-list="bullet"
+    const allBullet = Array.from(innerContent.matchAll(/<li[^>]*>/gi)).every(
+      (li: any) => li[0].includes('data-list="bullet"')
+    );
+
+    if (allBullet) {
+      // Replace opening and closing ol with ul
+      return `<ul>${innerContent}</ul>`;
+    }
+    return match; // leave as is
+  }
+);
 
 // Function to extract YouTube video links
 function extractYouTubeLinks(content: any) {
@@ -302,13 +415,12 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
   day: "2-digit",
 });
 ---
-
 <Layout
-  Title=`${blog_details.blog_title}`
+  Title=`${he.decode(blog_details.blog_title)}`
   meta_title={blog_details.meta_title}
   meta_desc={blog_details.meta_desc}
   meta_keyword={blog_details.meta_keyword}
-  canonicalURL=`${blog_details.canonical_url || ""}`
+  canonicalURL=`${API_URL}/faq/${blog_details.slug}`
   blogSchemaName={blog_details.blog_title || ""}
   youtubeVideoDetails={videoDetails || ""}
   blogSlug={blog_details.slug || ""}
@@ -325,20 +437,20 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
           >
             <div class="space-y-[30px]">
               <div
-                class="flex space-x-6 items-center lg:pr-[23px] 2xl:pr-[46px]"
+                class="flex flex-grow space-x-6 items-center lg:pr-[23px] 2xl:pr-[46px]"
               >
                 <div
-                  class="bg-[#E9F6FF] p-5 rounded-full flex items-center justify-center"
+                  class="bg-[#E9F6FF] p-5 rounded-full flex items-center justify-center flex-shrink-0"
                 >
                   <img
-                    class="h-full w-[44.2px]"
+                    class="w-10 h-10"
                     src=`${API_URL}${Icon}`
                     alt="icon"
                   />
                 </div>
-                <h1 class="text-xl lg:text-2xl">
-                  {post_category_name}
-                </h1>
+                <p class="text-xl lg:text-2xl">
+                  {he.decode(post_category_name)}
+                </p>
               </div>
             </div>
             <div>
@@ -397,8 +509,8 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
                       />
                       <span
                         class="hidden ssm:block overflow-hidden text-ellipsis whitespace-nowrap text-[#25282B] opacity-70"
-                        title={post_category_name}
-                        >{post_category_name}
+                        title={he.decode(post_category_name)}
+                        >{he.decode(post_category_name)}
                       </span>
                     </a>
 
@@ -428,26 +540,22 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
 
                 <div class="space-y-8">
                   <div
-                    class=`flex ${blog_details.featured_image ? "space-x-2 item-start xl:items-center" : ""}`
+                    class=`flex space-x-2 item-start xl:items-center`
                   >
-                    <div
-                      class=`p-5 ${blog_details.featured_image ? "" : "hidden"} h-fit rounded-full w-fit bg-[#E9F6FF] content-center`
-                    >
-                      <img
-                        class="w-16"
-                        src=`${API_URL}${blog_details.featured_image}`
-                        alt="featured-icon"
-                      />
-                    </div>
                     <div class="space-y-2">
-                      <h2
+                      <h1
                         class="font-semibold text-2xl md:text-3xl lg:text-4px 2xl:text-[40px] 2xl:leading-[54px]"
                       >
-                        {heading}
-                      </h2>
+                        {he.decode(heading)}
+                      </h1>
                       {
                         blog_details.publish_date && (
                           <p class="text-black opacity-70">{formattedDate}</p>
+                        )
+                      }
+                      {
+                        blog_details.featured_image && (
+                          <img class="!max-w-full" src={`${API_URL}${blog_details.featured_image}`} alt={blog_details.featured_image_alt_text} />
                         )
                       }
                     </div>
@@ -514,7 +622,7 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
       class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 hidden z-50"
     >
       <div
-        class="relative rounded-lg shadow-lg w-full max-w-3xl sm:max-w-4xl xl:max-w-7xl p-4 max-h-[90vh] overflow-y-auto"
+        class="relative rounded-lg shadow-lg w-full max-w-3xl sm:max-w-4xl xl:max-w-7xl p-4 max-h-[85vh] overflow-y-auto"
       >
         <!-- Close Button -->
         <button
@@ -536,7 +644,7 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
       </div>
     </div>
 
-    <MobileDropdown Data={CategoryData} Slug={blog_details.slug} />
+    <MobileDropdown HeadingTitle={he.decode(post_category_name)} Data={CategoryData} Slug={blog_details.slug} />
   </main>
 
   <script src="../../../src/assets/static/blog.js"></script>
@@ -654,4 +762,4 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
 
   return paths;
 }
- -->
+-->

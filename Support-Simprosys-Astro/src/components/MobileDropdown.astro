@@ -1,7 +1,7 @@
 ---
 import DetailDropdown from "./DetailDropdown.astro";
 
-const { Data , Slug } = Astro.props;
+const { Data , Slug , HeadingTitle } = Astro.props;
 ---
 
 <div
@@ -9,7 +9,7 @@ const { Data , Slug } = Astro.props;
 >
   <div class="space-y-[30px]">
     <div class="flex space-x-6 items-center">
-      <h3 class="text-2xl font-bold">Simprosys Google Shopping Feed</h3>
+      <p class="text-2xl font-semibold">{HeadingTitle}</p>
     </div>
   </div>
   <div>

@@ -12,12 +12,17 @@
   "blog_title",
   "blog_url",
   "publish_date",
-  "featured_image",
+  "order",
+  "parent_category_name",
+  "second_level_category",
+  "first_level_category",
   "column_break_riko",
   "slug",
   "status",
   "author",
-  "order",
+  "redirect_url",
+  "featured_image",
+  "featured_image_alt_text",
   "section_break_lxwe",
   "meta_title",
   "meta_keyword",
@@ -32,12 +37,14 @@
   {
    "fieldname": "section_break_7etp",
    "fieldtype": "Section Break",
-   "label": "Blog Details"
+   "label": "Doc Details"
   },
   {
    "default": "Draft",
    "fieldname": "status",
    "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Status",
    "options": "Publish\nUnpublish\nDraft",
    "permlevel": 1,
@@ -51,16 +58,14 @@
   {
    "fieldname": "slug",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Slug",
+   "reqd": 1,
    "unique": 1
   },
   {
    "fieldname": "author",
-   "fieldtype": "Link",
-   "label": "Author",
-   "options": "User",
-   "read_only": 1
+   "fieldtype": "Data",
+   "label": "Author"
   },
   {
    "fieldname": "section_break_xlce",
@@ -70,7 +75,6 @@
   {
    "fieldname": "post_category",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "Post Category",
    "link_filters": "[[\"Simprosys Post Category\",\"is_group\",\"=\",0]]",
    "options": "Simprosys Post Category",
@@ -80,7 +84,7 @@
   {
    "fieldname": "blog_url",
    "fieldtype": "Data",
-   "label": "Blog URL"
+   "label": "Doc URL"
   },
   {
    "fieldname": "content_details",
@@ -93,7 +97,7 @@
    "fieldname": "blog_title",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Blog Title",
+   "label": "Doc Title",
    "reqd": 1
   },
   {
@@ -147,13 +151,49 @@
    "fieldname": "meta_keyword",
    "fieldtype": "Data",
    "label": "Meta Keyword"
+  },
+  {
+   "fetch_from": "post_category.parent_simprosys_post_category",
+   "fieldname": "second_level_category",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Second level category ",
+   "options": "Simprosys Post Category"
+  },
+  {
+   "fetch_from": "second_level_category.parent_simprosys_post_category",
+   "fieldname": "first_level_category",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "First level category",
+   "options": "Simprosys Post Category"
+  },
+  {
+   "fetch_from": "first_level_category.post_category_name",
+   "fieldname": "parent_category_name",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Parent Category Name"
+  },
+  {
+   "fieldname": "redirect_url",
+   "fieldtype": "Data",
+   "label": "Redirect URL",
+   "options": "URL"
+  },
+  {
+   "fieldname": "featured_image_alt_text",
+   "fieldtype": "Small Text",
+   "label": "Featured Image Alt Text"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
  "make_attachments_public": 1,
- "modified": "2025-04-11 11:46:46.623442",
+ "modified": "2025-06-24 17:43:55.237865",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Simprosys Blog",
@@ -173,8 +213,10 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "blog_title"
+ "title_field": "blog_title",
+ "track_changes": 1
 }

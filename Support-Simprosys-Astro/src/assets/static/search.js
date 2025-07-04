@@ -27,7 +27,6 @@ async function fetchSearchResults(keyword) {
     );
     const dataJson = await response.json();
     const blogArray = (dataJson.message || []).slice(0, 20); // Get only first 20 items
-    console.log(blogArray);
     resultsContainer.innerHTML = ""; // Clear old results
 
     if (blogArray.length > 0) {
@@ -214,14 +213,140 @@ document.getElementById("searchInput").addEventListener("keydown", (event) => {
   }
 });
 
+// ! Working code and new code are written below
+// document.addEventListener("DOMContentLoaded", async () => {
+//   const params = new URLSearchParams(window.location.search);
+//   const keyword = params.get("query") || "";
 
+//   // Display the keyword in the page
+//   document.getElementById("search-term").textContent = keyword || "None";
+//   document.getElementById("searchInput").value = keyword;
+
+//   // const searchTermEl = document.getElementById("search-term");
+//   // if (searchTermEl) {
+//   //   searchTermEl.textContent = keyword || "None";
+//   // }
+
+//   // const searchInputEl = document.getElementById("searchInput");
+//   // if (searchInputEl) {
+//   //   searchInputEl.value = keyword;
+//   // }
+
+//   if (keyword.length >= 2) {
+//     try {
+//       const response = await fetch(
+//         `${
+//           import.meta.env.PUBLIC_ApiUrl
+//         }/api/method/support_simprosys.support_simprosys.api.search_blog?keyword=${encodeURIComponent(
+//           keyword
+//         )}`,
+//         {
+//           method: "GET",
+//           headers: {
+//             Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${
+//               import.meta.env.PUBLIC_SecretKey
+//             }`,
+//           },
+//         }
+//       );
+
+      
+//       if (!response.ok) {
+//         throw new Error(`HTTP error! Status: ${response.status}`);
+//       }
+
+//       const dataJson = await response.json();
+//       console.log("API Response:", dataJson);
+
+//       const searchResults = dataJson.message || [];
+//       const resultContainer = document.getElementById("search-results");
+//       document.getElementById("searchCount").textContent =
+//         searchResults.length || "0";
+
+//       // Grouping blogs by First Level Category → Then Second Level Category
+//       const groupedResults = {};
+
+//       // Organizing blogs into categories
+//       searchResults.forEach((blog) => {
+//         const firstCategory = blog.first_level_category || "Unknown";
+//         const secondCategory = blog.second_level_category || "Unknown";
+
+//         if (!groupedResults[firstCategory]) {
+//           groupedResults[firstCategory] = {};
+//         }
+//         if (!groupedResults[firstCategory][secondCategory]) {
+//           groupedResults[firstCategory][secondCategory] = [];
+//         }
+
+//         groupedResults[firstCategory][secondCategory].push(blog);
+//       });
+
+//       // Generating HTML Output
+//       if (searchResults.length > 0) {
+//         let htmlContent = "";
+
+//         Object.keys(groupedResults).forEach((firstCategory) => {
+//           Object.keys(groupedResults[firstCategory]).forEach(
+//             (secondCategory) => {
+//               htmlContent += `
+//         <p class="text-xl lg:text-2xl font-semibold mt-5">${secondCategory} - ${firstCategory}</p>
+//         <ul class="ml-4 mt-4">`;
+
+//               groupedResults[firstCategory][secondCategory].forEach((blog) => {
+//                 const highlightedTitle = highlightKeyword(
+//                   blog.blog_title,
+//                   keyword
+//                 );
+//                 htmlContent += `
+//           <li class="seach-li p-1 lg:p-2">
+//             <a href="/faq/${blog.slug}" class="text-black text-lg hover:underline">${highlightedTitle}</a>
+//           </li>`;
+//               });
+
+//               htmlContent += `</ul>`;
+//             }
+//           );
+//         });
+
+//         resultContainer.innerHTML = htmlContent;
+//       } else {
+//         resultContainer.innerHTML = `<p class="text-gray-500">No results found.</p>`;
+//       }
+//     } catch (error) {
+//       document.getElementById(
+//         "search-results"
+//       ).innerHTML = `<p class="text-red-500">Error fetching search results.</p>`;
+//     }
+//   } else {
+//     document.getElementById(
+//       "search-results"
+//     ).innerHTML = `<p class="text-gray-500">Please enter at least 2 characters.</p>`;
+//   }
+// });
+
+
+
+
+
+// ? Changed Code of above
 document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
   const keyword = params.get("query") || "";
 
-  // Display the keyword in the page
-  document.getElementById("search-term").textContent = keyword || "None";
-  document.getElementById("searchInput").value = keyword;
+  const searchTermEl = document.getElementById("search-term");
+  const searchInputEl = document.getElementById("searchInput");
+  const searchCountEl = document.getElementById("searchCount");
+  const resultContainer = document.getElementById("search-results");
+
+  if (searchTermEl) {
+    searchTermEl.textContent = keyword || "None";
+  }
+
+  if (searchInputEl) {
+    searchInputEl.value = keyword;
+  }
+
+  if (!resultContainer) return; // Exit early if no container
 
   if (keyword.length >= 2) {
     try {
@@ -241,23 +366,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       );
 
-      
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
       const dataJson = await response.json();
-      console.log("API Response:", dataJson);
 
       const searchResults = dataJson.message || [];
-      const resultContainer = document.getElementById("search-results");
-      document.getElementById("searchCount").textContent =
-        searchResults.length || "0";
 
-      // Grouping blogs by First Level Category → Then Second Level Category
+      if (searchCountEl) {
+        searchCountEl.textContent = searchResults.length.toString();
+      }
+
+      // Grouping blogs by category
       const groupedResults = {};
 
-      // Organizing blogs into categories
       searchResults.forEach((blog) => {
         const firstCategory = blog.first_level_category || "Unknown";
         const secondCategory = blog.second_level_category || "Unknown";
@@ -272,7 +395,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         groupedResults[firstCategory][secondCategory].push(blog);
       });
 
-      // Generating HTML Output
+      // Generate HTML
       if (searchResults.length > 0) {
         let htmlContent = "";
 
@@ -280,8 +403,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           Object.keys(groupedResults[firstCategory]).forEach(
             (secondCategory) => {
               htmlContent += `
-        <p class="text-xl lg:text-2xl font-semibold mt-5">${secondCategory} - ${firstCategory}</p>
-        <ul class="ml-4 mt-4">`;
+                <p class="text-xl lg:text-2xl font-semibold mt-5">${secondCategory} - ${firstCategory}</p>
+                <ul class="ml-4 mt-4">`;
 
               groupedResults[firstCategory][secondCategory].forEach((blog) => {
                 const highlightedTitle = highlightKeyword(
@@ -289,9 +412,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                   keyword
                 );
                 htmlContent += `
-          <li class="seach-li p-1 lg:p-2">
-            <a href="/faq/${blog.slug}" class="text-black text-lg hover:underline">${highlightedTitle}</a>
-          </li>`;
+                  <li class="seach-li p-1 lg:p-2">
+                    <a href="/faq/${blog.slug}" class="text-black text-lg hover:underline">${highlightedTitle}</a>
+                  </li>`;
               });
 
               htmlContent += `</ul>`;
@@ -304,16 +427,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         resultContainer.innerHTML = `<p class="text-gray-500">No results found.</p>`;
       }
     } catch (error) {
-      document.getElementById(
-        "search-results"
-      ).innerHTML = `<p class="text-red-500">Error fetching search results.</p>`;
+      resultContainer.innerHTML = `<p class="text-red-500">Error fetching search results.</p>`;
     }
   } else {
-    document.getElementById(
-      "search-results"
-    ).innerHTML = `<p class="text-gray-500">Please enter at least 2 characters.</p>`;
+    resultContainer.innerHTML = `<p class="text-gray-500">Please enter at least 2 characters.</p>`;
   }
 });
+
 
 
 //* Event listener for input with debounce

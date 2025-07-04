@@ -9,6 +9,7 @@ import Layout from "../layouts/Layout.astro";
 import TicketIcon from "../assets/img/raiseTicket.svg";
 import attachFile from "../assets/img/attachFile.svg";
 import Arrow from "../assets/img/downArrow.svg";
+import Support from "../components/Support.astro";
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -127,12 +128,26 @@ const schemaWebPage = {
     "query-input": "required name=search_term_string",
   },
 };
+
+const api_URL = import.meta.env.PUBLIC_ApiUrl;
+// Fetch Support Home Page Settings
+const SupportPageResponse = `${api_URL}/api/resource/Support%20Home%20Page/Support%20Home%20Page`;
+
+const support_response = await fetch(SupportPageResponse, {
+  method: "GET",
+  headers: {
+    Authorization: `token ${import.meta.env.PUBLIC_ApiKey}:${import.meta.env.PUBLIC_SecretKey}`,
+  },
+});
+
+const SupportHomePage_data = await support_response.json();
+const SupportHomeSettings = SupportHomePage_data.data; // Frappe API wraps data inside 'data'
 ---
 
 <Layout
   Title="Raise-A-Ticket"
-  meta_title=""
-  meta_desc=""
+  meta_title={SupportHomeSettings.ticket_meta_name || ""}
+  meta_desc={SupportHomeSettings.ticket_meta_description || ""}
   ticketSchema={schemaWebPage || ""}
 >
   <main>
@@ -280,7 +295,7 @@ const schemaWebPage = {
                 </p>
                 <div class="space-y-2 md:space-y-4">
                   <div>
-                    <div class="relative w-full">
+                    <div class="relative w-full"> 
                       <!-- Select field -->
                       <select
                         id="plugin_or_app_related_queries"
@@ -444,6 +459,11 @@ const schemaWebPage = {
                   type="submit">Submit</button
                 >
               </div>
+            </div>
+          </div>
+          <div id="loader" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+            <div class="text-white text-lg font-semibold">
+                  ⏳ Submitting your ticket...
             </div>
           </div>
         </form>

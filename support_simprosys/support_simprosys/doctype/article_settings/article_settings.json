@@ -39,7 +39,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-04-08 10:20:54.013056",
+ "modified": "2025-06-09 10:56:40.653736",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Article Settings",
@@ -56,7 +56,9 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }

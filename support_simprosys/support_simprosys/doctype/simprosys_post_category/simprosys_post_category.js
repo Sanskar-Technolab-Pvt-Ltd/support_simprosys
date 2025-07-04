@@ -12,6 +12,11 @@ frappe.ui.form.on('Simprosys Post Category', {
     // Parent Category
     category_criteria: function (frm) {
         filter_parent_simprosys_post_category(frm);
+        if (["Platform", "Category"].includes(frm.doc.category_criteria)) {
+          frm.set_value("is_group", 1);
+        } else {
+          frm.set_value("is_group", 0);
+        }
     },
     refresh: function (frm) {
         filter_parent_simprosys_post_category(frm);
@@ -83,7 +88,6 @@ function toggle_category_fields_section(frm) {
     const fields = [
       "header_app_name",
       "description",
-      "header_url",
       "header_url_target",
       "icon_image",
       "cta_button",

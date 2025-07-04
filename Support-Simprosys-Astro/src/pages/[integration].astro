@@ -1,4 +1,6 @@
 ---
+import he from 'he';
+
 // Components
 import MobileMenu from "../components/MobileMenu.astro";
 import Layout from "../layouts/Layout.astro";
@@ -78,7 +80,6 @@ const CategoryResponse = await fetch(
 );
 const categoryDataJson = await CategoryResponse.json();
 const CategoryData = categoryDataJson.data || [];
-
 const encodedName = encodeURIComponent(name);
 
 // Fetch Subcategories directly from API
@@ -94,6 +95,7 @@ const subCategoryResponse = await fetch(
 
 const subCategoryJson = await subCategoryResponse.json();
 const subCategoryData = subCategoryJson.data || [];
+// console.log(subCategoryData)
 
 // Fetch Platform directly from API
 const platformResponse = await fetch(
@@ -111,13 +113,13 @@ const platform = platformJson.data || [];
 ---
 
 <Layout
-  Title={integration_details.post_category_name
+  Title={he.decode(integration_details.post_category_name)
     ? `${integration_details.post_category_name} - Simprosys InfoMedia Help Centre`
     : "Shopify Product Feed and Google Shopping Ads Management App by Simprosys"}
   meta_title={integration_details.meta_title}
   meta_desc={integration_details.meta_desc}
-  canonicalURL=`${platform.canonical_url || ""}`
-  AppName={integration_details.post_category_name || ""}
+  canonicalURL=`${URL}/${integration_details.slug}`
+  AppName={he.decode(integration_details.post_category_name) || ""}
   PlatformName={platform[0].post_category_name || ""}
 >
   <main>
@@ -189,7 +191,7 @@ const platform = platformJson.data || [];
                         alt={platform[0]?.name ? `${platform[0].name}` : ""}
                       />
                       <span>
-                        {integration_details.post_category_name || ""}
+                        {he.decode(integration_details.post_category_name) || ""}
                       </span>
                     </a>
                   </div>
@@ -208,7 +210,7 @@ const platform = platformJson.data || [];
                       class="bg-[#E9F6FF] p-4 lg:p-5 rounded-full flex items-center justify-center flex-shrink-0"
                     >
                       <img
-                        class="w-10 h-full object-contain"
+                        class="w-10 h-10 object-contain"
                         src={`${URL}${integration_details.icon_image}`}
                         alt="icon"
                       />
@@ -218,10 +220,10 @@ const platform = platformJson.data || [];
                       <h1
                         class="font-semibold text-[18px] xl:text-[40px] xl:leading-[54px]"
                       >
-                        {integration_details.post_category_name || ""}
+                        {he.decode(integration_details.post_category_name) || ""}
                       </h1>
                       <p class="text-sm xl:text-base text-[#25282B]">
-                        {integration_details.description}
+                        {he.decode(integration_details.description)}
                       </p>
                     </div>
                   </div>

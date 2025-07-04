@@ -3,9 +3,8 @@ import FrameImage from "../assets/img/frameImage.webp";
 import Search from "../assets/img/search.svg";
 import SearchNote from "../assets/img/searchNote.svg";
 
-
 const api_URL = import.meta.env.PUBLIC_ApiUrl;
-const SupportSearchResponse = `${api_URL}/api/resource/Support%20Search%20Keyword?fields=["*"]&order_by=\`order\` asc`;
+const SupportSearchResponse = `${api_URL}/api/resource/Support%20Search%20Keyword?fields=["*"]&order_by=\`order\` asc&limit_page_length=8`;
 
 const support_search_response = await fetch(SupportSearchResponse, {
   method: "GET",
@@ -23,11 +22,12 @@ const SupportSearchData = SupportSearchJson.data;
   <div
     class="flex flex-wrap content-center text-center justify-center relative bg-cover bg-center w-full rounded-b-[48px] h-[219px]"
     style={`background-image: url(${FrameImage.src})`}
-    ;
   >
     <div class="space-y-6">
       <div class="flex items-center justify-center relative px-4 md:px-0">
-        <div class="relative w-full md:w-[90%] lg:w-full">
+        <div
+          class="relative w-full max-w-lg md:max-w-xl lg:max-w-3xl  2xl:max-w-4xl"
+        >
           <div
             class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none pl-5"
           >
@@ -44,24 +44,27 @@ const SupportSearchData = SupportSearchJson.data;
 
         <div
           id="searchResults"
-          class="absolute z-10 w-full md:w-[90%] lg:w-full top-[110%] hidden px-4 sm:px-0"
+          class="absolute z-10 w-full top-[110%] hidden px-4 sm:px-0"
         >
         </div>
       </div>
 
       <!-- Links Section -->
       <div
-        class="content-section px-5 sm:px-11 flex flex-wrap sm:flex-row sm:items-center justify-center gap-2"
+        id="keyword-container"
+        class="content-section px-5 sm:px-11 flex flex-wrap sm:flex-row sm:items-center justify-center gap-2 max-w-lg lg:max-w-2xl xl:max-w-4xl 2xl:max-w-4xl"
       >
-        { SupportSearchData &&
-          SupportSearchData.map((item: any) => (
-            <a
-              href="javascript:void(0);"
-              class="link-item px-2 py-1 md:px-3 md:py-2 bg-[#133953] bg-opacity-50 text-white rounded-full font-normal text-sm md:text-base hover:bg-opacity-100"
-            >
-              {item.keyword || ""}
-            </a>
-          ))
+        {
+          SupportSearchData &&
+            SupportSearchData.map((item: any, index: any) => (
+              <a
+                href="javascript:void(0);"
+                class="link-item px-2 py-1 xl:py-2 bg-[#133953] bg-opacity-50 text-white rounded-full font-normal text-sm md:text-base hover:bg-opacity-100"
+                data-index={index}
+              >
+                {item.keyword || ""}
+              </a>
+            ))
         }
       </div>
     </div>
@@ -70,3 +73,24 @@ const SupportSearchData = SupportSearchJson.data;
   <!-- Image Section End -->
   <script src="../../src/assets/static/search.js"></script>
 </section>
+
+<!-- Client-side script to slice visible keywords on mobile -->
+<script is:inline>
+  function updateVisibleKeywords() {
+    const links = document.querySelectorAll("#keyword-container .link-item");
+    if (!links.length) return;
+
+    if (window.innerWidth < 768) {
+      links.forEach((link, index) => {
+        link.style.display = index < 5 ? "inline-flex" : "none";
+      });
+    } else {
+      links.forEach((link) => {
+        link.style.display = "inline-flex";
+      });
+    }
+  }
+
+  window.addEventListener("DOMContentLoaded", updateVisibleKeywords);
+  window.addEventListener("resize", updateVisibleKeywords);
+</script>

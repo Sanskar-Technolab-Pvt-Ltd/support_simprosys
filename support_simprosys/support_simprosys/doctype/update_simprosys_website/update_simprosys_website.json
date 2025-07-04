@@ -16,17 +16,16 @@
   },
   {
    "fieldname": "logs",
-   "fieldtype": "Text Editor",
+   "fieldtype": "HTML",
    "label": "Logs",
-   "max_height": "350px",
-   "read_only": 1
+   "max_height": "350px"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-04-24 15:21:34.015340",
+ "modified": "2025-06-09 10:55:58.883558",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Update Simprosys Website",
@@ -43,7 +42,9 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }

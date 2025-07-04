@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         platformSelect.innerHTML += data.data
           .map(
             (platform) =>
-              `<option value="${platform.name}">${platform.post_category_name}</option>`
+              `<option value="${platform.name}" data-display-name="${platform.post_category_name}">${platform.post_category_name}</option>`
           )
           .join("");
 
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         appSelect.innerHTML += data.data
           .map(
             (app) =>
-              `<option value="${app.name}">${app.post_category_name}</option>`
+              `<option value="${app.name}" data-display-name="${app.post_category_name}">${app.post_category_name}</option>`
           )
           .join("");
       }
@@ -144,6 +144,8 @@ let emailMsg = document.getElementById("email_valid");
 
 const nameRegex =
   /^(?=(?:[^A-Za-z]*[A-Za-z]){2})(?![^\d~`?!^*¨ˆ;@=$%{}\[\]|\\\/<>#“.,]*[\d~`?!^*¨ˆ;@=$%{}\[\]|\\\/<>#“.,])\S+(?: \S+){0,2}$/;
+const companyNameRegex = /^[A-Za-z0-9 ]+$/;
+
 const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
 //* URL regex
@@ -185,7 +187,7 @@ company_name.addEventListener("input", () => {
   if (companyValue === "") {
     companyMsg.classList.remove("hidden");
     companyMsg.textContent = "Please fill out this field";
-  } else if (!nameRegex.test(companyValue)) {
+  } else if (!companyNameRegex.test(companyValue)) {
     companyMsg.classList.remove("hidden");
     companyMsg.textContent = "Please Enter Valid Company name";
   } else {
@@ -302,7 +304,7 @@ function handleInput() {
     companyMsg.classList.remove("hidden");
     companyMsg.textContent = "Please fill out this field";
     isCompanyNameValid = false;
-  } else if (!nameRegex.test(CompanyNameValue)) {
+  } else if (!companyNameRegex.test(CompanyNameValue)) {
     companyMsg.classList.remove("hidden");
     companyMsg.textContent = "Please Enter Valid Company name";
     isCompanyNameValid = false;
@@ -392,7 +394,6 @@ function handleInput() {
     isPluginValid &&
     isPlatformValid &&
     isAppValid &&
-    isFileValid &&
     isURLValid
   ) {
     // Check if all validations passed
@@ -516,45 +517,74 @@ document.getElementById("cancel_file").addEventListener("click", function () {
 const form = document.getElementById("form_id");
 // Submit
 
+// ! Old code for remove console error 
+// function showpopup(response) {
+//   const successPopup = document.getElementById("success-popup");
+//   const form = document.getElementById("form_id"); // Replace with your actual form ID
+//   let cancelButton = document.getElementById("cancel_file");
+
+//   if (response.ok) {
+//     // Show the pop-up message
+//     successPopup.classList.remove("hidden");
+
+//     // Close popup when clicked
+//     document.getElementById("closePopup").addEventListener("click", () => {
+//       successPopup.classList.add("hidden");
+//       cancelButton.classList.add("hidden"); 
+//       document.getElementById("attach_file_text").textContent = "Attach File";
+//       document.getElementById("file_list").innerHTML = "";
+//       form.reset(); // Reset the form
+//       location.reload(); // Reloads the entire page
+//     });
+
+//     // Hide the pop-up and reset the form after 3 seconds
+//     setTimeout(() => {
+//       successPopup.classList.add("hidden");
+//       cancelButton.classList.add("hidden"); 
+//       document.getElementById("attach_file_text").textContent = "Attach File";
+//       document.getElementById("file_list").value = "";
+//       form.reset(); // Reset the form
+//       location.reload(); // Reloads the entire page
+
+//     }, 3000); // 3000 milliseconds (3 seconds)
+
+//     if (response.status === 100) {
+//       // Show the pop-up message
+//       successPopup.classList.remove("hidden");
+//     } else {
+//       console.error("Failed to create document.");
+//     }
+//   } else {
+//     console.error("Failed to create document.");
+//   }
+// }
+
+// ? New code for remove console error
 function showpopup(response) {
   const successPopup = document.getElementById("success-popup");
-  const form = document.getElementById("form_id"); // Replace with your actual form ID
-  let cancelButton = document.getElementById("cancel_file");
+  const cancelButton = document.getElementById("cancel_file");
+  const formElement = document.getElementById("form_id");
 
   if (response.ok) {
-    // Show the pop-up message
     successPopup.classList.remove("hidden");
-    console.log("Ticket created successfully.");
 
-    // Close popup when clicked
-    document.getElementById("closePopup").addEventListener("click", () => {
+    const closeHandler = () => {
       successPopup.classList.add("hidden");
-      cancelButton.classList.add("hidden"); 
+      cancelButton.classList.add("hidden");
       document.getElementById("attach_file_text").textContent = "Attach File";
       document.getElementById("file_list").innerHTML = "";
-      form.reset(); // Reset the form
-    });
+      formElement.reset();
+      location.reload();
+    };
 
-    // Hide the pop-up and reset the form after 3 seconds
-    setTimeout(() => {
-      successPopup.classList.add("hidden");
-      cancelButton.classList.add("hidden"); 
-      document.getElementById("attach_file_text").textContent = "Attach File";
-      document.getElementById("file_list").innerHTML = "";
-      form.reset(); // Reset the form
-    }, 3000); // 3000 milliseconds (3 seconds)
+    document.getElementById("closePopup").addEventListener("click", closeHandler);
 
-    if (response.status === 100) {
-      // Show the pop-up message
-      successPopup.classList.remove("hidden");
-      console.log("Document created successfully.");
-    } else {
-      console.error("Failed to create document.");
-    }
+    setTimeout(closeHandler, 3000);
   } else {
     console.error("Failed to create document.");
   }
 }
+
 
 /**
  * Handles the form submission event for creating a support ticket.
@@ -562,56 +592,72 @@ function showpopup(response) {
  *
  * @param {Event} event - The form submission event
  */
-async function submitTicket(event) {
-  event.preventDefault();
-  
-  
-  const validationForm = handleInput();
-  if (validationForm) {
-  const api_URL = import.meta.env.PUBLIC_ApiUrl;
-  const apiKey = import.meta.env.PUBLIC_ApiKey;
-  const secretKey = import.meta.env.PUBLIC_SecretKey;
-  const fileInput = document.querySelector("#attach_file");
 
-  let uploadedFiles = [];
 
-  if (fileInput.files.length > 0) {
-    for (let i = 0; i < fileInput.files.length; i++) {
-      const file = fileInput.files[i];
-      const uploadData = new FormData();
-      uploadData.append("file", file);
-      uploadData.append("is_private", 0);
+function showLoader() {
+  document.getElementById("loader").classList.remove("hidden");
+}
 
-      try {
-        const uploadResponse = await fetch(
-          `${api_URL}/api/method/upload_file`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `token ${apiKey}:${secretKey}`,
-            },
-            body: uploadData,
-          }
-        );
+function hideLoader() {
+  document.getElementById("loader").classList.add("hidden");
+}
 
-        const uploadResult = await uploadResponse.json();
-        if (uploadResponse.ok && uploadResult.message.file_url) {
-          uploadedFiles.push(uploadResult.message.file_url);
-        } else {
-          alert(
-            "File upload failed: " +
-              (uploadResult.message.error || "Unknown error")
-          );
-          return;
-        }
-      } catch (error) {
-        console.error("File upload error:", error);
-        alert("File upload failed!");
-        return;
-      }
+
+
+
+  async function submitTicket(event) {
+    event.preventDefault();
+    
+    
+    const validationForm = handleInput();
+    if (validationForm) {
+    showLoader(); // Show loading overlay
+    const api_URL = import.meta.env.PUBLIC_ApiUrl;
+    const apiKey = import.meta.env.PUBLIC_ApiKey;
+    const secretKey = import.meta.env.PUBLIC_SecretKey;
+    const fileInput = document.querySelector("#attach_file");
+    let uploadedFiles = [];
+
+    if (selectedFiles.length > 0) {
+      const fileUploadPromises = selectedFiles.map(async (file) => {
+    const uploadData = new FormData();
+    uploadData.append("file", file);
+    uploadData.append("is_private", 0);
+
+    const uploadResponse = await fetch(`${api_URL}/api/method/upload_file`, {
+      method: "POST",
+      headers: {
+        Authorization: `token ${apiKey}:${secretKey}`,
+      },
+      body: uploadData,
+    });
+
+    const uploadResult = await uploadResponse.json();
+
+    if (uploadResponse.ok && uploadResult.message.file_url) {
+      return uploadResult.message.file_url;
+    } else {
+      throw new Error(
+        "File upload failed: " + (uploadResult.message?.error || "Unknown error")
+      );
     }
+  });
+
+  try {
+    uploadedFiles = await Promise.all(fileUploadPromises);
+  } catch (err) {
+    console.error("Upload error:", err);
+    alert("File upload failed: " + err.message);
+    return;
+  }
+
   }
   
+  const platformSelectEl = document.querySelector("#platformSelect");
+  const appSelectEl = document.querySelector("#appSelect");
+  const selectedPlatform = platformSelectEl.options[platformSelectEl.selectedIndex];
+  const selectedApp = appSelectEl.options[appSelectEl.selectedIndex];
+
 
   const formData = {
     name1: document.querySelector("#name1").value,
@@ -621,8 +667,8 @@ async function submitTicket(event) {
     plugin_or_app_related_queries: document.querySelector(
       "#plugin_or_app_related_queries"
     ).value,
-    platform: document.querySelector("#platformSelect").value,
-    app: document.querySelector("#appSelect").value,
+    platform: selectedPlatform ? selectedPlatform.getAttribute("data-display-name") : "",
+    app: selectedApp ? selectedApp.getAttribute("data-display-name") : "",
     additional_details: document.querySelector("#message").value,
   };
 
@@ -644,14 +690,17 @@ async function submitTicket(event) {
     if (response.ok) {
       let ticketName = result.data.name;
       await attachFilesToDoctype(ticketName, uploadedFiles);
+      hideLoader(); // Hide the loader
       showpopup(response);
+      await sendEmail(ticketName)
     } else {
       alert("Error: " + result.error);
     }
-  } catch (error) {
-    console.error("Form submission error:", error);
-    alert("Failed to submit ticket!");
-  }
+    } catch (error) {
+      hideLoader();
+      console.error("Form submission error:", error);
+      alert("Failed to submit ticket!");
+    }
 }
 }
 
@@ -659,7 +708,6 @@ async function attachFilesToDoctype(ticketName, fileUrls) {
   const api_URL = import.meta.env.PUBLIC_ApiUrl;
   const apiKey = import.meta.env.PUBLIC_ApiKey;
   const secretKey = import.meta.env.PUBLIC_SecretKey;
-
   for (let fileUrl of fileUrls) {
     const attachData = {
       file_url: fileUrl,
@@ -681,5 +729,26 @@ async function attachFilesToDoctype(ticketName, fileUrls) {
     }
   }
 }
+
+async function sendEmail(ticketName){
+  const api_URL = import.meta.env.PUBLIC_ApiUrl;
+  const apiKey = import.meta.env.PUBLIC_ApiKey;
+  const secretKey = import.meta.env.PUBLIC_SecretKey;
+  try {
+  const emailResponse = await fetch(
+    `${api_URL}/api/method/support_simprosys.support_simprosys.api.send_support_ticket_email?docname=${ticketName}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `token ${apiKey}:${secretKey}`,
+          },
+        }
+      );
+      const emailResult = await emailResponse.json();
+    } catch (emailErr) {
+      console.error("Email sending failed:", emailErr);
+    }
+}
+
 
 window.submitTicket = submitTicket;

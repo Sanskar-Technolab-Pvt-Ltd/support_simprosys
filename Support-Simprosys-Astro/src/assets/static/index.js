@@ -229,13 +229,103 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-//? Footer Email
+//? Footer Newsletter Email
 
 const api_URL = import.meta.env.PUBLIC_ApiUrl;
 const apiKey = import.meta.env.PUBLIC_ApiKey;
 const secretKey = import.meta.env.PUBLIC_SecretKey;
 
 
+// ! Old code for subscribe email
+// document
+//   .getElementById("subscribe_email")
+//   .addEventListener("submit", async function (event) {
+//     event.preventDefault();
+
+//     const emailInput = document.getElementById("emailInput");
+//     const email = emailInput.value.trim();
+//     const emailMessage = document.getElementById("emailError");
+
+//     // Clear previous messages
+//     emailMessage.classList.remove("hidden");
+//     emailMessage.style.color = "";
+
+//     // Step 1: Empty field check
+//     if (!email) {
+//       emailMessage.textContent = "Please enter email address";
+//       emailMessage.style.color = "red";
+//       return;
+//     }
+
+//     // Step 2: Email format check
+//     const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+//     if (!isValidEmail) {
+//       emailMessage.textContent = "Enter a valid Email Address";
+//       emailMessage.style.color = "red";
+//       return;
+//     }
+
+//     // Step 3: Check if email already exists
+//     try {
+//       const checkResponse = await fetch(
+//         `${api_URL}/api/resource/Simprosy%20Newsletter%20Subscriber?filters=${encodeURIComponent(JSON.stringify([["email", "=", email]]))}`,
+//         {
+//           headers: {
+//             Authorization: `token ${apiKey}:${secretKey}`,
+//             "Content-Type": "application/json",
+//           },
+//         }
+//       );
+
+//       const checkData = await checkResponse.json();
+
+//       if (checkData?.data?.length > 0) {
+//         // Step 4: Already subscribed
+//         emailMessage.textContent = "This email is already subscribed.";
+//         emailMessage.style.color = "yellow";
+//         return;
+//       }
+//     } catch (error) {
+//       console.error("Error checking email existence:", error);
+//       emailMessage.textContent = "Something went wrong! Please try again.";
+//       emailMessage.style.color = "red";
+//       return;
+//     }
+
+//     // Step 5: Insert new email
+//     try {
+//       const postResponse = await fetch(
+//         `${api_URL}/api/resource/Simprosy%20Newsletter%20Subscriber`,
+//         {
+//           method: "POST",
+//           headers: {
+//             Authorization: `token ${apiKey}:${secretKey}`,
+//             "Content-Type": "application/json",
+//           },
+//           body: JSON.stringify({ email }),
+//         }
+//       );
+
+//       const postResult = await postResponse.json();
+
+//       if (postResponse.ok) {
+//         emailMessage.textContent = "Subscribed Successfully!";
+//         emailMessage.style.color = "yellow";
+//         emailInput.value = "";
+//       } else {
+//         emailMessage.textContent =
+//           postResult?.message || "Subscription failed!";
+//         emailMessage.style.color = "red";
+//       }
+//     } catch (error) {
+//       console.error("Error inserting email:", error);
+//       emailMessage.textContent = "Subscription failed!";
+//       emailMessage.style.color = "red";
+//     }
+//   });
+
+
+// ? New code for subscriber email
 document
   .getElementById("subscribe_email")
   .addEventListener("submit", async function (event) {
@@ -245,18 +335,18 @@ document
     const email = emailInput.value.trim();
     const emailMessage = document.getElementById("emailError");
 
-    // Clear previous messages
+    // Reset previous message content and style
+    emailMessage.textContent = "";
     emailMessage.classList.remove("hidden");
     emailMessage.style.color = "";
 
-    // Step 1: Empty field check
+    // Validate input
     if (!email) {
       emailMessage.textContent = "Please enter email address";
       emailMessage.style.color = "red";
       return;
     }
 
-    // Step 2: Email format check
     const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     if (!isValidEmail) {
       emailMessage.textContent = "Enter a valid Email Address";
@@ -264,10 +354,10 @@ document
       return;
     }
 
-    // Step 3: Check if email already exists
+    // Check if already subscribed
     try {
       const checkResponse = await fetch(
-        `${api_URL}/api/resource/Simprosy%20Newsletter%20Subscriber?filters=[["email","=","${email}"]]`,
+        `${api_URL}/api/resource/Simprosy%20Newsletter%20Subscriber?filters=${encodeURIComponent(JSON.stringify([["email", "=", email]]))}`,
         {
           headers: {
             Authorization: `token ${apiKey}:${secretKey}`,
@@ -279,9 +369,8 @@ document
       const checkData = await checkResponse.json();
 
       if (checkData?.data?.length > 0) {
-        // Step 4: Already subscribed
         emailMessage.textContent = "This email is already subscribed.";
-        emailMessage.style.color = "yellow";
+        emailMessage.style.color = "yellow"; // Yellow-500
         return;
       }
     } catch (error) {
@@ -291,7 +380,7 @@ document
       return;
     }
 
-    // Step 5: Insert new email
+    // Add email if not already subscribed
     try {
       const postResponse = await fetch(
         `${api_URL}/api/resource/Simprosy%20Newsletter%20Subscriber`,
@@ -309,11 +398,10 @@ document
 
       if (postResponse.ok) {
         emailMessage.textContent = "Subscribed Successfully!";
-        emailMessage.style.color = "yellow";
+        emailMessage.style.color = "yellow"; // Green-500
         emailInput.value = "";
       } else {
-        emailMessage.textContent =
-          postResult?.message || "Subscription failed!";
+        emailMessage.textContent = postResult?.message || "Subscription failed!";
         emailMessage.style.color = "red";
       }
     } catch (error) {
