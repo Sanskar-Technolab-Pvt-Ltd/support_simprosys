@@ -2160,7 +2160,14 @@
       <url>
         <loc>http://127.0.0.1:8000/faq/pricing-for-product-question-answers-app</loc>
         <priority>1.0</priority>
-        <lastmod>2025-06-12</lastmod>
+        <lastmod>2025-06-24</lastmod>
+        <changefreq>daily</changefreq>
+      </url>
+    
+      <url>
+        <loc>http://127.0.0.1:8000/faq/test-blog</loc>
+        <priority>1.0</priority>
+        <lastmod>2025-06-19</lastmod>
         <changefreq>daily</changefreq>
       </url>
     

@@ -353,6 +353,13 @@ ul {
     line-height: 27px !important;
   }
 
+  .ql-editor ul li {
+    font-size: 16px !important;
+    margin-bottom: 10px !important;
+    line-height: 27px !important;
+  }
+
+
   .ql-editor p {
     font-size: 16px !important;
     margin-bottom: 10px !important;
