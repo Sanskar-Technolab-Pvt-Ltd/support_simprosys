@@ -1141,7 +1141,7 @@ def trigger_astro_build_realtime():
                 dst = os.path.join(www_target, item)
                 shutil.copytree(src, dst) if os.path.isdir(src) else shutil.copy2(src, dst)
 
-        # subprocess.run(["bench", "build", "--app", "support_simprosys"], cwd="/home/frappe/frappe-bench")
+        subprocess.run(["bench", "build", "--app", "support_simprosys"], cwd="/home/frappe/frappe-bench")
         subprocess.run(["bench", "--site", "all", "clear-cache"], cwd="/home/frappe/frappe-bench")
         subprocess.run(["bench", "--site", "all", "clear-website-cache"], cwd="/home/frappe/frappe-bench")
 
