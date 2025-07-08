@@ -10,6 +10,7 @@ import TicketIcon from "../assets/img/raiseTicket.svg";
 import attachFile from "../assets/img/attachFile.svg";
 import Arrow from "../assets/img/downArrow.svg";
 import Support from "../components/Support.astro";
+import { Schema } from "astro:schema";
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -84,52 +85,53 @@ async function attachFilesToDoctype(ticketName: any, fileUrls: any) {
   }
 }
 
+const api_URL = import.meta.env.PUBLIC_ApiUrl;
+
 const schemaWebPage = {
   "@context": "https://schema.org",
   "@type": "WebPage",
   name: "Raise a Ticket - Simprosys",
   description:
     "Submit a support ticket to Simprosys for assistance with your queries or issues. Provide details about your problem, and our team will get back to you.",
-  url: "https://simprosys.frappe.cloud/raise-a-ticket",
+  url: `${api_URL}/raise-a-ticket`,
   mainEntity: {
     "@type": "ContactPage",
     name: "Raise a Ticket - Simprosys",
     description:
       "Submit a support ticket to Simprosys for assistance with your queries or issues.",
-    url: "https://simprosys.frappe.cloud/raise-a-ticket",
+    url: `${api_URL}/raise-a-ticket`,
     potentialAction: {
       "@type": "CommunicateAction",
       target: {
         "@type": "EntryPoint",
-        url: "https://simprosys.frappe.cloud/raise-a-ticket",
+        url: `${api_URL}/raise-a-ticket`,
       },
       inLanguage: "en-US",
       instrument: {
         "@type": "WebSite",
-        url: "https://simprosys.frappe.cloud",
+        url: `${api_URL}`,
         name: "Simprosys",
       },
     },
     subjectOf: {
       "@type": "WebSite",
-      url: "https://simprosys.frappe.cloud",
+      url: `${api_URL}`,
       name: "Simprosys",
     },
   },
   publisher: {
     "@type": "Organization",
     name: "Simprosys",
-    url: "https://simprosys.frappe.cloud",
+    url: `${api_URL}`,
   },
   potentialAction: {
     "@type": "SearchAction",
     target:
-      "https://simprosys.frappe.cloud/raise-a-ticket?q={search_term_string}",
+      `${api_URL}/raise-a-ticket?q={search_term_string}`,
     "query-input": "required name=search_term_string",
   },
 };
 
-const api_URL = import.meta.env.PUBLIC_ApiUrl;
 // Fetch Support Home Page Settings
 const SupportPageResponse = `${api_URL}/api/resource/Support%20Home%20Page/Support%20Home%20Page`;
 

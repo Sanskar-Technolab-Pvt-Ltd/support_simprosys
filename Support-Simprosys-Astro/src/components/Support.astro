@@ -42,7 +42,7 @@ const { heading } = Astro.props;
         Platform_data.map((platform: any) => (
           <Platform
             imageSrc={platform.platform_logo}
-            alternateText={platform.alternateText}
+            alternateText={platform.platform_logo_alt_text}
             dataPlatform={platform.name}
             active={
               platform.post_category_name === `${first_platform}`

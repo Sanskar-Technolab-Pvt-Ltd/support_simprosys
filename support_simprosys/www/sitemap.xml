@@ -179,7 +179,7 @@
       <url>
         <loc>https://simprosys.frappe.cloud/faq/customize-product-title-name-and-line-in-the-simprosys-manufacturer-feed-app-for-the-bigcommerce-store</loc>
         <priority>1.0</priority>
-        <lastmod>2025-06-12</lastmod>
+        <lastmod>2025-07-07</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -921,7 +921,7 @@
       <url>
         <loc>https://simprosys.frappe.cloud/faq/implement-google-analytics-4-ga4-tracking-from-the-api-feed-for-google-shopping-microsoft-and-facebook-plugin</loc>
         <priority>1.0</priority>
-        <lastmod>2025-06-12</lastmod>
+        <lastmod>2025-06-27</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -1607,7 +1607,7 @@
       <url>
         <loc>https://simprosys.frappe.cloud/faq/how-to-enable-the-direct-checkout-feature-for-google-free-listings</loc>
         <priority>1.0</priority>
-        <lastmod>2025-06-12</lastmod>
+        <lastmod>2025-07-03</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -2111,7 +2111,7 @@
       <url>
         <loc>https://simprosys.frappe.cloud/faq/how-does-it-help-in-seo</loc>
         <priority>1.0</priority>
-        <lastmod>2025-06-12</lastmod>
+        <lastmod>2025-06-27</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -2132,7 +2132,7 @@
       <url>
         <loc>https://simprosys.frappe.cloud/faq/product-questions-answers-privacy-policy</loc>
         <priority>1.0</priority>
-        <lastmod>2025-06-12</lastmod>
+        <lastmod>2025-06-27</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -2161,48 +2161,6 @@
         <loc>https://simprosys.frappe.cloud/faq/pricing-for-product-question-answers-app</loc>
         <priority>1.0</priority>
         <lastmod>2025-06-12</lastmod>
-        <changefreq>daily</changefreq>
-      </url>
-    
-      <url>
-        <loc>https://simprosys.frappe.cloud/faq/test-blog</loc>
-        <priority>1.0</priority>
-        <lastmod>2025-06-17</lastmod>
-        <changefreq>daily</changefreq>
-      </url>
-    
-      <url>
-        <loc>https://simprosys.frappe.cloud/faq/image-alt-tag</loc>
-        <priority>1.0</priority>
-        <lastmod>2025-06-17</lastmod>
-        <changefreq>daily</changefreq>
-      </url>
-    
-      <url>
-        <loc>https://simprosys.frappe.cloud/faq/image-alt-text</loc>
-        <priority>1.0</priority>
-        <lastmod>2025-06-18</lastmod>
-        <changefreq>daily</changefreq>
-      </url>
-    
-      <url>
-        <loc>https://simprosys.frappe.cloud/faq/dharmik-test</loc>
-        <priority>1.0</priority>
-        <lastmod>2025-06-24</lastmod>
-        <changefreq>daily</changefreq>
-      </url>
-    
-      <url>
-        <loc>https://simprosys.frappe.cloud/faq/final</loc>
-        <priority>1.0</priority>
-        <lastmod>2025-06-24</lastmod>
-        <changefreq>daily</changefreq>
-      </url>
-    
-      <url>
-        <loc>https://simprosys.frappe.cloud/faq/testttt</loc>
-        <priority>1.0</priority>
-        <lastmod>2025-06-24</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
