@@ -1,2 +1,4 @@
 User-agent: *
-Disallow: /
+Allow: /
+Crawl-delay:3
+Sitemap:https://support.simprosys.com/sitemap.xml
