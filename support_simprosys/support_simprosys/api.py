@@ -1141,9 +1141,12 @@ def trigger_astro_build_realtime():
                 dst = os.path.join(www_target, item)
                 shutil.copytree(src, dst) if os.path.isdir(src) else shutil.copy2(src, dst)
 
-        subprocess.run(["bench", "build", "--app", "support_simprosys"], cwd="/home/frappe/frappe-bench")
+        # subprocess.run(["bench", "build", "--app", "support_simprosys"], cwd="/home/frappe/frappe-bench")
         subprocess.run(["bench", "--site", "all", "clear-cache"], cwd="/home/frappe/frappe-bench")
         subprocess.run(["bench", "--site", "all", "clear-website-cache"], cwd="/home/frappe/frappe-bench")
+        # Restart bench (supervisor or process manager)
+        subprocess.run(["bench", "restart"], cwd="/home/frappe/frappe-bench")
+
 
         update_log("✅ All steps completed successfully.", status="Success")
         return {"status": "success", "message": "Build finished successfully."}
