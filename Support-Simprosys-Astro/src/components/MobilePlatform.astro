@@ -11,7 +11,7 @@ interface Props {
 const { platformName, active, dataPlatform, classButton } = Astro.props;
 ---
 
-<button
+<button name={platformName}
   class=`${active || ''} py-[.5em] px-[.75em] bg-[#eee] w-full border-2 md:px-2 rounded-xl relative group flex items-center justify-between ${ classButton || 'platform-btn' }`
   data-platform={dataPlatform}
 >
