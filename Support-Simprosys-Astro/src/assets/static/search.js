@@ -8,7 +8,7 @@ function debounce(func, delay) {
 }
 
 const api_url = import.meta.env.PUBLIC_ApiUrl;
-
+import he from 'he';
 //* Function to fetch search results
 async function fetchSearchResults(keyword) {
   const resultsContainer = document.getElementById("searchResults");
@@ -44,7 +44,7 @@ async function fetchSearchResults(keyword) {
           <div class="text-start">
             <p class="text-sm sm:text-base text-[#25282B]">
               ${highlightKeyword(
-                blog.blog_title,
+                he.decode(blog.blog_title),
                 keyword
               )} <!-- Highlight the keyword in blog title -->
             </p>
@@ -408,7 +408,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
               groupedResults[firstCategory][secondCategory].forEach((blog) => {
                 const highlightedTitle = highlightKeyword(
-                  blog.blog_title,
+                  he.decode(blog.blog_title),
                   keyword
                 );
                 htmlContent += `
