@@ -2,6 +2,13 @@ import frappe
 from datetime import datetime
 import requests
 
+# ? Add Headers
+def after_request(response):
+    response.headers.extend({
+        "Content-Security-Policy": "frame-ancestors 'self'; base-uri 'self'",
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=(), fullscreen=(self)"
+    })
+
 
 #? Sync Article Data
 @frappe.whitelist()
