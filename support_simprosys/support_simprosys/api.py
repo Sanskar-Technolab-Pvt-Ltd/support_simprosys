@@ -3,25 +3,6 @@ from datetime import datetime
 import requests
 
 
-import frappe
-
-@frappe.whitelist()
-def replace_name():
-    # Fetch all documents
-    docs = frappe.get_all("Simprosys Blog", fields=["name", "content_details"])
-
-    for doc in docs:
-        if "/wp-content/" in (doc.content_details or ""):
-            updated_content = doc.content_details.replace("/wp-content/", "/files/")
-            
-            # Update document
-            frappe.db.set_value("Simprosys Blog", doc.name, "content_details", updated_content)
-            print(f"Updated: {doc.name}")
-
-    frappe.db.commit()
-
-
-
 #? Sync Article Data
 @frappe.whitelist()
 def import_Article_data():
