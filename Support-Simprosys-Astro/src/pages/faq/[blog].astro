@@ -274,6 +274,22 @@ decodedContent = decodedContent.replace(
   /https:\/\/support\.simprosys\.com\/wp-content\/uploads/g,
   `${API_URL}/files/uploads`
 );
+// Match alt atg
+decodedContent = decodedContent.replace(
+  /<p>\s*<strong[^>]*>\s*(<img[^>]*>)\s*<\/strong>\s*<\/p>\s*<p>\s*alt="([^"]+)"(?:<br\s*\/?>)?\s*<\/p>/gi,
+  (match, imgTag, altText) => {
+    if (/alt\s*=\s*"/i.test(imgTag)) {
+      // Replace existing alt
+      imgTag = imgTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
+    } else {
+      // Insert new alt
+      imgTag = imgTag.replace(/<img/i, `<img alt="${altText}"`);
+    }
+    return `<p>${imgTag}</p>`;
+  }
+);
+
+
 
 // Match alt tag
 decodedContent = decodedContent.replace(
