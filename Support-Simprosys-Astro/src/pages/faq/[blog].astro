@@ -302,6 +302,35 @@ decodedContent = decodedContent.replace(
   }
 );
 
+// Alt text match for H1 to H6
+decodedContent = decodedContent.replace(
+  /<(h[1-6])>\s*(<img[^>]*>)\s*<\/\1>\s*<p>\s*alt="([^"]+)"\s*<\/p>/gi,
+  (match, headingTag, imgTag, altText) => {
+    if (/alt\s*=\s*"/i.test(imgTag)) {
+      imgTag = imgTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
+    } else {
+      imgTag = imgTag.replace(/<img/i, `<img alt="${altText}"`);
+    }
+    return `<${headingTag}>${imgTag}</${headingTag}>`;
+  }
+);
+
+// Alt text for where image inside p and span
+decodedContent = decodedContent.replace(
+  /<p>\s*<span[^>]*>\s*(<img[^>]*>)\s*<\/span>\s*<\/p>\s*<p>\s*alt="([^"]+)"(?:<br\s*\/?>)?\s*<\/p>/gi,
+  (match, imgTag, altText) => {
+    // Add or replace alt attribute
+    if (/alt\s*=\s*"/i.test(imgTag)) {
+      imgTag = imgTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
+    } else {
+      imgTag = imgTag.replace(/<img/i, `<img alt="${altText}"`);
+    }
+    return `<p><span>${imgTag}</span></p>`;
+  }
+);
+
+
+
 // Match alt tag in table 
 decodedContent = decodedContent.replace(
   /(<td[^>]*>\s*<img[^>]*?)>(?:\s|&nbsp;)*alt="([^"]+)"(?:<br\s*\/?>)?/gi,
