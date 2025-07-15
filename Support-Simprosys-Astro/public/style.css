@@ -219,6 +219,7 @@ ul {
     .ql-editor div:has(table) {
         overflow-x: auto;
         width: 90vw !important;
+        word-break: auto-phrase;
     }
 }
 @media screen and (min-width: 886px) {
@@ -512,6 +513,7 @@ ul {
   .content-section {
     display: none;
   }
+  
 }
 
 /* ? Cookie Consent */
