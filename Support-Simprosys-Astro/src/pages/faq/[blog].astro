@@ -254,6 +254,13 @@ decodedContent = decodedContent.replace(
   '$1'
 );
 
+// Wrap the table in a div
+decodedContent = decodedContent.replace(
+  /<table([\s\S]*?)<\/table>/gi,
+  '<div><table$1</table></div>'
+);
+
+
 
 
 // Remove the <BR> tags
