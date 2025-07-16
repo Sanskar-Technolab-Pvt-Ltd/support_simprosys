@@ -219,7 +219,7 @@ ul {
     .ql-editor div:has(table) {
         overflow-x: auto;
         width: 90vw !important;
-        word-break: auto-phrase;
+        word-break: normal;
     }
 }
 @media screen and (min-width: 886px) {
@@ -232,12 +232,10 @@ ul {
 
 .ql-editor table {
   overflow-x: auto;
-  /* width: 100% !important; */
   width: auto;
-  /* table-layout: auto !important; */
   margin-bottom: 1rem;
   border-collapse: collapse;
-  /* overflow-x: scroll !important; */
+  word-break: normal;
 }
 
 .ql-editor table thead {
