@@ -260,7 +260,11 @@ decodedContent = decodedContent.replace(
   '<div><table$1</table></div>'
 );
 
-
+// Remove the <STRONG> tags
+decodedContent = decodedContent.replace(
+  /<(h[2-6][^>]*)>\s*<strong>(.*?)<\/strong>\s*(<br\s*\/?>)?\s*<\/h[2-6]>/gi,
+  '<$1>$2</$1>'
+);
 
 
 // Remove the <BR> tags
