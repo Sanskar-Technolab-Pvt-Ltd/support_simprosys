@@ -25,9 +25,9 @@
           nextEl: ".slide-next",
           prevEl: ".slide-prev",
         },
-        // autoplay: {
-        //   delay: 3000,
-        // },
+        autoplay: {
+          delay: 3000,
+        },
         breakpoints: {
           0: {
             slidesPerView: 1, // Small screens

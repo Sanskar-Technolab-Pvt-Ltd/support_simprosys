@@ -28,32 +28,6 @@ const Youtube_data_api = await fetch(YoutubeResponse, {
 const Youtube_data_json = await Youtube_data_api.json();
 const youtubeData = Youtube_data_json.data;
 
-// Front Page Schema
-// const orgSchema = {
-//   "@context": "https://schema.org",
-//   "@type": "Organization",
-//   name: "Simprosys Infomedia",
-//   url: "https://simprosys.com",
-//   address: {
-//     "@type": "PostalAddress",
-//     streetAddress:
-//       "B-303, Shapath Hexa, Opp. Gujarat High Court, Sarkhej - Gandhinagar Hwy",
-//     addressLocality: "Ahmedabad",
-//     addressRegion: "Gujarat",
-//     postalCode: "380060",
-//     addressCountry: "India",
-//   },
-//   email: "info@simprosys.com",
-//   telephone: "+91 9723663337",
-//   sameAs: [
-//     "https://www.facebook.com/simprosys",
-//     "https://www.instagram.com/simprosysinfomedia/",
-//     "https://www.youtube.com/@Simprosys",
-//     "https://www.linkedin.com/company/simprosys-infomedia",
-//   ],
-// };
-// const orgSchemaString = JSON.stringify(orgSchema);
-
 // Fetch Support Home Page Settings
 const SupportPageResponse = `${api_URL}/api/resource/Support%20Home%20Page/Support%20Home%20Page`;
 
@@ -72,10 +46,7 @@ const youtube_description = SupportHomeSettings.youtube_video_description
   ? he.decode(SupportHomeSettings.youtube_video_description)
   : "";
 
-// Decode Article
-// const article_description = SupportHomeSettings.article_description
-//   ? he.decode(SupportHomeSettings.article_description)
-//   : "";
+
 
 // Fetch Support Search Keyword Data
 const SupportSearchResponse = `${api_URL}/api/resource/Support%20Search%20Keyword?fields=["*"]&order_by=\`order\` asc`;
@@ -89,13 +60,21 @@ const support_search_response = await fetch(SupportSearchResponse, {
 
 const SupportSearchJson = await support_search_response.json();
 const SupportSearchData = SupportSearchJson.data;
+
+let decodeYoutubeDescription  = he.decode(youtube_description) || "";
+
+decodeYoutubeDescription = decodeYoutubeDescription.replace(
+  /<strong([^>]*)>\s*<a(?![^>]*\btarget=)([^>]*href=["'][^"']*["'])/gi,
+  '<a$2 target="_blank" rel="noopener noreferrer"'
+);
+
 ---
 
 <Layout
-  Title="Support Simprosys - Simprosys InfoMedia Help Centre"
+  Title={SupportHomeSettings.home_page_title || "Support Simprosys - Simprosys InfoMedia Help Centre"}
   meta_title={SupportHomeSettings.meta_title || ""}
   meta_desc={SupportHomeSettings.meta_description || ""}
-  canonicalURL=`${api_URL}/support-index`
+  canonicalURL=`${api_URL}`
   HomePageSchemaName={SupportHomeSettings.schema_name || ""}
   HomePageSchemaURL={SupportHomeSettings.schema_url || ""}
 >
@@ -135,9 +114,9 @@ const SupportSearchData = SupportSearchJson.data;
                 </div>
                 <input
                   id="searchInput"
-                  type="text"
+                  type="search"
                   title="Search for:"
-                  class="w-full py-2 font-normal text-base text-[#25282B] pl-10 lg:py-3 border border-gray-300 rounded-full shadow-sm focus:ring-2 focus:outline-none sm:text-base focus:placeholder:opacity-0 placeholder:text-[#25282B]"
+                  class="w-full py-2 font-normal text-base text-[#25282B] pl-10 lg:py-3 border border-gray-300 rounded-full shadow-sm focus:ring-2 focus:outline-none sm:text-base focus:placeholder:opacity-0 placeholder:text-[#25282B] pr-4"
                   placeholder="Search Simprosys Support"
                   required
                 />
@@ -226,8 +205,8 @@ const SupportSearchData = SupportSearchJson.data;
         <div class="btn flex text-start justify-center lg:justify-end gap-5">
           <button
             class="z-10 lg:absolute bottom-[-10%] sm:top-[40%] sm:left-[3%] lg:left-[1%]
-                               text-white rounded-full flex justify-center items-center py-10 w-[58px] h-[58px]
-                               sm:py-12 lg:py-0 sm:h-16 sm:w-16 bg-opacity-50 text-xl2 slide-prev"
+                              text-white rounded-full flex justify-center items-center py-10 w-[58px] h-[58px]
+                              sm:py-12 lg:py-0 sm:h-16 sm:w-16 bg-opacity-50 text-xl2 slide-prev"
           >
             <img
               class="hover:shadow-sm hover:rounded-full"
@@ -237,8 +216,8 @@ const SupportSearchData = SupportSearchJson.data;
           </button>
           <button
             class="z-10 lg:absolute bottom-[-10%] sm:top-[40%] sm:right-[3%] lg:right-[1%]
-                               text-white rounded-full flex justify-center items-center py-10 w-[58px] h-[58px]
-                               sm:py-12 lg:py-0 sm:h-16 sm:w-16 bg-opacity-50 text-xl2 slide-next"
+                              text-white rounded-full flex justify-center items-center py-10 w-[58px] h-[58px]
+                              sm:py-12 lg:py-0 sm:h-16 sm:w-16 bg-opacity-50 text-xl2 slide-next"
           >
             <img
               class="hover:shadow-sm hover:rounded-full"
@@ -271,7 +250,7 @@ const SupportSearchData = SupportSearchJson.data;
               </h2>
               <p
                 class="text-base text-[#25282B]"
-                set:html={he.decode(youtube_description) || ""}
+                set:html={decodeYoutubeDescription}
               />
               <div>
                 <a
