@@ -7,6 +7,7 @@
  "field_order": [
   "support_index_tab",
   "header_details_section",
+  "home_page_title",
   "canonical_url",
   "meta_title",
   "schema_name",
@@ -176,13 +177,18 @@
    "fieldname": "ticket_meta_description",
    "fieldtype": "Small Text",
    "label": "Ticket Meta Description"
+  },
+  {
+   "fieldname": "home_page_title",
+   "fieldtype": "Data",
+   "label": "Home Page Title"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-06-18 17:12:01.347972",
+ "modified": "2025-07-17 16:28:52.946186",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Support Home Page",

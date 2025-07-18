@@ -170,7 +170,7 @@ name1.addEventListener("input", () => {
 
   if (nameValue === "") {
     nameMsg.classList.remove("hidden");
-    nameMsg.textContent = "Please fill out this field";
+    nameMsg.textContent = "Please Enter Valid name";
   } else if (!nameRegex.test(nameValue)) {
     nameMsg.classList.remove("hidden");
     nameMsg.textContent = "Please Enter Valid name";
@@ -186,7 +186,7 @@ company_name.addEventListener("input", () => {
 
   if (companyValue === "") {
     companyMsg.classList.remove("hidden");
-    companyMsg.textContent = "Please fill out this field";
+    companyMsg.textContent = "Please provide the requested information";
   } else if (!companyNameRegex.test(companyValue)) {
     companyMsg.classList.remove("hidden");
     companyMsg.textContent = "Please Enter Valid Company name";
@@ -209,7 +209,7 @@ email.addEventListener("input", () => {
 
   if (emailValue === "") {
     emailMsg.classList.remove("hidden");
-    emailMsg.textContent = "Please fill out this field";
+    emailMsg.textContent = "Please provide the requested information";
   } else if (!emailRegex.test(emailValue)) {
     emailMsg.classList.remove("hidden");
     emailMsg.textContent = "Please Enter Valid Email";
@@ -287,7 +287,7 @@ function handleInput() {
   // Validate Name
   if (NameValue === "") {
     nameMsg.classList.remove("hidden");
-    nameMsg.textContent = "Please fill out this field";
+    nameMsg.textContent = "Please Enter Valid name";
     isNameValid = false;
   } else if (!nameRegex.test(NameValue)) {
     nameMsg.classList.remove("hidden");
@@ -302,7 +302,7 @@ function handleInput() {
   // Validate Company Name
   if (CompanyNameValue === "") {
     companyMsg.classList.remove("hidden");
-    companyMsg.textContent = "Please fill out this field";
+    companyMsg.textContent = "Please provide the requested information";
     isCompanyNameValid = false;
   } else if (!companyNameRegex.test(CompanyNameValue)) {
     companyMsg.classList.remove("hidden");
@@ -327,7 +327,7 @@ function handleInput() {
   // Validate Email
   if (EmailValue === "") {
     emailMsg.classList.remove("hidden");
-      emailMsg.textContent = "Please fill out this field";
+      emailMsg.textContent = "Please provide the requested information";
     isEmailValid = false;
   } else if (!emailRegex.test(EmailValue)) {
     emailMsg.classList.remove("hidden");
