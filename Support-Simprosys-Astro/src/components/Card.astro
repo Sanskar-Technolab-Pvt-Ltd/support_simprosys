@@ -73,7 +73,6 @@ const categoryData = await fetchCategoryData();
         <h3 class="font-semibold text-2xl text-[#25282B]">{he.decode(headTag)}</h3>
         <p class="font-normal text-base text-[#3D3F42] line-clamp-2">
           {he.decode(paragraphTag)}
-          <!-- {paragraphTag} -->
         </p>
       </div>
     </div>
@@ -93,7 +92,6 @@ const categoryData = await fetchCategoryData();
     class="pt-4 sssm:flex mx-4 lg:mx-8 sm:grid sm:grid-cols-2 sm:space-x-5 md:space-x-10 xl:space-x-17 lg:p-0 lg:pt-4 2xl:pt-[18px] border-t justify-between lg:justify-items-between items-center space-y-2 sssm:space-y-0 sm:text-right"
   >
     <div class="flex sm:h-[24px] sm:w-[200px] lg:w-[240px] space-x-1">
-      <!-- <div class="flex"> -->
       <a
         href={`${ReviewLink || ""}`}
         target={`${ReviewLinkTarget || "_self"}`}
