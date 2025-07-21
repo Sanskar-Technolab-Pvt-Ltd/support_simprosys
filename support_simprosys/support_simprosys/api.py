@@ -1360,16 +1360,26 @@ def send_support_ticket_email(docname):
     """
 
     recipients_email = None
+    cc_email = None
     if doc.plugin_or_app_related_queries == "Career opportunities":
         recipients_email = ["careers@simprosys.com"]
     elif doc.plugin_or_app_related_queries == "Partnership opportunities":
         recipients_email = ["partnerships@simprosys.com"]
-    else:
+        cc_email = ["prem@simprosys.net"]
+        # recipients_email = ["kushal@sanskartechnolab.com"]
+        # cc_email = ["kushal@sanskartechnolab.com", "meet@sanskartechnolab.com"]
+    elif doc.plugin_or_app_related_queries == "General Enquiry":
+        recipients_email = [
+        "info@simprosys.com",
+        "support@simprosys.com"
+        ]
+    else: #* Plugin and app related queries
         recipients_email = ["support@simprosys.com"]
 
     if recipients_email:
         frappe.sendmail(
             recipients=recipients_email,
+            cc=cc_email,
             subject=subject,
             message=content,
             attachments=attachments,
