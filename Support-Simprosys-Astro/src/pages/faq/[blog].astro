@@ -248,6 +248,13 @@ decodedContent = decodedContent.replace(
   '<a$2$3 target="_blank" rel="noopener noreferrer">$4</a>'
 );
 
+decodedContent = decodedContent.replace(
+  /<strong[^>]*>\s*(?:<u>\s*)?(<a\b(?![^>]*\btarget=)([^>]*?)>)((?:.|\n)*?)<\/a>\s*(?:<\/u>)?\s*<\/strong>/gi,
+  '<strong><a$2 target="_blank" rel="noopener noreferrer">$3</a></strong>'
+);
+
+
+
 // 2️⃣ Remove <strong> ONLY if it wraps an <a> tag (and the tag already has target from above)
 decodedContent = decodedContent.replace(
   /<strong>\s*(<a[^>]*>.*?<\/a>)\s*<\/strong>/gi,

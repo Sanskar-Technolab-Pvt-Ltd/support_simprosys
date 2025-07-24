@@ -31,6 +31,7 @@
   "youtube_video_description",
   "raise_a_ticket_tab",
   "reise_a_ticket_page_meta_details_section",
+  "ticket_page_title",
   "ticket_meta_name",
   "ticket_meta_description"
  ],
@@ -182,13 +183,18 @@
    "fieldname": "home_page_title",
    "fieldtype": "Data",
    "label": "Home Page Title"
+  },
+  {
+   "fieldname": "ticket_page_title",
+   "fieldtype": "Data",
+   "label": "Ticket Page Title"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-07-17 16:28:52.946186",
+ "modified": "2025-07-21 16:10:08.324038",
  "modified_by": "Administrator",
  "module": "Support Simprosys",
  "name": "Support Home Page",
