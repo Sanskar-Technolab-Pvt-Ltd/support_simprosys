@@ -248,6 +248,7 @@ decodedContent = decodedContent.replace(
   '<a$2$3 target="_blank" rel="noopener noreferrer">$4</a>'
 );
 
+// remove underline from link
 decodedContent = decodedContent.replace(
   /<strong[^>]*>\s*(?:<u>\s*)?(<a\b(?![^>]*\btarget=)([^>]*?)>)((?:.|\n)*?)<\/a>\s*(?:<\/u>)?\s*<\/strong>/gi,
   '<strong><a$2 target="_blank" rel="noopener noreferrer">$3</a></strong>'
