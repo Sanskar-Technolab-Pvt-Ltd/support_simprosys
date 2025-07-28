@@ -256,7 +256,7 @@
       <url>
         <loc>https://support.simprosys.com/faq/google-automated-discount-requirements</loc>
         <priority>1.0</priority>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-22</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -1131,7 +1131,7 @@
       <url>
         <loc>https://support.simprosys.com/faq/why-should-i-use-the-feed-for-manufacturer-center-app-by-simprosys</loc>
         <priority>1.0</priority>
-        <lastmod>2025-06-12</lastmod>
+        <lastmod>2025-07-21</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -1278,21 +1278,21 @@
       <url>
         <loc>https://support.simprosys.com/faq/dns-whitelist-configuration-in-proviews-product-reviews-q-a</loc>
         <priority>1.0</priority>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-23</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
       <url>
         <loc>https://support.simprosys.com/faq/product-grouping-of-proviews-product-reviews-q-a</loc>
         <priority>1.0</priority>
-        <lastmod>2025-07-16</lastmod>
+        <lastmod>2025-07-23</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
       <url>
         <loc>https://support.simprosys.com/faq/how-to-add-a-photo-and-video-to-the-reviews-widget</loc>
         <priority>1.0</priority>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-23</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -1313,14 +1313,14 @@
       <url>
         <loc>https://support.simprosys.com/faq/how-to-change-admin-language-product-reviews-q-a</loc>
         <priority>1.0</priority>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-23</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
       <url>
         <loc>https://support.simprosys.com/faq/how-to-flagged-review-as-inappropriate</loc>
         <priority>1.0</priority>
-        <lastmod>2025-07-14</lastmod>
+        <lastmod>2025-07-23</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -1334,14 +1334,14 @@
       <url>
         <loc>https://support.simprosys.com/faq/how-to-sync-past-orders</loc>
         <priority>1.0</priority>
-        <lastmod>2025-07-16</lastmod>
+        <lastmod>2025-07-23</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
       <url>
         <loc>https://support.simprosys.com/faq/how-to-install-the-preview-badge-below-the-product-title-in-shopify-themes</loc>
         <priority>1.0</priority>
-        <lastmod>2025-07-09</lastmod>
+        <lastmod>2025-07-23</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -1369,7 +1369,7 @@
       <url>
         <loc>https://support.simprosys.com/faq/how-to-set-up-review-request-configuration-in-proviews</loc>
         <priority>1.0</priority>
-        <lastmod>2025-07-16</lastmod>
+        <lastmod>2025-07-23</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -1460,14 +1460,14 @@
       <url>
         <loc>https://support.simprosys.com/faq/step-by-step-self-installation-guide-of-proviews</loc>
         <priority>1.0</priority>
-        <lastmod>2025-07-14</lastmod>
+        <lastmod>2025-07-23</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
       <url>
         <loc>https://support.simprosys.com/faq/product-rating-feed-of-proviews-product-reviews-q-a</loc>
         <priority>1.0</priority>
-        <lastmod>2025-07-21</lastmod>
+        <lastmod>2025-07-23</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -1481,7 +1481,7 @@
       <url>
         <loc>https://support.simprosys.com/faq/how-to-import-reviews-product-reviews-q-a</loc>
         <priority>1.0</priority>
-        <lastmod>2025-07-14</lastmod>
+        <lastmod>2025-07-23</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -1551,7 +1551,7 @@
       <url>
         <loc>https://support.simprosys.com/faq/best-practices-for-feed-optimization</loc>
         <priority>1.0</priority>
-        <lastmod>2025-07-09</lastmod>
+        <lastmod>2025-07-21</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -1628,7 +1628,7 @@
       <url>
         <loc>https://support.simprosys.com/faq/how-to-enable-enhanced-conversion-tracking-in-simprosys-google-shopping-feed</loc>
         <priority>1.0</priority>
-        <lastmod>2025-06-12</lastmod>
+        <lastmod>2025-07-23</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
@@ -2126,6 +2126,13 @@
         <loc>https://support.simprosys.com/faq/pricing-for-product-question-answers-app</loc>
         <priority>1.0</priority>
         <lastmod>2025-06-12</lastmod>
+        <changefreq>daily</changefreq>
+      </url>
+    
+      <url>
+        <loc>https://support.simprosys.com/faq/terms-of-service-simprosys-google-shopping-feed-for-shopify</loc>
+        <priority>1.0</priority>
+        <lastmod>2025-07-24</lastmod>
         <changefreq>daily</changefreq>
       </url>
     
