@@ -381,6 +381,39 @@ decodedContent = decodedContent.replace(
   }
 );
 
+// 1. Remove <strong> from headings
+decodedContent = decodedContent.replace(
+  /<(h[2-6][^>]*)>\s*<strong>(.*?)<\/strong>\s*(<br\s*\/?>)?\s*<\/h[2-6]>/gi,
+  '<$1>$2</$1>'
+);
+
+// 2. Unwrap {'...'}
+decodedContent = decodedContent.replace(
+  /\{\s*'(.*?)'\s*\}/g,
+  '$1'
+);
+
+// 3. Escape critical tags that break HTML rendering
+decodedContent = decodedContent.replace(
+  /<\/(body|html|head|script|style)>/gi,
+  (match, tag) => `&lt;/${tag}&gt;`
+);
+
+// Code blocks
+decodedContent = decodedContent.replace(
+  /<code>([\s\S]*?)<\/code>/gi,
+  (match, raw) => {
+    const escaped = raw
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+    return `<pre><code>${escaped}</code></pre>`;
+  }
+);
+
+
 
 
 
