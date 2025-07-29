@@ -2,6 +2,14 @@ import frappe
 from datetime import datetime
 import requests
 
+# ? Add Headers
+def after_request(response):
+    response.headers.extend({
+        "Content-Security-Policy": "frame-ancestors 'self'; base-uri 'self'",
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=(), fullscreen=(self)"
+    })
+
+
 #? Sync Article Data
 @frappe.whitelist()
 def import_Article_data():
@@ -1352,20 +1360,30 @@ def send_support_ticket_email(docname):
     """
 
     recipients_email = None
+    cc_email = None
     if doc.plugin_or_app_related_queries == "Career opportunities":
         recipients_email = ["careers@simprosys.com"]
-        # recipients_email = ["nil@sanskartechnolab.com"]
     elif doc.plugin_or_app_related_queries == "Partnership opportunities":
         recipients_email = ["partnerships@simprosys.com"]
-    else:
+        cc_email = ["prem@simprosys.net"]
+        # recipients_email = ["kushal@sanskartechnolab.com"]
+        # cc_email = ["kushal@sanskartechnolab.com", "meet@sanskartechnolab.com"]
+    elif doc.plugin_or_app_related_queries == "General Enquiry":
+        recipients_email = [
+        "info@simprosys.com",
+        "support@simprosys.com"
+        ]
+    else: #* Plugin and app related queries
         recipients_email = ["support@simprosys.com"]
 
     if recipients_email:
         frappe.sendmail(
             recipients=recipients_email,
+            cc=cc_email,
             subject=subject,
             message=content,
-            attachments=attachments
+            attachments=attachments,
+            reply_to=doc.email
         )
 
     # Save full URLs in attachment_urls field (one per line)

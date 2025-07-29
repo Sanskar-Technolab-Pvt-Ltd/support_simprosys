@@ -48,7 +48,7 @@ export const config: CookieConsentConfig = {
     translations: {
       en: {
         consentModal: {
-          title: "Hello traveller, it's cookie time!",
+          title: "Hello Visitor, it's cookie time!",
           description: `Our website uses cookies to ensure you get the best experience on our website. Details can be found in our <a href="https://simprosys.com/privacy-policy">Privacy Policy</a>`,
           acceptAllBtn: "Accept all",
           acceptNecessaryBtn: "Reject all",

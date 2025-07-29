@@ -145,9 +145,8 @@ const support_response = await fetch(SupportPageResponse, {
 const SupportHomePage_data = await support_response.json();
 const SupportHomeSettings = SupportHomePage_data.data; // Frappe API wraps data inside 'data'
 ---
-
 <Layout
-  Title="Raise-A-Ticket"
+  Title={SupportHomeSettings.ticket_page_title || "Raise A Ticket - Simprosys"}
   meta_title={SupportHomeSettings.ticket_meta_name || ""}
   meta_desc={SupportHomeSettings.ticket_meta_description || ""}
   ticketSchema={schemaWebPage || ""}
@@ -312,9 +311,6 @@ const SupportHomeSettings = SupportHomePage_data.data; // Frappe API wraps data 
                         >
                         <option value="Partnership opportunities"
                           >Partnership opportunities</option
-                        >
-                        <option value="Shopify Store Design and Development"
-                          >Shopify Store Design and Development</option
                         >
                         <option value="Plugin and App related query"
                           >Plugin and App related query</option

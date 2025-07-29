@@ -25,6 +25,10 @@ ul {
   padding-left: 1.5rem;
 }
 
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button {
+  width: 30px !important;
+}
 
 
 #header {
@@ -219,6 +223,7 @@ ul {
     .ql-editor div:has(table) {
         overflow-x: auto;
         width: 90vw !important;
+        word-break: normal;
     }
 }
 @media screen and (min-width: 886px) {
@@ -231,12 +236,10 @@ ul {
 
 .ql-editor table {
   overflow-x: auto;
-  /* width: 100% !important; */
   width: auto;
-  /* table-layout: auto !important; */
   margin-bottom: 1rem;
   border-collapse: collapse;
-  /* overflow-x: scroll !important; */
+  word-break: normal;
 }
 
 .ql-editor table thead {
@@ -447,23 +450,26 @@ ul {
   }
 
   .ql-editor h2 {
-    font-size: 32px !important;
-    font-weight: 500 !important;
+    font-size: 28px !important;
+    font-weight: 600 !important;
     line-height: 54px !important;
   }
 
   .ql-editor h2 span {
-    font-size: 32px !important;
+    font-size: 28px !important;
+    font-weight: 600 !important;
     line-height: 54px !important;
   }
 
   .ql-editor h3{
-    font-size: 28px !important;
+    font-size: 24px !important;
+    font-weight: 600 !important;
     line-height: 42px !important;
   }
 
   .ql-editor h3 *{
-    font-size: 28px !important;
+    font-size: 24px !important;
+    font-weight: 600 !important;
     line-height: 42px !important;
   }
 
@@ -475,23 +481,27 @@ ul {
   }
 
   .ql-editor h3 {
-    font-size: 28px !important;
+    font-size: 24px !important;
+    font-weight: 600 !important;
     line-height: 36px !important;
     margin-bottom: 1rem !important;
   }
 
   .ql-editor h4 {
-    font-size: 24px;
+    font-size: 22px;
+    font-weight: 500;
     line-height: 30px;
   }
 
   .ql-editor h5 {
     font-size: 20px;
+    font-weight: 400;
     line-height: 26px;
   }
 
   .ql-editor h6 {
     font-size: 18px;
+    font-weight: 400;
     line-height: 24px;
   }
 
@@ -512,6 +522,7 @@ ul {
   .content-section {
     display: none;
   }
+  
 }
 
 /* ? Cookie Consent */

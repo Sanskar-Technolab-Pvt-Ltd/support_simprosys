@@ -110,12 +110,15 @@ const platformResponse = await fetch(
 
 const platformJson = await platformResponse.json();
 const platform = platformJson.data || [];
+
+const encodeTitle = he.decode(integration_details.header_app_name);
+const alternateTitle = he.decode(integration_details.post_category_name);
 ---
 
 <Layout
-  Title={he.decode(integration_details.post_category_name)
-    ? `${integration_details.post_category_name} - Simprosys InfoMedia Help Centre`
-    : "Shopify Product Feed and Google Shopping Ads Management App by Simprosys"}
+  Title={encodeTitle
+    ? `${encodeTitle} - Simprosys InfoMedia Help Centre`
+    :`${alternateTitle} - Simprosys InfoMedia Help Centre`}
   meta_title={integration_details.meta_title}
   meta_desc={integration_details.meta_desc}
   canonicalURL=`${URL}/${integration_details.slug}`

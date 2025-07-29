@@ -248,12 +248,31 @@ decodedContent = decodedContent.replace(
   '<a$2$3 target="_blank" rel="noopener noreferrer">$4</a>'
 );
 
+// remove underline from link
+decodedContent = decodedContent.replace(
+  /<strong[^>]*>\s*(?:<u>\s*)?(<a\b(?![^>]*\btarget=)([^>]*?)>)((?:.|\n)*?)<\/a>\s*(?:<\/u>)?\s*<\/strong>/gi,
+  '<strong><a$2 target="_blank" rel="noopener noreferrer">$3</a></strong>'
+);
+
+
+
 // 2️⃣ Remove <strong> ONLY if it wraps an <a> tag (and the tag already has target from above)
 decodedContent = decodedContent.replace(
   /<strong>\s*(<a[^>]*>.*?<\/a>)\s*<\/strong>/gi,
   '$1'
 );
 
+// Wrap the table in a div
+decodedContent = decodedContent.replace(
+  /<table([\s\S]*?)<\/table>/gi,
+  '<div><table$1</table></div>'
+);
+
+// Remove the <STRONG> tags
+decodedContent = decodedContent.replace(
+  /<(h[2-6][^>]*)>\s*<strong>(.*?)<\/strong>\s*(<br\s*\/?>)?\s*<\/h[2-6]>/gi,
+  '<$1>$2</$1>'
+);
 
 
 // Remove the <BR> tags
@@ -274,6 +293,22 @@ decodedContent = decodedContent.replace(
   /https:\/\/support\.simprosys\.com\/wp-content\/uploads/g,
   `${API_URL}/files/uploads`
 );
+// Match alt atg
+decodedContent = decodedContent.replace(
+  /<p>\s*<strong[^>]*>\s*(<img[^>]*>)\s*<\/strong>\s*<\/p>\s*<p>\s*alt="([^"]+)"(?:<br\s*\/?>)?\s*<\/p>/gi,
+  (match, imgTag, altText) => {
+    if (/alt\s*=\s*"/i.test(imgTag)) {
+      // Replace existing alt
+      imgTag = imgTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
+    } else {
+      // Insert new alt
+      imgTag = imgTag.replace(/<img/i, `<img alt="${altText}"`);
+    }
+    return `<p>${imgTag}</p>`;
+  }
+);
+
+
 
 // Match alt tag
 decodedContent = decodedContent.replace(
@@ -302,6 +337,35 @@ decodedContent = decodedContent.replace(
   }
 );
 
+// Alt text match for H1 to H6
+decodedContent = decodedContent.replace(
+  /<(h[1-6])>\s*(<img[^>]*>)\s*<\/\1>\s*<p>\s*alt="([^"]+)"\s*<\/p>/gi,
+  (match, headingTag, imgTag, altText) => {
+    if (/alt\s*=\s*"/i.test(imgTag)) {
+      imgTag = imgTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
+    } else {
+      imgTag = imgTag.replace(/<img/i, `<img alt="${altText}"`);
+    }
+    return `<${headingTag}>${imgTag}</${headingTag}>`;
+  }
+);
+
+// Alt text for where image inside p and span
+decodedContent = decodedContent.replace(
+  /<p>\s*<span[^>]*>\s*(<img[^>]*>)\s*<\/span>\s*<\/p>\s*<p>\s*alt="([^"]+)"(?:<br\s*\/?>)?\s*<\/p>/gi,
+  (match, imgTag, altText) => {
+    // Add or replace alt attribute
+    if (/alt\s*=\s*"/i.test(imgTag)) {
+      imgTag = imgTag.replace(/alt\s*=\s*"[^"]*"/i, `alt="${altText}"`);
+    } else {
+      imgTag = imgTag.replace(/<img/i, `<img alt="${altText}"`);
+    }
+    return `<p><span>${imgTag}</span></p>`;
+  }
+);
+
+
+
 // Match alt tag in table 
 decodedContent = decodedContent.replace(
   /(<td[^>]*>\s*<img[^>]*?)>(?:\s|&nbsp;)*alt="([^"]+)"(?:<br\s*\/?>)?/gi,
@@ -316,6 +380,39 @@ decodedContent = decodedContent.replace(
     return `${imgStartTag}>`; // return cleaned-up <td><img ...> without Alt="..." text
   }
 );
+
+// 1. Remove <strong> from headings
+decodedContent = decodedContent.replace(
+  /<(h[2-6][^>]*)>\s*<strong>(.*?)<\/strong>\s*(<br\s*\/?>)?\s*<\/h[2-6]>/gi,
+  '<$1>$2</$1>'
+);
+
+// 2. Unwrap {'...'}
+decodedContent = decodedContent.replace(
+  /\{\s*'(.*?)'\s*\}/g,
+  '$1'
+);
+
+// 3. Escape critical tags that break HTML rendering
+decodedContent = decodedContent.replace(
+  /<\/(body|html|head|script|style)>/gi,
+  (match, tag) => `&lt;/${tag}&gt;`
+);
+
+// Code blocks
+decodedContent = decodedContent.replace(
+  /<code>([\s\S]*?)<\/code>/gi,
+  (match, raw) => {
+    const escaped = raw
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+    return `<pre><code>${escaped}</code></pre>`;
+  }
+);
+
 
 
 

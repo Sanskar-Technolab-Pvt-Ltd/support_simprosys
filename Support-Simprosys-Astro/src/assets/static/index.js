@@ -65,26 +65,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ✅ Open the selected or default dropdown
   if (dropdownToOpen) {
-    dropdownToOpen.classList.remove("hidden");
-    arrowIconToOpen.classList.add("rotate");
-    activeDropdown = dropdownToOpen;
-    activeArrowIcon = arrowIconToOpen;
+  dropdownToOpen.classList.remove("hidden");
+  arrowIconToOpen.classList.add("rotate");
+  activeDropdown = dropdownToOpen;
+  activeArrowIcon = arrowIconToOpen;
 
-    // ✅ Scroll only if user came from FAQ
-    if (shouldScroll) {
-      setTimeout(() => {
-        const scrollPosition =
-          dropdownToOpen.getBoundingClientRect().top +
-          window.scrollY -
-          window.innerHeight / 4; // Adjusted scroll position
+  // ✅ Scroll only when required (e.g., came from FAQ)
+  if (shouldScroll) {
+    setTimeout(() => {
+      const scrollPosition =
+        dropdownToOpen.getBoundingClientRect().top +
+        window.scrollY -
+        window.innerHeight / 4;
 
-        window.scrollTo({
-          top: scrollPosition,
-          behavior: "smooth",
-        });
-      }, 200);
-    }
+      window.scrollTo({
+        top: scrollPosition,
+        behavior: "smooth",
+      });
+    }, 200);
   }
+}
+
 
   // ✅ Click event for breadcrumbs
   window.storeDropdownSelection = function (event, categoryName) {
@@ -132,10 +133,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             window.scrollTo({
               top: scrollPosition,
-              behavior: "smooth",
+              behavior: "auto",
             });
           }
-        }, 300);
+        }, 0);
       }
     });
   });
