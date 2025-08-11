@@ -390,18 +390,21 @@ input[type="search"]::-webkit-search-cancel-button {
   }
 
   .ql-editor h2 *{
+    font-weight: 600 !important;
     font-size: 24px !important;
     line-height: 36px !important;
     margin-bottom: 10px !important;
   }
 
   .ql-editor h3{
+    font-weight: 500 !important;
     font-size: 20px !important;
     line-height: 36px !important;
     margin-bottom: 10px !important;
   }
 
   .ql-editor h3 *{
+    font-weight: 500 !important;
     font-size: 20px !important;
     line-height: 36px !important;
   margin-bottom: 10px !important;    
