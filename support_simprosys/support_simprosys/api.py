@@ -265,7 +265,20 @@ def import_Youtube_data():
 # ? Fetch the data for Searching for any single word ------------------------------>
 @frappe.whitelist(allow_guest=True)
 def search_blog(keyword):
-    keywords = [w for w in keyword.strip().split() if w]
+    # Split keyword by spaces to handle multiple words
+    keywords = keyword.strip().split()
+
+    # --- 🔹 Add singular/plural handling ---
+    processed_keywords = []
+    for word in keywords:
+        processed_keywords.append(word)
+        if word.endswith("s"):
+            processed_keywords.append(word[:-1])  # errors -> error
+        else:
+            processed_keywords.append(word + "s")  # error -> errors
+
+    # Remove duplicates
+    processed_keywords = list(set(processed_keywords))
 
     # Base query
     base_query = """
@@ -278,8 +291,8 @@ def search_blog(keyword):
             category2.post_category_name AS second_level_category,
             category1.post_category_name AS first_level_category,
             (
-                {match_score}
-            ) AS relevance_score
+                {score_case}
+            ) AS relevance
         FROM
             `tabSimprosys Blog` AS blog
         INNER JOIN
@@ -298,30 +311,23 @@ def search_blog(keyword):
             AND (category1.status IS NULL OR category1.status = 'Publish')
     """
 
-    if keywords:
-        # Build OR conditions for filtering
-        like_clauses = " OR ".join([f"blog.blog_title LIKE %s" for _ in keywords])
+    if processed_keywords:
+        like_clauses = " OR ".join([f"blog.blog_title LIKE %s" for _ in processed_keywords])
         base_query += f" AND ({like_clauses})"
 
-        # Build match_score: add +1 for each matched keyword
-        score_parts = [f"(CASE WHEN blog.blog_title LIKE %s THEN 1 ELSE 0 END)" for _ in keywords]
-        match_score = " + ".join(score_parts)
+    # Relevance scoring
+    score_case = " + ".join([f"CASE WHEN blog.blog_title LIKE %s THEN 1 ELSE 0 END" for _ in processed_keywords])
+    base_query = base_query.format(score_case=score_case)
 
-        base_query = base_query.format(match_score=match_score)
-    else:
-        base_query = base_query.format(match_score="0")
+    final_query = base_query + " ORDER BY relevance DESC, category1.order ASC"
 
-    final_query = base_query + " ORDER BY relevance_score DESC, category1.post_category_name ASC"
+    # Prepare parameters
+    like_params = [f"%{word}%" for word in processed_keywords]
 
-    # Prepare parameters:
-    #   First for WHERE (OR conditions), then again for CASE scoring
-    like_params = [f"%{word}%" for word in keywords]  # for OR filtering
-    score_params = [f"%{word}%" for word in keywords]  # for CASE relevance
-
-    params = tuple(like_params + score_params)
-
-    blogs = frappe.db.sql(final_query, params, as_dict=True)
+    # 🔹 Two sets of params (one for filtering, one for scoring)
+    blogs = frappe.db.sql(final_query, tuple(like_params * 2), as_dict=True)
     return blogs
+
     
 
 
