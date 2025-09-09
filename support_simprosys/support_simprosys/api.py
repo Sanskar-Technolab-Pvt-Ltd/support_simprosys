@@ -218,10 +218,54 @@ def import_Youtube_data():
 
 
 #? Fetch the data for Searching ------------------------------>
+# @frappe.whitelist(allow_guest=True)
+# def search_blog(keyword):
+#     # Split keyword by spaces to handle multiple words
+#     keywords = keyword.strip().split()
+
+#     # Base query
+#     base_query = """
+#         SELECT
+#             blog.name,
+#             blog.blog_title,
+#             blog.post_category,
+#             blog.slug,
+#             category3.post_category_name AS third_level_category,
+#             category2.post_category_name AS second_level_category,
+#             category1.post_category_name AS first_level_category
+#         FROM
+#             `tabSimprosys Blog` AS blog
+#         INNER JOIN
+#             `tabSimprosys Post Category` AS category3
+#                 ON blog.post_category = category3.name
+#         LEFT JOIN
+#             `tabSimprosys Post Category` AS category2
+#                 ON category3.parent_simprosys_post_category = category2.name
+#         LEFT JOIN
+#             `tabSimprosys Post Category` AS category1
+#                 ON category2.parent_simprosys_post_category = category1.name
+#         WHERE
+#             blog.status = 'Publish'
+#             AND category3.status = 'Publish'
+#             AND (category2.status IS NULL OR category2.status = 'Publish')
+#             AND (category1.status IS NULL OR category1.status = 'Publish')
+#     """
+
+#     # Add dynamic LIKE clauses for each keyword
+#     like_clauses = " AND ".join([f"blog.blog_title LIKE %s" for _ in keywords])
+#     final_query = base_query + f" AND {like_clauses} ORDER BY category1.post_category_name ASC"
+
+#     # Prepare parameters
+#     like_params = [f"%{word}%" for word in keywords]
+
+#     blogs = frappe.db.sql(final_query, tuple(like_params), as_dict=True)
+#     return blogs
+
+
+# ? Fetch the data for Searching for any single word ------------------------------>
 @frappe.whitelist(allow_guest=True)
 def search_blog(keyword):
-    # Split keyword by spaces to handle multiple words
-    keywords = keyword.strip().split()
+    keywords = [w for w in keyword.strip().split() if w]
 
     # Base query
     base_query = """
@@ -232,7 +276,10 @@ def search_blog(keyword):
             blog.slug,
             category3.post_category_name AS third_level_category,
             category2.post_category_name AS second_level_category,
-            category1.post_category_name AS first_level_category
+            category1.post_category_name AS first_level_category,
+            (
+                {match_score}
+            ) AS relevance_score
         FROM
             `tabSimprosys Blog` AS blog
         INNER JOIN
@@ -251,16 +298,30 @@ def search_blog(keyword):
             AND (category1.status IS NULL OR category1.status = 'Publish')
     """
 
-    # Add dynamic LIKE clauses for each keyword
-    like_clauses = " AND ".join([f"blog.blog_title LIKE %s" for _ in keywords])
-    final_query = base_query + f" AND {like_clauses} ORDER BY category1.post_category_name ASC"
+    if keywords:
+        # Build OR conditions for filtering
+        like_clauses = " OR ".join([f"blog.blog_title LIKE %s" for _ in keywords])
+        base_query += f" AND ({like_clauses})"
 
-    # Prepare parameters
-    like_params = [f"%{word}%" for word in keywords]
+        # Build match_score: add +1 for each matched keyword
+        score_parts = [f"(CASE WHEN blog.blog_title LIKE %s THEN 1 ELSE 0 END)" for _ in keywords]
+        match_score = " + ".join(score_parts)
 
-    blogs = frappe.db.sql(final_query, tuple(like_params), as_dict=True)
+        base_query = base_query.format(match_score=match_score)
+    else:
+        base_query = base_query.format(match_score="0")
+
+    final_query = base_query + " ORDER BY relevance_score DESC, category1.post_category_name ASC"
+
+    # Prepare parameters:
+    #   First for WHERE (OR conditions), then again for CASE scoring
+    like_params = [f"%{word}%" for word in keywords]  # for OR filtering
+    score_params = [f"%{word}%" for word in keywords]  # for CASE relevance
+
+    params = tuple(like_params + score_params)
+
+    blogs = frappe.db.sql(final_query, params, as_dict=True)
     return blogs
-
     
 
 
