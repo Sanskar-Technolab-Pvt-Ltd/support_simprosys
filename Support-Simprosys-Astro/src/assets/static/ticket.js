@@ -608,6 +608,12 @@ function hideLoader() {
   async function submitTicket(event) {
     event.preventDefault();
     
+    // --- CHECK RECAPTCHA ---
+    const recaptchaResponse = grecaptcha.getResponse();
+    if (recaptchaResponse.length === 0) {
+        alert("Please verify that you are not a robot.");
+        return; // stop submission
+    }
     
     const validationForm = handleInput();
     if (validationForm) {

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities; */
 
+/* ? Recaptcha */
+.g-recaptcha {
+  margin: 10px 0px;
+}
 
 /*? Apply styles to the body fonts */
 body {
