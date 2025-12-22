@@ -84,7 +84,7 @@ const encodedName = encodeURIComponent(name);
 
 // Fetch Subcategories directly from API
 const subCategoryResponse = await fetch(
-  `${URL}/api/resource/Simprosys%20Post%20Category?fields=["*"]&filters=[["parent_simprosys_post_category", "=", "${encodedName}"], ["category_criteria", "=", "Subcategory"],["status","=","publish"]]&order_by=\`order\` asc`,
+  `${URL}/api/resource/Simprosys%20Post%20Category?fields=["*"]&filters=[["parent_simprosys_post_category", "=", "${encodedName}"], ["category_criteria", "=", "Subcategory"],["status","=","publish"]]&order_by=\`order\` asc&limit_page_length=100`,
   {
     method: "GET",
     headers: {
