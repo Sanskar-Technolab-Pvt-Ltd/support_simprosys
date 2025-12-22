@@ -111,7 +111,7 @@ const encodeSubCategory = encodeURIComponent(
 );
 // Fetching Category Data
 const CategoryResponse = await fetch(
-  `${API_URL}/api/resource/Simprosys%20Post%20Category?fields=["*"]&filters=[["parent_simprosys_post_category", "=", "${encodeSubCategory}"], ["category_criteria", "=", "Subcategory"],["status","=","publish"]]&order_by=\`order\` asc`,
+  `${API_URL}/api/resource/Simprosys%20Post%20Category?fields=["*"]&filters=[["parent_simprosys_post_category", "=", "${encodeSubCategory}"], ["category_criteria", "=", "Subcategory"],["status","=","publish"]]&order_by=\`order\` asc&limit_page_length=100`,
   {
     method: "GET",
     headers: {
