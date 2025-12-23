@@ -242,7 +242,7 @@ decodedContent = decodedContent.replace(
 // Step 2: Remove <strong> and </strong> tags
 // decodedContent = decodedContent.replace(/<\/?strong[^>]*>/gi, "");
 
-// 1️⃣ Add target="_blank" and rel="noopener noreferrer" ONLY to <a> inside <strong>
+// 1️ Add target="_blank" and rel="noopener noreferrer" ONLY to <a> inside <strong>
 decodedContent = decodedContent.replace(
   /<strong>\s*(<a(?![^>]*\btarget=)([^>]*href=["'][^"']*["']))([^>]*)>(.*?)<\/a>\s*<\/strong>/gi,
   '<a$2$3 target="_blank" rel="noopener noreferrer">$4</a>'
@@ -256,7 +256,7 @@ decodedContent = decodedContent.replace(
 
 
 
-// 2️⃣ Remove <strong> ONLY if it wraps an <a> tag (and the tag already has target from above)
+//  Remove <strong> ONLY if it wraps an <a> tag (and the tag already has target from above)
 decodedContent = decodedContent.replace(
   /<strong>\s*(<a[^>]*>.*?<\/a>)\s*<\/strong>/gi,
   '$1'
@@ -554,16 +554,21 @@ const formattedDate = dateObj.toLocaleDateString("en-US", {
             <div>
               <div class="pr-2 lg:pr-[23px] 2xl:pr-[46px]">
                 {
-                  CategoryData.map((item: any, index: number) => (
-                    <DetailDropdown
-                      heading={item.name}
-                      Label={item?.post_category_name || ""}
-                      round="rounded-[12px]"
-                      Slug={blog_details.slug}
-                      DropdownClass="dropdown-details cursor-pointer"
-                      index={index}
-                    />
-                  ))
+                  [...CategoryData]
+                    .sort(
+                      (a: any, b: any) =>
+                        (Number(a.order) || 0) - (Number(b.order) || 0)
+                    )
+                    .map((item: any, index: number) => (
+                      <DetailDropdown
+                        heading={item.name}
+                        Label={item?.post_category_name || ""}
+                        round="rounded-[12px]"
+                        Slug={blog_details.slug}
+                        DropdownClass="dropdown-details cursor-pointer"
+                        index={index}
+                      />
+                    ))
                 }
               </div>
             </div>
