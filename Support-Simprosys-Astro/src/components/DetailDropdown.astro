@@ -48,14 +48,21 @@ const BlogCount = Blog.length;
       </div>
       <div class="toggle-section py-4 xl:pb-8 hidden max-h-[300px] overflow-y-auto xl:max-h-full">
         <ul class="font-medium text-[#55575A] text-sm space-y-3 xl:text-[16px]">
-          {Blog.map((item: any) => (
-            <DetailDropdownLinks
-              hrefLink={item.slug}
-              Label={item.blog_title}
-              rounded={round}
-              activeSlug={Slug === item.slug ? "activeClass" : ""}
-            />
-          ))}
+          {
+            [...Blog]
+              .sort(
+                (a: any, b: any) =>
+                  (Number(a.order) || 0) - (Number(b.order) || 0)
+              )
+              .map((item: any) => (
+                <DetailDropdownLinks
+                  hrefLink={item.slug}
+                  Label={item.blog_title}
+                  rounded={round}
+                  activeSlug={Slug === item.slug ? "activeClass" : ""}
+                />
+              ))
+          }
         </ul>
       </div>
     </div>

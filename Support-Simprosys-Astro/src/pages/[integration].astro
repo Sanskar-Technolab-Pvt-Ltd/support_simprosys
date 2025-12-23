@@ -234,14 +234,14 @@ const alternateTitle = he.decode(integration_details.post_category_name);
               </div>
 
               <div class="border-t">
-                {
-                  subCategoryData.map((item: any) => (
+                {[...subCategoryData]
+                  .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0))
+                  .map((item: any) => (
                     <Dropdown
                       heading={item.name}
                       Label={item.post_category_name || ""}
                     />
-                  ))
-                }
+                  ))}
               </div>
             </div>
           </div>

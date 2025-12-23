@@ -43,9 +43,19 @@ const BlogCount = Blog.length;
       </div>
       <div class="toggle-section px-2 py-4 xl:px-4 xl:pb-8 hidden">
         <ul class="font-medium text-sm space-y-3 xl:text-[16px] 2xl:leading-[42px] text-[#55575A] list-disc px-5">
-          {Blog.map((item: any) => (
-            <DropdownLinks hrefLink={item.slug} Label={item.blog_title} />
-          ))}
+          {
+            [...Blog]
+              .sort(
+                (a: any, b: any) =>
+                  (Number(a.order) || 0) - (Number(b.order) || 0)
+              )
+              .map((item: any) => (
+                <DropdownLinks
+                  hrefLink={item.slug}
+                  Label={item.blog_title}
+                />
+              ))
+          }
         </ul>
       </div>
     </div>
