@@ -207,8 +207,16 @@ decodedContent = decodedContent.replace(
 // Convert YouTube short links to embedded iFrames
 decodedContent = decodedContent.replace(
   /https?:\/\/(?:www\.)?youtu\.be\/([\w-]+)/g,
-  '<iframe width="560" height="315" src="https://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>'
+  `<iframe
+    src="https://www.youtube.com/embed/$1"
+    class="w-full aspect-video"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+    allowfullscreen
+    loading="lazy"
+  ></iframe>`
 );
+
 
 // Ensure all links have "https://"
 decodedContent = decodedContent.replace(
