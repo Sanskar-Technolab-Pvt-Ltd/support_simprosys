@@ -31,7 +31,7 @@ const BlogCount = Blog.length;
 {
   BlogCount > 0 && (
     <div class="cursor-pointer border-b">
-      <div class="dropdown flex items-center px-2 py-4 xl:px-4 xl:py-8 justify-between">
+      <div class="dropdown flex items-center px-2 py-4 xl:px-4 xl:py-6 justify-between">
         <h2 class="text-xl xl:text-2xl font-medium">{Label}</h2>
         <button class="toggle-button p-0 bg-transparent">
           <img
@@ -41,8 +41,8 @@ const BlogCount = Blog.length;
           />
         </button>
       </div>
-      <div class="toggle-section px-2 py-4 xl:px-4 xl:pb-8 hidden">
-        <ul class="font-medium text-sm space-y-3 xl:text-[16px] 2xl:leading-[42px] text-[#55575A] list-disc px-5">
+      <div class="toggle-section px-2 py-2.5 xl:px-4 xl:pb-6 hidden">
+        <ul class="font-medium text-sm  xl:text-[16px] 2xl:leading-[42px] text-[#55575A] list-disc px-5">
           {
             [...Blog]
               .sort(
